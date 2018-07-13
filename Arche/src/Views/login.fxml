@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="170.0" maxWidth="400.0" minHeight="170.0" minWidth="400.0" prefHeight="170.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.LoginController">
+   <children>
+      <TextField fx:id="username" layoutX="126.0" layoutY="32.0" promptText="Username" />
+      <TextField fx:id="password" layoutX="126.0" layoutY="67.0" promptText="Password" />
+      <Button fx:id="loginButton" layoutX="137.0" layoutY="100.0" mnemonicParsing="false" onAction="#LoginButtonClicked" text="Login" />
+      <Button fx:id="skipButton" layoutX="211.0" layoutY="100.0" mnemonicParsing="false" onAction="#SkipButtonClicked" text="Skip" />
+      <Text layoutX="114.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Administrative Access">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Label fx:id="label" layoutX="127.0" layoutY="136.0" text="Invalid Username/Password" visible="false" />
+   </children>
+   <padding>
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+   </padding>
+</AnchorPane>

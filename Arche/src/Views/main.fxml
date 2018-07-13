@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="10.0" minWidth="10.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.MainController">
+   <center>
+      <TabPane fx:id="layout" prefHeight="200.0" prefWidth="200.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab fx:id="dailyTab" closable="false" onSelectionChanged="#initializeDailyTabData">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <top>
+                        <VBox BorderPane.alignment="CENTER">
+                           <children>
+                              <HBox alignment="TOP_CENTER">
+                                 <children>
+                                    <Label text="Daily Tasks">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="TOP_CENTER" spacing="20.0">
+                                 <children>
+                                    <Button fx:id="leftArrowButton" mnemonicParsing="false" onAction="#leftArrowClicked" />
+                                    <Label fx:id="dailyTaskDateLabel" text="Date" />
+                                    <Button fx:id="rightArrowButton" mnemonicParsing="false" onAction="#rightArrowClicked" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </top>
+                     <center>
+                        <TabPane fx:id="dailyTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+                          <tabs>
+                            <Tab text="Tasks">
+                                 <content>
+                                    <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                       <top>
+                                          <VBox BorderPane.alignment="CENTER">
+                                             <children>
+                                                <Label fx:id="incompleteTodayLabel" text="X Incomplete Immediate Tasks" />
+                                                <Label fx:id="incompleteSoonLabel" text="X Incomplete Due soon Tasks" />
+                                                <Label fx:id="overdueLabel" text="X Overdue Tasks" />
+                                             </children>
+                                          </VBox>
+                                       </top>
+                                       <center>
+                                          <TreeTableView fx:id="dailyTreeTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                            <columns>
+                                              <TreeTableColumn fx:id="nameTreeTableCol" prefWidth="191.0" text="Name" />
+                                              <TreeTableColumn fx:id="descTreeTableCol" minWidth="0.0" prefWidth="142.0" text="Description" />
+                                                <TreeTableColumn fx:id="typeTreeTableCol" minWidth="0.0" prefWidth="186.0" text="Type" />
+                                                <TreeTableColumn fx:id="classTreeTableCol" minWidth="0.0" prefWidth="161.0" text="Class" />
+                                                <TreeTableColumn fx:id="dueDateTreeTableCol" prefWidth="167.0" text="Due Date" />
+                                                <TreeTableColumn fx:id="completedTreeTableCol" prefWidth="123.0" text="Completed" />
+                                            </columns>
+                                          </TreeTableView>
+                                       </center>
+                                    </BorderPane>
+                                 </content>
+                            </Tab>
+                            <Tab fx:id="scheduleTab" text="Schedule">
+                                 <content>
+                                    <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                       <center>
+                                          <GridPane BorderPane.alignment="CENTER">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                          </GridPane>
+                                       </center>
+                                    </BorderPane>
+                                 </content>
+                            </Tab>
+                          </tabs>
+                        </TabPane>
+                     </center>
+                     <bottom>
+                        <Button mnemonicParsing="false" text="View" BorderPane.alignment="CENTER" />
+                     </bottom>
+                  </BorderPane>
+               </content>
+          </Tab>
+          <Tab fx:id="calendarTab" closable="false">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+            <Tab fx:id="tasksTab" closable="false" onSelectionChanged="#initializeTaskTabData">
+               <content>
+                  <BorderPane minHeight="10.0" minWidth="10.0" prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <TableView fx:id="tableView" minHeight="10.0" minWidth="10.0" onMouseClicked="#handleClick" BorderPane.alignment="CENTER">
+                          <columns>
+                            <TableColumn fx:id="nameColumn" minWidth="30.0" text="Name" />
+                            <TableColumn fx:id="descriptionColumn" minWidth="100.0" prefWidth="300.0" text="Description" />
+                              <TableColumn fx:id="typeColumn" minWidth="40.0" prefWidth="81.199951171875" text="Type" />
+                              <TableColumn fx:id="classColumn" minWidth="40.0" prefWidth="81.800048828125" text="Class" />
+                              <TableColumn fx:id="dueDateColumn" minWidth="40.0" prefWidth="80.20001220703125" text="Due Date" />
+                              <TableColumn fx:id="completedColumn" minWidth="40.0" prefWidth="87.79998779296875" text="Completed" />
+                          </columns>
+                        </TableView>
+                     </center>
+                     <bottom>
+                        <VBox BorderPane.alignment="CENTER">
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <Button fx:id="viewButton" mnemonicParsing="false" onAction="#viewButtonClicked" prefHeight="25.0" prefWidth="106.0" text="View/Edit/Delete" />
+                                    <Pane HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="25.0" prefWidth="66.0" text="Add" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </bottom>
+                     <top>
+                        <Label text="Task List" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </top>
+                  </BorderPane>
+               </content>
+            </Tab>
+            <Tab fx:id="classesTab" closable="false">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab fx:id="projectsTab" closable="false">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
