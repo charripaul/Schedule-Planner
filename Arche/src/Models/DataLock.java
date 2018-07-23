@@ -41,7 +41,7 @@ public class DataLock {
 			int index = getReverseIndex(in[count]);
 			if(index == -1) {
 				int num = Character.getNumericValue(in[count]);
-				num -= 3;				
+				num += 7;				
 				num %= 10;
 				out[count] = (char) (num + 48);
 			}

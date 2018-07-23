@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import Views.ConfirmExitView;
+import Views.LoginController;
 import Views.MainView;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -29,15 +30,26 @@ public class main extends Application{
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		window = primaryStage;
-		Parent root = FXMLLoader.load(getClass().getResource("/Views/main.fxml"));
-		window.setTitle("Arche");
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/login.fxml"));
+		Parent root = loader.load();
+		
+		LoginController controller = loader.getController();
+		controller.setStage(window);
+		
 		window.getIcons().add(new Image("file:resources/icons/icons8-idea-40.png"));
+		window.initStyle(StageStyle.UNDECORATED);
+		window.setResizable(false);
+		window.setScene(new Scene(root));
+		window.show();
+		
+		/*window.setTitle("Arche");
 		window.setMinWidth(900);
 		window.setMinHeight(600);
 		window.setOnCloseRequest(e -> {
 			e.consume();
 			closeProgram(ConfirmExitView.display("Are you sure you want to exit?"));
 		});
+		
 		window.setScene(new Scene(root));
 		window.show();
 		
@@ -51,12 +63,20 @@ public class main extends Application{
 			//DBConn.closeConnection();
 		});
 		loginWindow.setScene(new Scene(root2));
-		loginWindow.showAndWait();
+		loginWindow.showAndWait();*/
 	}
-	private void closeProgram(boolean answer){
-		if(answer == true) {
-			DBConn.closeConnection();
-			window.close();
-		}
+	public void showLoginWindow() throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/login.fxml"));
+		Parent root = loader.load();
+		Stage stage = new Stage();
+		
+		LoginController controller = loader.getController();
+		controller.setStage(stage);					//send stage to controller
+		
+		stage.getIcons().add(new Image("file:resources/icons/icons8-idea-40.png"));
+		stage.initStyle(StageStyle.UNDECORATED);
+		stage.setResizable(false);
+		stage.setScene(new Scene(root));
+		stage.showAndWait();
 	}
 }

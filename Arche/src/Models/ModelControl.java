@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -289,7 +290,11 @@ public class ModelControl {
 			}
 			long startOfWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays);
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-			LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(startOfWarningPeriod),TimeZone.getDefault().toZoneId());
+			
+			Instant instant = Instant.ofEpochMilli(startOfWarningPeriod);
+			ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
+			LocalDate start = zdt.toLocalDate();
+			//LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(startOfWarningPeriod),TimeZone.getDefault().toZoneId());  //se 9
 			
 			Date date1 = Date.from(dayOfReference.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Date date2 = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -332,7 +337,11 @@ public class ModelControl {
 			long startOfWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays);
 			long extraWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays) - getDayValue(numOfDays/2);
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-			LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(startOfWarningPeriod),TimeZone.getDefault().toZoneId());
+			
+			Instant instant = Instant.ofEpochMilli(startOfWarningPeriod);
+			ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
+			LocalDate start = zdt.toLocalDate();
+			//LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(startOfWarningPeriod),TimeZone.getDefault().toZoneId());  //se 9
 			
 			Date date1 = Date.from(dayOfReference.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Date date2 = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());

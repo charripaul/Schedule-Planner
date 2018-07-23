@@ -24,8 +24,8 @@ import javafx.stage.Stage;
 
 public class test {
 	public static void main(String args[]) {
-		Date t = Calendar.getInstance().getTime();
-		
-		System.out.println(t.getTime());
+		String s = DataLock.encrypt("");
+		System.out.println(s);
+		System.out.println(DataLock.decrypt(s));
 	}
 }
