@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import jfxtras.scene.control.ImageViewButton?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.MainNewController">
+   <left>
+      <StackPane BorderPane.alignment="CENTER">
+         <children>
+            <VBox depthTest="DISABLE" prefHeight="720.0" prefWidth="244.0" style="-fx-background-color: #373838;">
+               <children>
+                  <Pane prefHeight="127.0" prefWidth="244.0" style="-fx-background-color: #2a2a2b;">
+                     <children>
+                        <Label layoutX="37.0" layoutY="41.0" text="Project Arche" textFill="WHITE">
+                           <font>
+                              <Font name="System Italic" size="30.0" />
+                           </font>
+                           <effect>
+                              <Bloom />
+                           </effect>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <JFXButton fx:id="homeButton" alignment="BASELINE_LEFT" onAction="#homeButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Home" textFill="WHITE">
+                     <graphic>
+                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                           <image>
+                              <Image url="@../../resources/icons/white/home.png" />
+                           </image>
+                        </ImageViewButton>
+                     </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets left="40.0" />
+                     </padding>
+                  </JFXButton>
+                  <JFXButton fx:id="calendarButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#calendarButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Calendar" textFill="WHITE">
+                     <graphic>
+                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                           <image>
+                              <Image url="@../../resources/icons/white/calendar.png" />
+                           </image>
+                        </ImageViewButton>
+                     </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets left="40.0" />
+                     </padding>
+                  </JFXButton>
+                  <JFXButton fx:id="taskButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#taskButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Tasks" textFill="WHITE">
+                     <graphic>
+                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                           <image>
+                              <Image url="@../../resources/icons/white/list.png" />
+                           </image>
+                        </ImageViewButton>
+                     </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets left="40.0" />
+                     </padding>
+                  </JFXButton>
+                  <JFXButton fx:id="classButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#classButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Classes" textFill="WHITE">
+                     <graphic>
+                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                           <image>
+                              <Image url="@../../resources/icons/white/briefcase.png" />
+                           </image>
+                        </ImageViewButton>
+                     </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets left="40.0" />
+                     </padding>
+                  </JFXButton>
+                  <Pane minHeight="50.0" prefHeight="209.0" prefWidth="244.0" VBox.vgrow="ALWAYS" />
+                  <HBox prefHeight="81.0" prefWidth="244.0">
+                     <children>
+                        <Pane prefHeight="81.0" prefWidth="83.0" />
+                        <JFXButton prefHeight="81.0" prefWidth="85.0" text=" " textFill="WHITE">
+                           <graphic>
+                              <ImageViewButton fitHeight="34.0" fitWidth="39.0" visible="false">
+                                 <image>
+                                    <Image url="@../../resources/icons/white/settings.png" />
+                                 </image>
+                              </ImageViewButton>
+                           </graphic>
+                        </JFXButton>
+                        <Pane prefHeight="81.0" prefWidth="82.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </StackPane>
+   </left>
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+         <top>
+            <VBox alignment="BASELINE_CENTER" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane prefHeight="24.0" prefWidth="1036.0" />
+                  <Label fx:id="title" alignment="BASELINE_CENTER" text="Daily Tasks" textFill="WHITE">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </top>
+      </BorderPane>
+   </center>
+   <effect>
+      <DropShadow />
+   </effect>
+</BorderPane>

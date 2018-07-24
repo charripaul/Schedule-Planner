@@ -62,10 +62,11 @@ public class LoginController implements Initializable{
 		String u = username.getText();
 		String p = password.getText();
 		
-		if(ModelControl.isAdmin(u, p)) {
+		//TODO: revert to normal (u,p)
+		if(ModelControl.isAdmin("ventex1000","trinity77")) {
 			loginWindow.hide();
 			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/main.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/mainNew.fxml"));
 			Parent root = loader.load();
 			mainWindow = new Stage();
 			mainWindow.setMinWidth(900);

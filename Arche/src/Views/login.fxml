@@ -41,9 +41,9 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button fx:id="closeButton" layoutX="844.0" mnemonicParsing="false" onAction="#closeButtonClicked" style="-fx-background-color: #05080C;">
+      <Button fx:id="closeButton" layoutX="855.0" mnemonicParsing="false" onAction="#closeButtonClicked" style="-fx-background-color: #05080C;">
          <graphic>
-            <ImageView fitHeight="40.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../resources/icons/x.png" />
                </image>
