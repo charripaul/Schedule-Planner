@@ -85,7 +85,6 @@ public class MainController implements Initializable{
 	@FXML private TreeTableColumn<Task, String> classTreeTableCol;
 	@FXML private TreeTableColumn<Task, LocalDateTime> dueDateTreeTableCol;
 	@FXML private TreeTableColumn<Task, Boolean> completedTreeTableCol;
-	@FXML private Tab scheduleTab;
 	//tasktab
 	@FXML private TableView<Task> tableView;
 	@FXML private TableColumn<Task, String> nameColumn;

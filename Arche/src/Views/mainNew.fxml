@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
@@ -16,121 +22,233 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.MainNewController">
    <left>
+      <VBox depthTest="DISABLE" prefHeight="720.0" prefWidth="244.0" style="-fx-background-color: #373838;">
+         <children>
+            <Pane prefHeight="127.0" prefWidth="244.0" style="-fx-background-color: #2a2a2b;">
+               <children>
+                  <Label layoutX="37.0" layoutY="41.0" text="Project Arche" textFill="WHITE">
+                     <font>
+                        <Font name="System Italic" size="30.0" />
+                     </font>
+                     <effect>
+                        <Bloom />
+                     </effect>
+                  </Label>
+               </children>
+            </Pane>
+            <JFXButton fx:id="homeButton" alignment="BASELINE_LEFT" onAction="#homeButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Home" textFill="WHITE">
+               <graphic>
+                  <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                     <image>
+                        <Image url="@../../resources/icons/white/home.png" />
+                     </image>
+                  </ImageViewButton>
+               </graphic>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="40.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton fx:id="calendarButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#calendarButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Calendar" textFill="WHITE">
+               <graphic>
+                  <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                     <image>
+                        <Image url="@../../resources/icons/white/calendar.png" />
+                     </image>
+                  </ImageViewButton>
+               </graphic>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="40.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton fx:id="taskButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#taskButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Tasks" textFill="WHITE">
+               <graphic>
+                  <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                     <image>
+                        <Image url="@../../resources/icons/white/list.png" />
+                     </image>
+                  </ImageViewButton>
+               </graphic>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="40.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton fx:id="classButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#classButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Classes" textFill="WHITE">
+               <graphic>
+                  <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                     <image>
+                        <Image url="@../../resources/icons/white/briefcase.png" />
+                     </image>
+                  </ImageViewButton>
+               </graphic>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="40.0" />
+               </padding>
+            </JFXButton>
+            <Pane prefHeight="114.0" prefWidth="244.0" VBox.vgrow="ALWAYS" />
+            <VBox>
+               <children>
+                  <HBox>
+                     <children>
+                        <Label text="Urgent Tasks: " textFill="WHITE" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label fx:id="urgentLabel" text="0" textFill="WHITE" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label text="Approaching Tasks: " textFill="WHITE" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label fx:id="approachingLabel" text="0" textFill="WHITE" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label text="Overdue Tasks: " textFill="WHITE" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label fx:id="overdueLabel" text="0" textFill="WHITE" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="15.0" right="15.0" />
+               </padding>
+            </VBox>
+            <HBox prefHeight="51.0" prefWidth="244.0" visible="false">
+               <children>
+                  <Pane prefHeight="81.0" prefWidth="83.0" />
+                  <JFXButton prefHeight="81.0" prefWidth="85.0" text=" " textFill="WHITE">
+                     <graphic>
+                        <ImageViewButton fitHeight="34.0" fitWidth="39.0">
+                           <image>
+                              <Image url="@../../resources/icons/white/settings.png" />
+                           </image>
+                        </ImageViewButton>
+                     </graphic>
+                  </JFXButton>
+                  <Pane prefHeight="81.0" prefWidth="82.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </left>
+   <center>
       <StackPane BorderPane.alignment="CENTER">
          <children>
-            <VBox depthTest="DISABLE" prefHeight="720.0" prefWidth="244.0" style="-fx-background-color: #373838;">
-               <children>
-                  <Pane prefHeight="127.0" prefWidth="244.0" style="-fx-background-color: #2a2a2b;">
+            <BorderPane fx:id="homeView" prefHeight="200.0" prefWidth="200.0" visible="false">
+               <center>
+                  <JFXTabPane BorderPane.alignment="CENTER">
+                     <tabs>
+                        <Tab closable="false" text="Tasks">
+                           <content>
+                              <JFXTreeTableView fx:id="homeTreeTable">
+                                 <columns>
+                                    <TreeTableColumn fx:id="nameTreeTableCol" prefWidth="125.0" text="Name" />
+                                    <TreeTableColumn fx:id="descTreeTableCol" prefWidth="336.0" text="Description" />
+                                    <TreeTableColumn fx:id="typeTreeTableCol" minWidth="0.0" prefWidth="120.0" text="Type" />
+                                    <TreeTableColumn fx:id="classTreeTableCol" prefWidth="114.0" text="Class" />
+                                    <TreeTableColumn fx:id="dueDateTreeTableCol" prefWidth="226.0" text="Due Date" />
+                                    <TreeTableColumn fx:id="completedTreeTableCol" prefWidth="114.0" text="Completed" />
+                                 </columns>
+                              </JFXTreeTableView>
+                           </content>
+                        </Tab>
+                        <Tab closable="false" text="Schedule" />
+                     </tabs>
+                  </JFXTabPane>
+               </center>
+               <top>
+                  <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
                      <children>
-                        <Label layoutX="37.0" layoutY="41.0" text="Project Arche" textFill="WHITE">
+                        <Label fx:id="title" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="376.0" text="Daily Tasks" textFill="WHITE">
                            <font>
-                              <Font name="System Italic" size="30.0" />
+                              <Font size="36.0" />
                            </font>
-                           <effect>
-                              <Bloom />
-                           </effect>
                         </Label>
-                     </children>
-                  </Pane>
-                  <JFXButton fx:id="homeButton" alignment="BASELINE_LEFT" onAction="#homeButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Home" textFill="WHITE">
-                     <graphic>
-                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
-                           <image>
-                              <Image url="@../../resources/icons/white/home.png" />
-                           </image>
-                        </ImageViewButton>
-                     </graphic>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <padding>
-                        <Insets left="40.0" />
-                     </padding>
-                  </JFXButton>
-                  <JFXButton fx:id="calendarButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#calendarButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Calendar" textFill="WHITE">
-                     <graphic>
-                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
-                           <image>
-                              <Image url="@../../resources/icons/white/calendar.png" />
-                           </image>
-                        </ImageViewButton>
-                     </graphic>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <padding>
-                        <Insets left="40.0" />
-                     </padding>
-                  </JFXButton>
-                  <JFXButton fx:id="taskButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#taskButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Tasks" textFill="WHITE">
-                     <graphic>
-                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
-                           <image>
-                              <Image url="@../../resources/icons/white/list.png" />
-                           </image>
-                        </ImageViewButton>
-                     </graphic>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <padding>
-                        <Insets left="40.0" />
-                     </padding>
-                  </JFXButton>
-                  <JFXButton fx:id="classButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#classButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Classes" textFill="WHITE">
-                     <graphic>
-                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
-                           <image>
-                              <Image url="@../../resources/icons/white/briefcase.png" />
-                           </image>
-                        </ImageViewButton>
-                     </graphic>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <padding>
-                        <Insets left="40.0" />
-                     </padding>
-                  </JFXButton>
-                  <Pane minHeight="50.0" prefHeight="209.0" prefWidth="244.0" VBox.vgrow="ALWAYS" />
-                  <HBox prefHeight="81.0" prefWidth="244.0">
-                     <children>
-                        <Pane prefHeight="81.0" prefWidth="83.0" />
-                        <JFXButton prefHeight="81.0" prefWidth="85.0" text=" " textFill="WHITE">
+                        <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="SOMETIMES" />
+                        <JFXButton fx:id="leftArrowButton" onAction="#leftArrowClicked" HBox.hgrow="NEVER">
                            <graphic>
-                              <ImageViewButton fitHeight="34.0" fitWidth="39.0" visible="false">
+                              <ImageViewButton fitHeight="25.0" fitWidth="25.0">
                                  <image>
-                                    <Image url="@../../resources/icons/white/settings.png" />
+                                    <Image url="@../../resources/icons/white/left-arrow.png" />
                                  </image>
                               </ImageViewButton>
                            </graphic>
                         </JFXButton>
-                        <Pane prefHeight="81.0" prefWidth="82.0" />
+                        <Label fx:id="dailyTaskDateLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="311.0" text="Date" textFill="WHITE" HBox.hgrow="ALWAYS" />
+                        <JFXButton fx:id="rightArrowButton" layoutX="979.0" layoutY="47.0" nodeOrientation="RIGHT_TO_LEFT" onAction="#rightArrowClicked" HBox.hgrow="NEVER">
+                           <graphic>
+                              <ImageViewButton fitHeight="25.0" fitWidth="25.0">
+                                 <image>
+                                    <Image url="@../../resources/icons/white/right-arrow.png" />
+                                 </image>
+                              </ImageViewButton>
+                           </graphic>
+                        </JFXButton>
                      </children>
+                     <padding>
+                        <Insets left="90.0" right="15.0" />
+                     </padding>
                   </HBox>
-               </children>
-            </VBox>
+               </top>
+            </BorderPane>
+            <BorderPane fx:id="calendarView" prefHeight="200.0" prefWidth="200.0" />
+            <BorderPane fx:id="classView" prefHeight="200.0" prefWidth="200.0" />
+            <BorderPane fx:id="taskView" prefHeight="200.0" prefWidth="200.0">
+               <top>
+                  <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label fx:id="title2" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="214.0" text="Task List" textFill="WHITE">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets left="90.0" right="15.0" />
+                     </padding>
+                  </HBox>
+               </top>
+               <center>
+                  <TableView fx:id="tableView" minHeight="10.0" minWidth="10.0" onMouseClicked="#handleClick" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
+                     <columns>
+                        <TableColumn fx:id="nameColumn" minWidth="30.0" text="Name" />
+                        <TableColumn fx:id="descriptionColumn" minWidth="100.0" prefWidth="300.0" text="Description" />
+                        <TableColumn fx:id="typeColumn" minWidth="40.0" prefWidth="81.199951171875" text="Type" />
+                        <TableColumn fx:id="classColumn" minWidth="40.0" prefWidth="81.800048828125" text="Class" />
+                        <TableColumn fx:id="dueDateColumn" minWidth="40.0" prefWidth="80.20001220703125" text="Due Date" />
+                        <TableColumn fx:id="completedColumn" minWidth="40.0" prefWidth="87.79998779296875" text="Completed" />
+                     </columns>
+                  </TableView>
+               </center>
+               <bottom>
+                  <VBox BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox>
+                           <children>
+                              <JFXButton fx:id="viewButton" onAction="#viewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                              <Pane HBox.hgrow="ALWAYS" />
+                              <JFXButton fx:id="addButton" onAction="#addButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </bottom>
+            </BorderPane>
          </children>
-         <effect>
-            <DropShadow />
-         </effect>
       </StackPane>
-   </left>
-   <center>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
-         <top>
-            <VBox alignment="BASELINE_CENTER" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
-               <children>
-                  <Pane prefHeight="24.0" prefWidth="1036.0" />
-                  <Label fx:id="title" alignment="BASELINE_CENTER" text="Daily Tasks" textFill="WHITE">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
-               </children>
-            </VBox>
-         </top>
-      </BorderPane>
    </center>
    <effect>
       <DropShadow />
