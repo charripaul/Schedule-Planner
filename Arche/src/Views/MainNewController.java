@@ -221,7 +221,45 @@ public class MainNewController implements Initializable{
 		initializeTasksData();
 	}
 	private void initializeClass() {
-		//TODO: write
+		//class tab
+		classNameColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, String>("name"));
+		classAbrColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, String>("abbreviation"));
+		classDetailsColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, String>("details"));
+		classDOWColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, String>("daysOfWeek"));
+		classTimeColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, String>("timeOfDay"));
+		classTAColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, Integer>("totalAssignments"));
+		
+		classNameColumn.setStyle("-fx-alignment: CENTER;");
+		classAbrColumn.setStyle("-fx-alignment: CENTER;");
+		classDetailsColumn.setStyle("-fx-alignment: CENTER;");
+		classDOWColumn.setStyle("-fx-alignment: CENTER;");
+		classTimeColumn.setStyle("-fx-alignment: CENTER;");
+		classTAColumn.setStyle("-fx-alignment: CENTER;");
+		
+		classNameColumn.prefWidthProperty().bind(classTable.widthProperty().multiply(.163));
+		classAbrColumn.prefWidthProperty().bind(classTable.widthProperty().multiply(.096));
+		classDetailsColumn.prefWidthProperty().bind(classTable.widthProperty().multiply(.362));
+		classDOWColumn.prefWidthProperty().bind(classTable.widthProperty().multiply(.118));
+		classTimeColumn.prefWidthProperty().bind(classTable.widthProperty().multiply(.123));
+		classTAColumn.prefWidthProperty().bind(classTable.widthProperty().multiply(.13));
+		
+		//type tab
+		typeNameColumn.setCellValueFactory(new PropertyValueFactory<TaskType, String>("name"));
+		typeDescColumn.setCellValueFactory(new PropertyValueFactory<TaskType, String>("description"));
+		typeWarnColumn.setCellValueFactory(new PropertyValueFactory<TaskType, Integer>("warningPeriod"));
+		typeTTCColumn.setCellValueFactory(new PropertyValueFactory<TaskType, Integer>("timeToComplete"));
+		
+		typeNameColumn.setStyle("-fx-alignment: CENTER;");
+		typeDescColumn.setStyle("-fx-alignment: CENTER;");
+		typeWarnColumn.setStyle("-fx-alignment: CENTER;");
+		typeTTCColumn.setStyle("-fx-alignment: CENTER;");
+		
+		typeNameColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.165));
+		typeDescColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.465));
+		typeWarnColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.16));
+		typeTTCColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.2));
+		
+		initializeClassData();
 	}
 	private void initializeHomeData() {
 		//dailyTreeTableView.getRoot().getChildren().clear();
@@ -263,7 +301,15 @@ public class MainNewController implements Initializable{
 		taskTable.getSortOrder().add(taskDueDateColumn);
 	}
 	private void initializeClassData() {
-		//TODO: write
+		//class tab
+		classTable.getItems().clear();
+		classTable.setItems(ModelControl.getClasses(""));
+		classTable.getSortOrder().add(classNameColumn);
+		
+		//type tab
+		typeTable.getItems().clear();
+		typeTable.setItems(ModelControl.getTaskTypes(""));
+		typeTable.getSortOrder().add(typeNameColumn);
 	}
 	@FXML
 	private void taskAddButtonClicked() {
@@ -294,6 +340,8 @@ public class MainNewController implements Initializable{
 			System.out.println("\nError code: Pouch\n" + e.getMessage());
 			e.printStackTrace();
 		}
+		//update labels in case anything changed
+		initializeLabels();
 	}
 	@FXML
 	private void taskViewButtonClicked() {
@@ -325,6 +373,8 @@ public class MainNewController implements Initializable{
 		else {
 			System.out.println("\nError Code: Row not selected");
 		}
+		//update labels in case anything changed
+		initializeLabels();
 	}
 	@FXML
 	private void classAddButtonClicked() {
