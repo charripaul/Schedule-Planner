@@ -25,9 +25,7 @@ public class ModelControl {
 	private static ArrayList<TaskType> taskTypes = new ArrayList<TaskType>();
 	public static LocalDate dayOfReference = LocalDate.now();
 	public static LocalDate today = LocalDate.now();
-	/*public ModelControl() {
-		initialize();
-	}*/
+	
 	static {
 		initialize();
 		System.out.println("ModelControl layer instantiated");

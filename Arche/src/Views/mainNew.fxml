@@ -204,7 +204,7 @@
                </top>
             </BorderPane>
             <BorderPane fx:id="calendarView" prefHeight="200.0" prefWidth="200.0" visible="false" />
-            <BorderPane fx:id="taskView" prefHeight="200.0" prefWidth="200.0" visible="false">
+            <BorderPane fx:id="taskView" prefHeight="200.0" prefWidth="200.0">
                <top>
                   <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
                      <children>
@@ -221,14 +221,14 @@
                   </HBox>
                </top>
                <center>
-                  <TableView fx:id="tableView" minHeight="10.0" minWidth="10.0" onMouseClicked="#handleClick" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
+                  <TableView fx:id="taskTable" minHeight="10.0" minWidth="10.0" onMouseClicked="#handleTaskClick" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
                      <columns>
-                        <TableColumn fx:id="nameColumn" minWidth="30.0" text="Name" />
-                        <TableColumn fx:id="descriptionColumn" minWidth="100.0" prefWidth="300.0" text="Description" />
-                        <TableColumn fx:id="typeColumn" minWidth="40.0" prefWidth="81.199951171875" text="Type" />
-                        <TableColumn fx:id="classColumn" minWidth="40.0" prefWidth="81.800048828125" text="Class" />
-                        <TableColumn fx:id="dueDateColumn" minWidth="40.0" prefWidth="80.20001220703125" text="Due Date" />
-                        <TableColumn fx:id="completedColumn" minWidth="40.0" prefWidth="87.79998779296875" text="Completed" />
+                        <TableColumn fx:id="taskNameColumn" minWidth="30.0" text="Name" />
+                        <TableColumn fx:id="taskDescriptionColumn" minWidth="100.0" prefWidth="300.0" text="Description" />
+                        <TableColumn fx:id="taskTypeColumn" minWidth="40.0" prefWidth="81.199951171875" text="Type" />
+                        <TableColumn fx:id="taskClassColumn" minWidth="40.0" prefWidth="81.800048828125" text="Class" />
+                        <TableColumn fx:id="taskDueDateColumn" minWidth="40.0" prefWidth="80.20001220703125" text="Due Date" />
+                        <TableColumn fx:id="taskCompletedColumn" minWidth="40.0" prefWidth="87.79998779296875" text="Completed" />
                      </columns>
                   </TableView>
                </center>
@@ -237,9 +237,9 @@
                      <children>
                         <HBox>
                            <children>
-                              <JFXButton fx:id="viewButton" onAction="#viewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                              <JFXButton fx:id="taskViewButton" onAction="#taskViewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
                               <Pane HBox.hgrow="ALWAYS" />
-                              <JFXButton fx:id="addButton" onAction="#addButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                              <JFXButton fx:id="taskAddButton" onAction="#taskAddButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
                            </children>
                         </HBox>
                      </children>
@@ -269,23 +269,23 @@
                            <content>
                               <BorderPane prefHeight="200.0" prefWidth="200.0">
                                  <center>
-                                    <TableView prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
+                                    <TableView fx:id="classTable" onMouseClicked="#handleClassClick" prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
                                       <columns>
-                                        <TableColumn prefWidth="169.0" text="Name" />
-                                        <TableColumn prefWidth="100.0" text="Abbreviation" />
-                                          <TableColumn prefWidth="375.0" text="Details" />
-                                          <TableColumn prefWidth="122.0" text="Days of Week" />
-                                          <TableColumn prefWidth="127.0" text="Time" />
-                                          <TableColumn prefWidth="142.0" text="Total Assignments" />
+                                        <TableColumn fx:id="classNameColumn" prefWidth="169.0" text="Name" />
+                                        <TableColumn fx:id="classAbrColumn" prefWidth="100.0" text="Abbreviation" />
+                                          <TableColumn fx:id="classDetailsColumn" prefWidth="375.0" text="Details" />
+                                          <TableColumn fx:id="classDOWColumn" prefWidth="122.0" text="Days of Week" />
+                                          <TableColumn fx:id="classTimeColumn" prefWidth="127.0" text="Time" />
+                                          <TableColumn fx:id="classTAColumn" prefWidth="142.0" text="Total Assignments" />
                                       </columns>
                                     </TableView>
                                  </center>
                                  <bottom>
                                     <HBox>
                                        <children>
-                                          <JFXButton style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                                          <JFXButton fx:id="classViewButton" onAction="#classViewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
                                           <Pane HBox.hgrow="ALWAYS" />
-                                          <JFXButton prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                                          <JFXButton fx:id="classAddButton" onAction="#classAddButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
                                        </children>
                                     </HBox>
                                  </bottom>
@@ -296,21 +296,21 @@
                            <content>
                               <BorderPane>
                                  <center>
-                                    <TableView prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css">
+                                    <TableView fx:id="typeTable" onMouseClicked="#handleTypeClick" prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css">
                                       <columns>
-                                          <TableColumn prefWidth="171.0" text="Name" />
-                                        <TableColumn prefWidth="481.0" text="Description" />
-                                        <TableColumn prefWidth="165.0" text="Notice Period (days)" />
-                                          <TableColumn prefWidth="218.0" text="Estimated Time to Complete (mins)" />
+                                          <TableColumn fx:id="typeNameColumn" prefWidth="171.0" text="Name" />
+                                        <TableColumn fx:id="typeDescColumn" prefWidth="481.0" text="Description" />
+                                        <TableColumn fx:id="typeWarnColumn" prefWidth="165.0" text="Notice Period (days)" />
+                                          <TableColumn fx:id="typeTTCColumn" prefWidth="218.0" text="Estimated Time to Complete (mins)" />
                                       </columns>
                                     </TableView>
                                  </center>
                                  <bottom>
                                     <HBox>
                                        <children>
-                                          <JFXButton style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                                          <JFXButton fx:id="typeViewButton" onAction="#typeViewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
                                           <Pane HBox.hgrow="ALWAYS" />
-                                          <JFXButton prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                                          <JFXButton fx:id="typeAddButton" onAction="#typeAddButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
                                        </children>
                                     </HBox>
                                  </bottom>

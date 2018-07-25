@@ -16,6 +16,7 @@ import com.jfoenix.controls.JFXTreeTableView;
 
 import Models.ModelControl;
 import Models.Task;
+import Models.TaskType;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -48,7 +49,7 @@ public class MainNewController implements Initializable{
 	@FXML private Label approachingLabel;
 	@FXML private Label overdueLabel;
 	
-	//home
+	//home tab
 	@FXML private BorderPane homeView;
 	@FXML private JFXButton leftArrowButton;
 	@FXML private JFXButton rightArrowButton;
@@ -62,26 +63,53 @@ public class MainNewController implements Initializable{
 	@FXML private TreeTableColumn<Task, LocalDateTime> dueDateTreeTableCol;
 	@FXML private TreeTableColumn<Task, Boolean> completedTreeTableCol;
 	
-	//calendar
+	//calendar tab
 	@FXML private BorderPane calendarView;
 	
-	//task
+	//task tab
 	@FXML private BorderPane taskView;
-	@FXML private TableView<Task> tableView;
-	@FXML private TableColumn<Task, String> nameColumn;
-	@FXML private TableColumn<Task, String> descriptionColumn;
-	@FXML private TableColumn<Task, String> typeColumn;
-	@FXML private TableColumn<Task, String> classColumn;
-	@FXML private TableColumn<Task, LocalDateTime> dueDateColumn;
-	@FXML private TableColumn<Task, Boolean> completedColumn;
-	@FXML private Button addButton;
-	@FXML private Button viewButton;
+	@FXML private TableView<Task> taskTable;
+	@FXML private TableColumn<Task, String> taskNameColumn;
+	@FXML private TableColumn<Task, String> taskDescriptionColumn;
+	@FXML private TableColumn<Task, String> taskTypeColumn;
+	@FXML private TableColumn<Task, String> taskClassColumn;
+	@FXML private TableColumn<Task, LocalDateTime> taskDueDateColumn;
+	@FXML private TableColumn<Task, Boolean> taskCompletedColumn;
+	@FXML private JFXButton taskAddButton;
+	@FXML private JFXButton taskViewButton;
 	
-	//classes
+	//classes tab
+	//class tab (subset of classes)
 	@FXML private BorderPane classView;
+	@FXML private JFXButton classAddButton;
+	@FXML private JFXButton classViewButton;
+	@FXML private TableView<Models.Class> classTable;
+	@FXML private TableColumn<Models.Class, String> classNameColumn;
+	@FXML private TableColumn<Models.Class, String> classAbrColumn;
+	@FXML private TableColumn<Models.Class, String> classDetailsColumn;
+	@FXML private TableColumn<Models.Class, String> classDOWColumn;
+	@FXML private TableColumn<Models.Class, String> classTimeColumn;
+	@FXML private TableColumn<Models.Class, Integer> classTAColumn;
 	
-	Task temp;
-	Date lastClickTime;
+	//type tab (subset of classes)
+	@FXML private TableView<TaskType> typeTable;
+	@FXML private JFXButton typeAddButton;
+	@FXML private JFXButton typeViewButton;
+	@FXML private TableColumn<TaskType, String> typeNameColumn;
+	@FXML private TableColumn<TaskType, String> typeDescColumn;
+	@FXML private TableColumn<TaskType, Integer> typeWarnColumn;
+	@FXML private TableColumn<TaskType, Integer> typeTTCColumn;
+	
+	//for measuring time between clicks for double click feature
+	Task taskTemp;
+	Models.Class classTemp;
+	Models.TaskType typeTemp;
+	Date taskLastClickTime;
+	Date classLastClickTime;
+	Date typeLastClickTime;
+	
+	//button click properties
+	String selectedColor = "-fx-background-color:  #f2782f;";
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -151,22 +179,19 @@ public class MainNewController implements Initializable{
 		completedTreeTableCol.setStyle("-fx-alignment: CENTER;");
 		
 		initializeHomeData();
-		
-		homeView.setVisible(true);
 	}
 
 	private void initializeCalendar() {
-		calendarView.setVisible(true);
 	}
 	private void initializeTasks() {
-		nameColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("name"));
-		descriptionColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
-		typeColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("type"));
-		classColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("classAbr"));
+		taskNameColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("name"));
+		taskDescriptionColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
+		taskTypeColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("type"));
+		taskClassColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("classAbr"));
 		
 		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm");
-		dueDateColumn.setCellValueFactory(Task -> Task.getValue().getDueDate(""));
-		dueDateColumn.setCellFactory(dueDateColumn -> new TableCell<Task, LocalDateTime>() {
+		taskDueDateColumn.setCellValueFactory(Task -> Task.getValue().getDueDate(""));
+		taskDueDateColumn.setCellFactory(taskDueDateColumn -> new TableCell<Task, LocalDateTime>() {
 		    @Override
 		    protected void updateItem(LocalDateTime item, boolean empty) {
 		        super.updateItem(item, empty);
@@ -176,29 +201,27 @@ public class MainNewController implements Initializable{
 		            setText(String.format(item.format(formatter)));
 		    }
 		});
-		completedColumn.setCellValueFactory(c -> new SimpleBooleanProperty(c.getValue().getFinishFlag()));
-		completedColumn.setCellFactory(tc -> new CheckBoxTableCell<>());
+		taskCompletedColumn.setCellValueFactory(c -> new SimpleBooleanProperty(c.getValue().getFinishFlag()));
+		taskCompletedColumn.setCellFactory(tc -> new CheckBoxTableCell<>());
 		
 		//column autosizing
-		nameColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(.107));
-		descriptionColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(.416));
-		typeColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(.111));
-		classColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(.111));
-		dueDateColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(.13));
-		completedColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(.107));
+		taskNameColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(.107));
+		taskDescriptionColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(.416));
+		taskTypeColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(.111));
+		taskClassColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(.111));
+		taskDueDateColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(.13));
+		taskCompletedColumn.prefWidthProperty().bind(taskTable.widthProperty().multiply(.107));
 		
 		//text alignment
-		nameColumn.setStyle("-fx-alignment: CENTER;");
-		typeColumn.setStyle("-fx-alignment: CENTER;");
-		classColumn.setStyle("-fx-alignment: CENTER;");
-		dueDateColumn.setStyle("-fx-alignment: CENTER;");
+		taskNameColumn.setStyle("-fx-alignment: CENTER;");
+		taskTypeColumn.setStyle("-fx-alignment: CENTER;");
+		taskClassColumn.setStyle("-fx-alignment: CENTER;");
+		taskDueDateColumn.setStyle("-fx-alignment: CENTER;");
 		
 		initializeTasksData();
-		
-		taskView.setVisible(true);
 	}
 	private void initializeClass() {
-		classView.setVisible(true);
+		//TODO: write
 	}
 	private void initializeHomeData() {
 		//dailyTreeTableView.getRoot().getChildren().clear();
@@ -235,15 +258,17 @@ public class MainNewController implements Initializable{
 		//TODO: write
 	}
 	private void initializeTasksData() {
-		tableView.getItems().clear();
-		tableView.setItems(ModelControl.getTasks(""));
-		tableView.getSortOrder().add(dueDateColumn);
+		taskTable.getItems().clear();
+		taskTable.setItems(ModelControl.getTasks(""));
+		taskTable.getSortOrder().add(taskDueDateColumn);
 	}
-	//task list tab
+	private void initializeClassData() {
+		//TODO: write
+	}
 	@FXML
-	private void addButtonClicked() {
-		int size = tableView.getItems().size();
-		int sIndex = tableView.getSelectionModel().getSelectedIndex();
+	private void taskAddButtonClicked() {
+		int size = taskTable.getItems().size();
+		int sIndex = taskTable.getSelectionModel().getSelectedIndex();
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("newTask.fxml"));
 			Scene addWindow = new Scene(loader.load());
@@ -254,14 +279,14 @@ public class MainNewController implements Initializable{
 			stage.showAndWait();
 			initializeTasks();
 			//select correct row after closing add window
-			if(size == tableView.getItems().size()) {
-				tableView.getSelectionModel().select(sIndex);
+			if(size == taskTable.getItems().size()) {
+				taskTable.getSelectionModel().select(sIndex);
 			}
 			else {
 				ArrayList<Task> tasks = ModelControl.getTasks();
-				for(int count = 0;count<tableView.getItems().size();count++) {
-					if(tasks.get(tasks.size()-1).getId() == tableView.getItems().get(count).getId()) {
-						tableView.getSelectionModel().select(count);
+				for(int count = 0;count<taskTable.getItems().size();count++) {
+					if(tasks.get(tasks.size()-1).getId() == taskTable.getItems().get(count).getId()) {
+						taskTable.getSelectionModel().select(count);
 					}
 				}
 			}
@@ -270,15 +295,11 @@ public class MainNewController implements Initializable{
 			e.printStackTrace();
 		}
 	}
-	private void initializeClassData() {
-		//TODO: write
-	}
-	//task list tab
 	@FXML
-	private void viewButtonClicked() {
+	private void taskViewButtonClicked() {
 		//highlighted row in table
-		Task selected = tableView.getSelectionModel().selectedItemProperty().get();
-		int sIndex = tableView.getSelectionModel().getSelectedIndex();
+		Task selected = taskTable.getSelectionModel().selectedItemProperty().get();
+		int sIndex = taskTable.getSelectionModel().getSelectedIndex();
 		if(selected != null) {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("viewTask.fxml"));
@@ -295,7 +316,130 @@ public class MainNewController implements Initializable{
 				stage.setScene(viewWindow);
 				stage.showAndWait();
 				initializeTasks();
-				tableView.getSelectionModel().select(sIndex);
+				taskTable.getSelectionModel().select(sIndex);
+			}catch(IOException e) {
+				System.out.println("\nError code: Satchel\n" + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.out.println("\nError Code: Row not selected");
+		}
+	}
+	@FXML
+	private void classAddButtonClicked() {
+		int size = classTable.getItems().size();
+		int sIndex = classTable.getSelectionModel().getSelectedIndex();
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("newClass.fxml"));
+			Scene addWindow = new Scene(loader.load());
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.initStyle(StageStyle.UTILITY);
+			stage.setScene(addWindow);
+			stage.showAndWait();
+			initializeClass();
+			//select correct row after closing add window
+			if(size == classTable.getItems().size()) {
+				classTable.getSelectionModel().select(sIndex);
+			}
+			else {
+				ArrayList<Models.Class> classes = ModelControl.getClasses();
+				for(int count = 0;count<classTable.getItems().size();count++) {
+					if(classes.get(classes.size()-1).getId() == classTable.getItems().get(count).getId()) {
+						classTable.getSelectionModel().select(count);
+					}
+				}
+			}
+		}catch(IOException e) {
+			System.out.println("\nError code: Pouch\n" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	private void classViewButtonClicked() {
+		//highlighted row in table
+		Models.Class selected = classTable.getSelectionModel().selectedItemProperty().get();
+		int sIndex = classTable.getSelectionModel().getSelectedIndex();
+		if(selected != null) {
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("viewClass.fxml"));
+				
+				//pass in values from selected row
+				//TODO: create controller and layouts for different views
+				ViewClassController controller = new ViewClassController(selected);
+				
+				loader.setController(controller);
+				Scene viewWindow = new Scene(loader.load());
+				
+				Stage stage = new Stage();
+				stage.initModality(Modality.APPLICATION_MODAL);
+				stage.initStyle(StageStyle.UTILITY);
+				stage.setScene(viewWindow);
+				stage.showAndWait();
+				initializeClass();
+				classTable.getSelectionModel().select(sIndex);
+			}catch(IOException e) {
+				System.out.println("\nError code: Satchel\n" + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.out.println("\nError Code: Row not selected");
+		}
+	}
+	@FXML
+	private void typeAddButtonClicked() {
+		int size = typeTable.getItems().size();
+		int sIndex = typeTable.getSelectionModel().getSelectedIndex();
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("newType.fxml"));
+			Scene addWindow = new Scene(loader.load());
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.initStyle(StageStyle.UTILITY);
+			stage.setScene(addWindow);
+			stage.showAndWait();
+			initializeClass();
+			//select correct row after closing add window
+			if(size == typeTable.getItems().size()) {
+				typeTable.getSelectionModel().select(sIndex);
+			}
+			else {
+				ArrayList<TaskType> types = ModelControl.getTaskTypes();
+				for(int count = 0;count<typeTable.getItems().size();count++) {
+					if(types.get(types.size()-1).getId() == typeTable.getItems().get(count).getId()) {
+						typeTable.getSelectionModel().select(count);
+					}
+				}
+			}
+		}catch(IOException e) {
+			System.out.println("\nError code: Pouch\n" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	@FXML
+	private void typeViewButtonClicked() {
+		//highlighted row in table
+		TaskType selected = typeTable.getSelectionModel().selectedItemProperty().get();
+		int sIndex = typeTable.getSelectionModel().getSelectedIndex();
+		if(selected != null) {
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("viewType.fxml"));
+				
+				//pass in values from selected row
+				ViewTypeController controller = new ViewTypeController(selected);
+				
+				loader.setController(controller);
+				Scene viewWindow = new Scene(loader.load());
+				
+				Stage stage = new Stage();
+				stage.initModality(Modality.APPLICATION_MODAL);
+				stage.initStyle(StageStyle.UTILITY);
+				stage.setScene(viewWindow);
+				stage.showAndWait();
+				initializeClass();
+				typeTable.getSelectionModel().select(sIndex);
 			}catch(IOException e) {
 				System.out.println("\nError code: Satchel\n" + e.getMessage());
 				e.printStackTrace();
@@ -307,50 +451,87 @@ public class MainNewController implements Initializable{
 	}
 	//open view window on double click
 	@FXML
-	private void handleClick() {
-	    Task row = tableView.getSelectionModel().getSelectedItem();
+	private void handleTaskClick() {
+	    Task row = taskTable.getSelectionModel().getSelectedItem();
 	    if(row == null) return;
-	    if(row != temp){
-	        temp = row;
-	        lastClickTime = new Date();
-	    } else if(row == temp) {
+	    if(row != taskTemp){
+	        taskTemp = row;
+	        taskLastClickTime = new Date();
+	    } else if(row == taskTemp) {
 	        Date now = new Date();
-	        long diff = now.getTime() - lastClickTime.getTime();
+	        long diff = now.getTime() - taskLastClickTime.getTime();
 	        if (diff < 300){ //another click registered in 300 millis
-	             viewButtonClicked();
+	             taskViewButtonClicked();
 	        } else {
-	            lastClickTime = new Date();
+	            taskLastClickTime = new Date();
 	        }
 	    }
 	}
-
+	@FXML
+	private void handleClassClick() {
+	    Models.Class row = classTable.getSelectionModel().getSelectedItem();
+	    if(row == null) return;
+	    if(row != classTemp){
+	        classTemp = row;
+	        classLastClickTime = new Date();
+	    } else if(row == classTemp) {
+	        Date now = new Date();
+	        long diff = now.getTime() - classLastClickTime.getTime();
+	        if (diff < 300){ //another click registered in 300 millis
+	             classViewButtonClicked();
+	        } else {
+	            classLastClickTime = new Date();
+	        }
+	    }
+	}
+	@FXML
+	private void handleTypeClick() {
+	    TaskType row = typeTable.getSelectionModel().getSelectedItem();
+	    if(row == null) return;
+	    if(row != typeTemp){
+	        typeTemp = row;
+	        typeLastClickTime = new Date();
+	    } else if(row == typeTemp) {
+	        Date now = new Date();
+	        long diff = now.getTime() - typeLastClickTime.getTime();
+	        if (diff < 300){ //another click registered in 300 millis
+	             typeViewButtonClicked();
+	        } else {
+	            typeLastClickTime = new Date();
+	        }
+	    }
+	}
 	@FXML
 	private void homeButtonClicked() {
 		resetButtons();
-		homeButton.setStyle("-fx-background-color:  #f2782f;");
+		homeButton.setStyle(selectedColor);
 		resetViews();
 		initializeHome();
+		homeView.setVisible(true);
 	}
 	@FXML
 	private void calendarButtonClicked() {
 		resetButtons();
-		calendarButton.setStyle("-fx-background-color:  #f2782f;");
+		calendarButton.setStyle(selectedColor);
 		resetViews();
 		initializeCalendar();
+		calendarView.setVisible(true);
 	}
 	@FXML
 	private void taskButtonClicked() {
 		resetButtons();
-		taskButton.setStyle("-fx-background-color:  #f2782f;");
+		taskButton.setStyle(selectedColor);
 		resetViews();
 		initializeTasks();
+		taskView.setVisible(true);
 	}
 	@FXML
 	private void classButtonClicked() {
 		resetButtons();
-		classButton.setStyle("-fx-background-color:  #f2782f;");
+		classButton.setStyle(selectedColor);
 		resetViews();
 		initializeClass();
+		classView.setVisible(true);
 	}
 	@FXML
 	private void leftArrowClicked() {
