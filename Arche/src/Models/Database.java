@@ -12,7 +12,7 @@ public class Database {
 	public static void addTask(Task t) {
 		PreparedStatement prep = null;
 		try {
-			prep = DBConn.getConnection().prepareStatement("INSERT INTO Tasks VALUES (?,?,?,?,?,?,?,?);");
+			prep = DBConn.getConnection().prepareStatement("INSERT INTO Tasks VALUES (?,?,?,?,?,?,?,?,?);");
 			//prep.setInt(1, t.getId());
 			prep.setString(2, t.getName());
 			prep.setString(3, t.getDescription());
@@ -21,6 +21,7 @@ public class Database {
 			prep.setBoolean(6, t.getOnFlag());
 			prep.setString(7, t.getType());
 			prep.setString(8, t.getClassAbr());
+			prep.setString(9, t.getScheduledWorkTime());
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {
@@ -43,11 +44,14 @@ public class Database {
 	public static void addClass(Class c) {
 		PreparedStatement prep = null;
 		try {
-			prep = DBConn.getConnection().prepareStatement("INSERT INTO Classes VALUES (?,?,?,?);");
+			prep = DBConn.getConnection().prepareStatement("INSERT INTO Classes VALUES (?,?,?,?,?,?,?);");
 			//prep.setInt(1, c.getId());
 			prep.setString(2, c.getName());
 			prep.setString(3, c.getAbbreviation());
-			prep.setString(4, c.getNotes());
+			prep.setString(4, c.getDetails());
+			prep.setInt(5, c.getTotalAssignments());
+			prep.setString(6, c.getDaysOfWeek());
+			prep.setString(7, c.getTimeOfDay());
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {
@@ -72,11 +76,12 @@ public class Database {
 	public static void addTaskType(TaskType tt) {
 		PreparedStatement prep = null;
 		try {
-			prep = DBConn.getConnection().prepareStatement("INSERT INTO TaskTypes VALUES (?,?,?);");
+			prep = DBConn.getConnection().prepareStatement("INSERT INTO TaskTypes VALUES (?,?,?,?,?);");
 			//prep.setInt(1, tt.getId());
 			prep.setString(2, tt.getName());
 			prep.setString(3, tt.getDescription());
 			prep.setInt(4, tt.getWarningPeriod());
+			prep.setInt(5, tt.getTimeToComplete());
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {
@@ -87,14 +92,16 @@ public class Database {
 		PreparedStatement prep = null;
 		try {
 			prep = DBConn.getConnection().prepareStatement("UPDATE Tasks SET name = ?, description = ?, "
-					+ "dueDate = ?, finishFlag = ?, class = ?, type = ? WHERE id = ?;");
+					+ "dueDate = ?, finishFlag = ?, onFlag = ?, class = ?, type = ?, scheduledWorkTime = ?, WHERE id = ?;");
 			prep.setString(1, t.getName());
 			prep.setString(2, t.getDescription());
 			prep.setLong(3, t.getDueDate());
 			prep.setBoolean(4, t.getFinishFlag());
-			prep.setString(5, t.getClassAbr());
-			prep.setString(6, t.getType());
-			prep.setInt(7, t.getId());
+			prep.setBoolean(5, t.getOnFlag());
+			prep.setString(6, t.getClassAbr());
+			prep.setString(7, t.getType());
+			prep.setString(8, t.getScheduledWorkTime());
+			prep.setInt(9, t.getId());
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {
@@ -117,12 +124,15 @@ public class Database {
 	public static void updateClass(Class c) {
 		PreparedStatement prep = null;
 		try {
-			prep = DBConn.getConnection().prepareStatement("UPDATE Administrators SET name = ?, abbreviation = ?, notes = ? "
-					+ "WHERE id = ?;");
+			prep = DBConn.getConnection().prepareStatement("UPDATE Administrators SET name = ?, abbreviation = ?, details = ?, "
+					+ "totalAssignments = ?, daysOfWeek = ?, timeOfDay = ? WHERE id = ?;");
 			prep.setString(1, c.getName());
 			prep.setString(2, c.getAbbreviation());
-			prep.setString(3, c.getNotes());
-			prep.setInt(4, c.getId());
+			prep.setString(3, c.getDetails());
+			prep.setInt(4, c.getTotalAssignments());
+			prep.setString(5,  c.getDaysOfWeek());
+			prep.setString(6,  c.getTimeOfDay());
+			prep.setInt(7, c.getId());
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {
@@ -148,12 +158,13 @@ public class Database {
 	public static void updateTaskType(TaskType tt) {
 		PreparedStatement prep = null;
 		try {
-			prep = DBConn.getConnection().prepareStatement("UPDATE TaskTypes SET name = ?, description = ?, warningPeriod = ? "
-					+ "WHERE id = ?;");
+			prep = DBConn.getConnection().prepareStatement("UPDATE TaskTypes SET name = ?, description = ?, warningPeriod = ?, "
+					+ "timeToComplete = ? WHERE id = ?;");
 			prep.setString(1, tt.getName());
 			prep.setString(2, tt.getDescription());
 			prep.setInt(3, tt.getWarningPeriod());
-			prep.setInt(4,  tt.getId());
+			prep.setInt(4, tt.getTimeToComplete());
+			prep.setInt(5,  tt.getId());
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {

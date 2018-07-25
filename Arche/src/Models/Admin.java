@@ -6,9 +6,8 @@ public class Admin {
 	
 	//initialization constructor
 	public Admin(int i, String u, String p) {
+		this(u,p);
 		id = i;
-		username = u;
-		password = p;
 	}
 	//new admin constructor
 	public Admin(String u, String p) {

@@ -39,7 +39,7 @@ public class ModelControl {
 			while(rs.next()) {
 				tasks.add(new Task(rs.getInt("id"), rs.getString("name"), rs.getString("description"),
 						 rs.getLong("dueDate"), rs.getBoolean("finishFlag"), rs.getBoolean("onFlag"),
-						 rs.getString("type"), rs.getString("class")));
+						 rs.getString("type"), rs.getString("class"), rs.getString("scheduledWorkTime")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Solar\n" + e.getMessage());
@@ -56,7 +56,8 @@ public class ModelControl {
 			rs = Database.getClasses();
 			while(rs.next()) {
 				classes.add(new Class(rs.getInt("id"), rs.getString("name"), rs.getString("abbreviation"),
-						rs.getString("notes")));
+						rs.getString("details"), rs.getInt("totalAssignments"), rs.getString("daysOfWeek"),
+						rs.getString("timeOfDay")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Swab\n" + e.getMessage());
@@ -74,15 +75,17 @@ public class ModelControl {
 			rs = Database.getTaskTypes();
 			while(rs.next()) {
 				taskTypes.add(new TaskType(rs.getInt("id"), rs.getString("name"), rs.getString("description"),
-						rs.getInt("warningPeriod")));
+						rs.getInt("warningPeriod"), rs.getInt("timeToComplete")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Center\n" + e.getMessage());
 		}
 	}
+	//obsolete
 	//TODO: need to test to see whether identical task already exists excluding description
-	public static void addTask(String name, String description, long dueDate, boolean onFlag, String type, String ca) {
+	public static void addTask(String name, String description, long dueDate, boolean onFlag, String type, String ca, String scheduledWorkTime) {
 		Task t = new Task(name, description, dueDate, onFlag, type, ca);
+		t.setScheduledWorkTime(scheduledWorkTime);
 		tasks.add(t);
 		Database.addTask(t);
 	}
@@ -91,8 +94,8 @@ public class ModelControl {
 		admins.add(a);
 		Database.addAdmin(a);
 	}
-	public static void addClass(String name, String abbreviation, String notes) {
-		Class c = new Class(name, abbreviation, notes);
+	public static void addClass(String name, String abbreviation, String details, int totalAssignments, String daysOfWeek, String timeOfDay) {
+		Class c = new Class(name, abbreviation, details, totalAssignments, daysOfWeek, timeOfDay);
 		classes.add(c);
 		Database.addClass(c);
 	}
@@ -121,8 +124,8 @@ public class ModelControl {
 		Database.addProject(p);
 	}
 	//need to test to see whether tasktype with same name already exists
-	public static void addTaskType(String name, String description, int warningPeriod) {
-		TaskType tt = new TaskType(name, description, warningPeriod);
+	public static void addTaskType(String name, String description, int warningPeriod, int timeToComplete) {
+		TaskType tt = new TaskType(name, description, warningPeriod, timeToComplete);
 		taskTypes.add(tt);
 		Database.addTaskType(tt);
 	}

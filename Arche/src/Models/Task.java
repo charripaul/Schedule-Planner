@@ -16,21 +16,17 @@ public class Task {
 	private boolean onFlag;					//true if appointment at this specific time, false if due by date
 	private String type;
 	private long dueDate;
-	private String classAbr;
+	private String classAbr, scheduledWorkTime;
 	
-	public Task(String s) {
-		name = s;
+	public Task(String n) {
+		name = n;			//for tree items on treetableview
 	}
 	//initialization constructor
-	public Task(int i, String n, String d, long dd, boolean ff, boolean of, String t, String ca) {
+	public Task(int i, String n, String d, long dd, boolean ff, boolean of, String t, String ca, String swt) {
+		this(n,d,dd,of,t,ca);
 		id = i;
-		name = n;
-		description = d;
-		dueDate = dd;
 		finishFlag = ff;
-		onFlag = of;
-		type = t;
-		classAbr = ca;
+		scheduledWorkTime = swt;
 	}
 	//new task constructor
 	public Task(String n, String d, long dd, boolean of, String t, String ca) {
@@ -65,6 +61,9 @@ public class Task {
 	}
 	public void setClassAbr(String ca) {
 		classAbr = ca;
+	}
+	public void setScheduledWorkTime(String swt) {
+		scheduledWorkTime = swt;
 	}
 	public int getId() {
 		return id;
@@ -103,6 +102,9 @@ public class Task {
 	}
 	public String getClassAbr() {
 		return classAbr;
+	}
+	public String getScheduledWorkTime() {
+		return scheduledWorkTime;
 	}
 	public String toString() {
 		return "id: " + id + "\nname: " + name + "\ntype: "

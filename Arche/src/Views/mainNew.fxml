@@ -203,9 +203,8 @@
                   </HBox>
                </top>
             </BorderPane>
-            <BorderPane fx:id="calendarView" prefHeight="200.0" prefWidth="200.0" />
-            <BorderPane fx:id="classView" prefHeight="200.0" prefWidth="200.0" />
-            <BorderPane fx:id="taskView" prefHeight="200.0" prefWidth="200.0">
+            <BorderPane fx:id="calendarView" prefHeight="200.0" prefWidth="200.0" visible="false" />
+            <BorderPane fx:id="taskView" prefHeight="200.0" prefWidth="200.0" visible="false">
                <top>
                   <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
                      <children>
@@ -247,6 +246,80 @@
                   </VBox>
                </bottom>
             </BorderPane>
+            <BorderPane fx:id="classView" prefHeight="200.0" prefWidth="200.0">
+               <top>
+                  <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label fx:id="title21" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="302.0" text="Classes and Types" textFill="WHITE">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets left="90.0" right="15.0" />
+                     </padding>
+                  </HBox>
+               </top>
+               <center>
+                  <JFXTabPane BorderPane.alignment="CENTER">
+                     <tabs>
+                        <Tab text="Classes">
+                           <content>
+                              <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                 <center>
+                                    <TableView prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
+                                      <columns>
+                                        <TableColumn prefWidth="169.0" text="Name" />
+                                        <TableColumn prefWidth="100.0" text="Abbreviation" />
+                                          <TableColumn prefWidth="375.0" text="Details" />
+                                          <TableColumn prefWidth="122.0" text="Days of Week" />
+                                          <TableColumn prefWidth="127.0" text="Time" />
+                                          <TableColumn prefWidth="142.0" text="Total Assignments" />
+                                      </columns>
+                                    </TableView>
+                                 </center>
+                                 <bottom>
+                                    <HBox>
+                                       <children>
+                                          <JFXButton style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                                          <Pane HBox.hgrow="ALWAYS" />
+                                          <JFXButton prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                                       </children>
+                                    </HBox>
+                                 </bottom>
+                              </BorderPane>
+                           </content>
+                        </Tab>
+                        <Tab text="Task Types">
+                           <content>
+                              <BorderPane>
+                                 <center>
+                                    <TableView prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css">
+                                      <columns>
+                                          <TableColumn prefWidth="171.0" text="Name" />
+                                        <TableColumn prefWidth="481.0" text="Description" />
+                                        <TableColumn prefWidth="165.0" text="Notice Period (days)" />
+                                          <TableColumn prefWidth="218.0" text="Estimated Time to Complete (mins)" />
+                                      </columns>
+                                    </TableView>
+                                 </center>
+                                 <bottom>
+                                    <HBox>
+                                       <children>
+                                          <JFXButton style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                                          <Pane HBox.hgrow="ALWAYS" />
+                                          <JFXButton prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                                       </children>
+                                    </HBox>
+                                 </bottom>
+                              </BorderPane>
+                           </content>
+                        </Tab>
+                     </tabs>
+                  </JFXTabPane>
+               </center></BorderPane>
          </children>
       </StackPane>
    </center>

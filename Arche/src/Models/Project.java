@@ -7,11 +7,8 @@ public class Project {
 	
 	//initialization constructor
 	public Project(int i, String n, String d, String cs, int pl) {
+		this(n,d,cs,pl);
 		id = i;
-		name = n;
-		description = d;
-		currentStep = cs;
-		priorityLevel = pl;
 	}
 	//new project constructor
 	public Project(String n, String d, String cs, int pl) {
