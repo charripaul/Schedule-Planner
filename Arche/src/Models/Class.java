@@ -1,23 +1,27 @@
 package Models;
 
+import java.time.LocalTime;
+
 public class Class {
 	private int id;
-	private String name, abbreviation, details, daysOfWeek, timeOfDay;
+	private String name, abbreviation, details, daysOfWeek;
+	private LocalTime startTime, endTime;
 	private int totalAssignments;
 	
 	//initialization constructor
-	public Class(int i, String n, String a, String d, int ta, String dow, String tod) {
-		this(n,a,d,ta,dow,tod);
+	public Class(int i, String n, String a, String d, int ta, String dow, String st, String et) {
+		this(n,a,d,ta,dow,st,et);
 		id = i;
 	}
 	//new class constructor
-	public Class(String n, String a, String d, int ta, String dow, String tod) {
+	public Class(String n, String a, String d, int ta, String dow, String st, String et) {
 		name = n;
 		abbreviation = a;
 		details = d;
 		totalAssignments = ta;
 		daysOfWeek = dow;
-		timeOfDay = tod;
+		startTime = LocalTime.parse(st);
+		endTime = LocalTime.parse(et);
 	}
 	public void setId(int i) {
 		id = i;
@@ -37,8 +41,17 @@ public class Class {
 	public void setTotalAssignments(int ta) {
 		totalAssignments = ta;
 	}
-	public void setTimeOfDay(String tod) {
-		timeOfDay = tod;
+	public void setStartTime(String st) {
+		startTime = LocalTime.parse(st);
+	}
+	public void setStartTime(LocalTime st) {
+		startTime = st;
+	}
+	public void setEndTime(String et) {
+		endTime = LocalTime.parse(et);
+	}
+	public void setEndTime(LocalTime et) {
+		endTime = et;
 	}
 	public int getId() {
 		return id;
@@ -58,7 +71,16 @@ public class Class {
 	public int getTotalAssignments() {
 		return totalAssignments;
 	}
-	public String getTimeOfDay() {
-		return timeOfDay;
+	public LocalTime getStartTime() {
+		return startTime;
+	}
+	public String getStartTime(String s) {
+		return startTime.toString();
+	}
+	public LocalTime getEndTime() {
+		return endTime;
+	}
+	public String getEndTime(String s) {
+		return endTime.toString();
 	}
 }

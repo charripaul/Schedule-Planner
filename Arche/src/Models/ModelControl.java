@@ -55,7 +55,7 @@ public class ModelControl {
 			while(rs.next()) {
 				classes.add(new Class(rs.getInt("id"), rs.getString("name"), rs.getString("abbreviation"),
 						rs.getString("details"), rs.getInt("totalAssignments"), rs.getString("daysOfWeek"),
-						rs.getString("timeOfDay")));
+						rs.getString("startTime"), rs.getString("endTime")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Swab\n" + e.getMessage());
@@ -73,7 +73,7 @@ public class ModelControl {
 			rs = Database.getTaskTypes();
 			while(rs.next()) {
 				taskTypes.add(new TaskType(rs.getInt("id"), rs.getString("name"), rs.getString("description"),
-						rs.getInt("warningPeriod"), rs.getInt("timeToComplete")));
+						rs.getInt("warningPeriod"), rs.getInt("timeToComplete"), rs.getInt("totalAssignments")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Center\n" + e.getMessage());
@@ -92,8 +92,9 @@ public class ModelControl {
 		admins.add(a);
 		Database.addAdmin(a);
 	}
-	public static void addClass(String name, String abbreviation, String details, int totalAssignments, String daysOfWeek, String timeOfDay) {
-		Class c = new Class(name, abbreviation, details, totalAssignments, daysOfWeek, timeOfDay);
+	public static void addClass(String name, String abbreviation, String details, String daysOfWeek,
+			String startTime, String endTime) {
+		Class c = new Class(name, abbreviation, details, 0, daysOfWeek, startTime, endTime);
 		classes.add(c);
 		Database.addClass(c);
 	}
@@ -123,7 +124,7 @@ public class ModelControl {
 	}
 	//need to test to see whether tasktype with same name already exists
 	public static void addTaskType(String name, String description, int warningPeriod, int timeToComplete) {
-		TaskType tt = new TaskType(name, description, warningPeriod, timeToComplete);
+		TaskType tt = new TaskType(name, description, warningPeriod, timeToComplete, 0);
 		taskTypes.add(tt);
 		Database.addTaskType(tt);
 	}
@@ -221,6 +222,11 @@ public class ModelControl {
 			}
 		}
 		Database.updateTaskType(tt);
+	}
+	public static void updateDependency() {
+		//TODO: write for task types and classes
+		//task types and classes rely on number of dependents
+		//tasks rely on names
 	}
 	public static void deleteTask(Task t) {
 		System.out.println(t);

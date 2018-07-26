@@ -298,10 +298,11 @@
                                  <center>
                                     <TableView fx:id="typeTable" onMouseClicked="#handleTypeClick" prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css">
                                       <columns>
-                                          <TableColumn fx:id="typeNameColumn" prefWidth="171.0" text="Name" />
-                                        <TableColumn fx:id="typeDescColumn" prefWidth="481.0" text="Description" />
-                                        <TableColumn fx:id="typeWarnColumn" prefWidth="165.0" text="Notice Period (days)" />
-                                          <TableColumn fx:id="typeTTCColumn" prefWidth="218.0" text="Estimated Time to Complete (mins)" />
+                                          <TableColumn fx:id="typeNameColumn" prefWidth="154.0" text="Name" />
+                                        <TableColumn fx:id="typeDescColumn" minWidth="0.0" prefWidth="425.0" text="Description" />
+                                        <TableColumn fx:id="typeWarnColumn" minWidth="0.0" prefWidth="124.0" text="Notice Period (days)" />
+                                          <TableColumn fx:id="typeTTCColumn" minWidth="0.0" prefWidth="208.0" text="Estimated Time to Complete (mins)" />
+                                          <TableColumn minWidth="0.0" prefWidth="121.0" text="Total Assignments" />
                                       </columns>
                                     </TableView>
                                  </center>

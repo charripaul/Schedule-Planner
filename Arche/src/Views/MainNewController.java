@@ -99,6 +99,7 @@ public class MainNewController implements Initializable{
 	@FXML private TableColumn<TaskType, String> typeDescColumn;
 	@FXML private TableColumn<TaskType, Integer> typeWarnColumn;
 	@FXML private TableColumn<TaskType, Integer> typeTTCColumn;
+	@FXML private TableColumn<TaskType, Integer> typeTAColumn;
 	
 	//for measuring time between clicks for double click feature
 	Task taskTemp;
@@ -109,7 +110,7 @@ public class MainNewController implements Initializable{
 	Date typeLastClickTime;
 	
 	//button click properties
-	String selectedColor = "-fx-background-color:  #f2782f;";
+	final String selectedColor = "-fx-background-color:  #f2782f;";
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -248,16 +249,20 @@ public class MainNewController implements Initializable{
 		typeDescColumn.setCellValueFactory(new PropertyValueFactory<TaskType, String>("description"));
 		typeWarnColumn.setCellValueFactory(new PropertyValueFactory<TaskType, Integer>("warningPeriod"));
 		typeTTCColumn.setCellValueFactory(new PropertyValueFactory<TaskType, Integer>("timeToComplete"));
+		typeTAColumn.setCellValueFactory(new PropertyValueFactory<TaskType, Integer>("totalAssignments"));
 		
 		typeNameColumn.setStyle("-fx-alignment: CENTER;");
 		typeDescColumn.setStyle("-fx-alignment: CENTER;");
 		typeWarnColumn.setStyle("-fx-alignment: CENTER;");
 		typeTTCColumn.setStyle("-fx-alignment: CENTER;");
+		typeTAColumn.setStyle("-fx-alignment: CENTER;");
 		
-		typeNameColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.165));
-		typeDescColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.465));
-		typeWarnColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.16));
-		typeTTCColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.2));
+		
+		typeNameColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.149));
+		typeDescColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.411));
+		typeWarnColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.12));
+		typeTTCColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.202));
+		typeTAColumn.prefWidthProperty().bind(typeTable.widthProperty().multiply(.113));
 		
 		initializeClassData();
 	}

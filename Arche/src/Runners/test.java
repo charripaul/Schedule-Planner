@@ -3,6 +3,7 @@ package Runners;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ import javafx.stage.Stage;
 
 public class test {
 	public static void main(String args[]) {
-		String s = DataLock.encrypt("");
-		System.out.println(s);
-		System.out.println(DataLock.decrypt(s));
+		LocalTime time = LocalTime.now();
+		System.out.println(time.toString());
+		System.out.println(LocalTime.parse(time.toString()));
 	}
 }

@@ -3,19 +3,20 @@ package Models;
 public class TaskType {
 	private int id;
 	private String name, description;
-	private int warningPeriod, timeToComplete;
+	private int warningPeriod, timeToComplete, totalAssignments;
 	
 	//initialization constructor
-	public TaskType(int i, String n, String d, int wp, int ttc) {
-		this(n,d,wp, ttc);
+	public TaskType(int i, String n, String d, int wp, int ttc, int ta) {
+		this(n,d,wp,ttc,ta);
 		id = i;
 	}
 	//new type constructor
-	public TaskType(String n, String d, int wp, int ttc) {
+	public TaskType(String n, String d, int wp, int ttc, int ta) {
 		name = n;
 		description = d;
 		warningPeriod = wp;
 		timeToComplete = ttc;
+		totalAssignments = ta;
 	}
 	public void setId(int i) {
 		id = i;
@@ -32,6 +33,9 @@ public class TaskType {
 	public void setTimeToComplete(int ttc) {
 		timeToComplete = ttc;
 	}
+	public void setTotalAssignments(int ta) {
+		totalAssignments = ta;
+	}
 	public int getId() {
 		return id;
 	}
@@ -46,5 +50,8 @@ public class TaskType {
 	}
 	public int getTimeToComplete() {
 		return timeToComplete;
+	}
+	public int getTotalAssignments() {
+		return totalAssignments;
 	}
 }
