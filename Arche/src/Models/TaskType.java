@@ -36,6 +36,12 @@ public class TaskType {
 	public void setTotalAssignments(int ta) {
 		totalAssignments = ta;
 	}
+	public void addOneToTA() {
+		totalAssignments+=1;
+	}
+	public void removeOneFromTA() {
+		totalAssignments-=1;
+	}
 	public int getId() {
 		return id;
 	}

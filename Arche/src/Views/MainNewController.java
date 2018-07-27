@@ -19,6 +19,8 @@ import Models.Task;
 import Models.TaskType;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -38,6 +40,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 
 public class MainNewController implements Initializable{
 	@FXML private JFXButton homeButton;
@@ -227,7 +230,15 @@ public class MainNewController implements Initializable{
 		classAbrColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, String>("abbreviation"));
 		classDetailsColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, String>("details"));
 		classDOWColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, String>("daysOfWeek"));
-		classTimeColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, String>("timeOfDay"));
+		classTimeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Models.Class, String>,
+				ObservableValue<String>>(){
+	        @Override
+	        public ObservableValue<String> call(
+	                TableColumn.CellDataFeatures<Models.Class, String> c) {
+	            return new SimpleStringProperty(c.getValue().getStartTime("")
+	                    + " - " + c.getValue().getEndTime(""));
+	        }
+		});
 		classTAColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, Integer>("totalAssignments"));
 		
 		classNameColumn.setStyle("-fx-alignment: CENTER;");

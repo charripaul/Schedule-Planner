@@ -86,6 +86,18 @@ public class ModelControl {
 		t.setScheduledWorkTime(scheduledWorkTime);
 		tasks.add(t);
 		Database.addTask(t);
+		for(int count = 0;count<classes.size();count++) {
+			if(classes.get(count).getAbbreviation().equals(ca)) {
+				classes.get(count).addOneToTA();
+				Database.updateClass(classes.get(count));
+			}
+		}
+		for(int count=0;count<taskTypes.size();count++) {
+			if(taskTypes.get(count).getName().equals(type)) {
+				taskTypes.get(count).addOneToTA();;
+				Database.updateTaskType(taskTypes.get(count));
+			}
+		}
 	}
 	public static void addAdmin(String username, String password) {
 		Admin a = new Admin(username, DataLock.encrypt(password));
@@ -122,13 +134,15 @@ public class ModelControl {
 		projects.add(p);
 		Database.addProject(p);
 	}
-	//need to test to see whether tasktype with same name already exists
+	//TODO: need to test to see whether tasktype with same name already exists
 	public static void addTaskType(String name, String description, int warningPeriod, int timeToComplete) {
 		TaskType tt = new TaskType(name, description, warningPeriod, timeToComplete, 0);
 		taskTypes.add(tt);
 		Database.addTaskType(tt);
 	}
 	public static void addTask(Task t) {
+		String classAbr = t.getClassAbr();
+		String type = t.getType();
 		if(tasks.size() == 0) {
 			t.setId(1);
 		}
@@ -137,6 +151,18 @@ public class ModelControl {
 		}
 		tasks.add(t);
 		Database.addTask(t);
+		for(int count = 0;count<classes.size();count++) {
+			if(classes.get(count).getAbbreviation().equals(classAbr)) {
+				classes.get(count).addOneToTA();
+				Database.updateClass(classes.get(count));
+			}
+		}
+		for(int count=0;count<taskTypes.size();count++) {
+			if(taskTypes.get(count).getName().equals(type)) {
+				taskTypes.get(count).addOneToTA();;
+				Database.updateTaskType(taskTypes.get(count));
+			}
+		}
 	}
 	public static void addAdmin(Admin a) {
 		if(admins.size() == 0) {
@@ -148,6 +174,7 @@ public class ModelControl {
 		admins.add(a);
 		Database.addAdmin(a);
 	}
+	//make sure not duplicate abbreviation
 	public static void addClass(Class c) {
 		if(classes.size() == 0) {
 			c.setId(1);
@@ -223,13 +250,15 @@ public class ModelControl {
 		}
 		Database.updateTaskType(tt);
 	}
-	public static void updateDependency() {
+	//update total assignment values on classes and task types
+	public static void updateDependencies() {
 		//TODO: write for task types and classes
 		//task types and classes rely on number of dependents
 		//tasks rely on names
 	}
 	public static void deleteTask(Task t) {
-		System.out.println(t);
+		String classAbr = t.getClassAbr();
+		String type = t.getType();
 		for(int count = 0;count<tasks.size();count++) {
 			if(tasks.get(count).getId() == t.getId()) {
 				tasks.remove(count);
@@ -237,6 +266,18 @@ public class ModelControl {
 			}
 		}
 		Database.deleteTask(t);
+		for(int count = 0;count<classes.size();count++) {
+			if(classes.get(count).getAbbreviation().equals(classAbr)) {
+				classes.get(count).removeOneFromTA();
+				Database.updateClass(classes.get(count));
+			}
+		}
+		for(int count=0;count<taskTypes.size();count++) {
+			if(taskTypes.get(count).getName().equals(type)) {
+				taskTypes.get(count).removeOneFromTA();
+				Database.updateTaskType(taskTypes.get(count));
+			}
+		}
 	}
 	public static void deleteAdmin(Admin a) {
 		for(int count = 0;count<admins.size();count++) {
@@ -520,6 +561,22 @@ public class ModelControl {
 	}
 	public static void closeConnection() {
 		DBConn.closeConnection();
+	}
+	public static boolean isBeingUsed(Models.Class c) {
+		for(int count=0;count<tasks.size();count++) {
+			if(tasks.get(count).getClassAbr().equals(c.getAbbreviation())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public static boolean isBeingUsed(TaskType tt) {
+		for(int count=0;count<taskTypes.size();count++) {
+			if(tasks.get(count).getType().equals(tt.getName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	//convert number of days into long value for milliseconds
 	private static long getDayValue(int numOfDays) {

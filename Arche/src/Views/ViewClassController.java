@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTimePicker;
 
 import Models.ModelControl;
+import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class ViewClassController implements Initializable{
 	@FXML private TextField name;
@@ -28,7 +30,7 @@ public class ViewClassController implements Initializable{
 								thursday, friday, saturday, sunday;
 	@FXML private JFXTimePicker startTime, endTime;
 	@FXML private JFXButton deleteButton, saveButton;
-	@FXML private Label totalAssignments;
+	@FXML private Label totalAssignments, warningLabel;
 	
 	private final Models.Class temp;
 	//TODO: fix all methods for dependency on these structures
@@ -49,6 +51,19 @@ public class ViewClassController implements Initializable{
 		details.setText(c.getDetails());
 		startTime.setValue(c.getStartTime());
 		endTime.setValue(c.getEndTime());
+		totalAssignments.setText(c.getTotalAssignments()+"");
+		
+		//initialize checkboxes
+		String binary = c.getDaysOfWeek();
+		monday.setSelected(getBooleanVal(binary.substring(0,1)));
+		tuesday.setSelected(getBooleanVal(binary.substring(1,2)));
+		wednesday.setSelected(getBooleanVal(binary.substring(2,3)));
+		thursday.setSelected(getBooleanVal(binary.substring(3,4)));
+		friday.setSelected(getBooleanVal(binary.substring(4,5)));
+		saturday.setSelected(getBooleanVal(binary.substring(5,6)));
+		sunday.setSelected(getBooleanVal(binary.substring(6,7)));
+		
+		warningLabel.setVisible(false);
 	}
 	@FXML
 	private void saveButtonClicked() {
@@ -72,10 +87,14 @@ public class ViewClassController implements Initializable{
 	}
 	@FXML
 	private void deleteButtonClicked() {
-		if(ConfirmExitView.display("Are you sure you want to delete this task?\nDeleting this"
-				+ " Class will move any tasks assigned to it into other class")) {
-			ModelControl.deleteClass(temp);
-			closeWindow();
+		warningLabel.setText("");
+		if(ModelControl.isBeingUsed(temp)) {
+			displayWarningLabel("Cannot delete Class: Already in use by Task");
+		}else {
+			if(ConfirmExitView.display("Are you sure you want to delete this task?")) {
+				ModelControl.deleteClass(temp);
+				closeWindow();
+			}
 		}
 	}
 	//detect change, ask for save changes on close
@@ -150,12 +169,31 @@ public class ViewClassController implements Initializable{
             setCloseEvent();
         });
 	}
+	private void displayWarningLabel(String s) {
+		warningLabel.setText(s);
+		warningLabel.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(3)
+		);
+		visiblePause.setOnFinished(
+		        event -> warningLabel.setVisible(false)
+		);
+		visiblePause.play();
+	}
 	private void setCloseEvent() {
 		Stage window = (Stage) name.getScene().getWindow();
 		window.setOnCloseRequest(e -> {
 			e.consume();
 			closeWindow(ConfirmExitView.display("Are you sure you want to exit without saving?"));
 		});
+	}
+	private boolean getBooleanVal(String s) {
+		if(s.equals("0")) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 	private String getBinary(boolean b) {
 		if(b) {

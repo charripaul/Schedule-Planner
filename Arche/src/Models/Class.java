@@ -53,6 +53,12 @@ public class Class {
 	public void setEndTime(LocalTime et) {
 		endTime = et;
 	}
+	public void addOneToTA() {
+		totalAssignments+=1;
+	}
+	public void removeOneFromTA() {
+		totalAssignments-=1;
+	}
 	public int getId() {
 		return id;
 	}

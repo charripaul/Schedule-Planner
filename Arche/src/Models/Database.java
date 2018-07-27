@@ -126,7 +126,7 @@ public class Database {
 	public static void updateClass(Class c) {
 		PreparedStatement prep = null;
 		try {
-			prep = DBConn.getConnection().prepareStatement("UPDATE Administrators SET name = ?, abbreviation = ?, details = ?, "
+			prep = DBConn.getConnection().prepareStatement("UPDATE Classes SET name = ?, abbreviation = ?, details = ?, "
 					+ "totalAssignments = ?, daysOfWeek = ?, startTime = ?, endTime = ? WHERE id = ?;");
 			prep.setString(1, c.getName());
 			prep.setString(2, c.getAbbreviation());
