@@ -12,7 +12,7 @@ public class Database {
 	public static void addTask(Task t) {
 		PreparedStatement prep = null;
 		try {
-			prep = DBConn.getConnection().prepareStatement("INSERT INTO Tasks VALUES (?,?,?,?,?,?,?,?,?);");
+			prep = DBConn.getConnection().prepareStatement("INSERT INTO Tasks VALUES (?,?,?,?,?,?,?,?,?,?,?);");
 			//prep.setInt(1, t.getId());
 			prep.setString(2, t.getName());
 			prep.setString(3, t.getDescription());
@@ -22,6 +22,8 @@ public class Database {
 			prep.setString(7, t.getType());
 			prep.setString(8, t.getClassAbr());
 			prep.setString(9, t.getScheduledWorkTime());
+			prep.setInt(10, t.getNoticePeriod());
+			prep.setInt(11, t.getTimeToComplete());
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {
@@ -50,7 +52,7 @@ public class Database {
 			prep.setString(3, c.getAbbreviation());
 			prep.setString(4, c.getDetails());
 			prep.setInt(5, c.getTotalAssignments());
-			prep.setString(6, c.getDaysOfWeek());
+			prep.setString(6, c.getDaysOfWeek(""));
 			prep.setString(7, c.getStartTime(""));
 			prep.setString(8, c.getEndTime(""));
 			prep.execute();
@@ -94,7 +96,8 @@ public class Database {
 		PreparedStatement prep = null;
 		try {
 			prep = DBConn.getConnection().prepareStatement("UPDATE Tasks SET name = ?, description = ?, "
-					+ "dueDate = ?, finishFlag = ?, onFlag = ?, class = ?, type = ?, scheduledWorkTime = ? WHERE id = ?;");
+					+ "dueDate = ?, finishFlag = ?, onFlag = ?, class = ?, type = ?, scheduledWorkTime = ?,"
+					+ " noticePeriod = ?, timeToComplete = ? WHERE id = ?;");
 			prep.setString(1, t.getName());
 			prep.setString(2, t.getDescription());
 			prep.setLong(3, t.getDueDate());
@@ -103,7 +106,9 @@ public class Database {
 			prep.setString(6, t.getClassAbr());
 			prep.setString(7, t.getType());
 			prep.setString(8, t.getScheduledWorkTime());
-			prep.setInt(9, t.getId());
+			prep.setInt(9,  t.getNoticePeriod());
+			prep.setInt(10, t.getTimeToComplete());
+			prep.setInt(11, t.getId());
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {
@@ -132,7 +137,7 @@ public class Database {
 			prep.setString(2, c.getAbbreviation());
 			prep.setString(3, c.getDetails());
 			prep.setInt(4, c.getTotalAssignments());
-			prep.setString(5,  c.getDaysOfWeek());
+			prep.setString(5,  c.getDaysOfWeek(""));
 			prep.setString(6,  c.getStartTime(""));
 			prep.setString(7,  c.getEndTime(""));
 			prep.setInt(8, c.getId());

@@ -17,19 +17,21 @@ public class Task {
 	private String type;
 	private long dueDate;
 	private String classAbr, scheduledWorkTime;
+	private int noticePeriod, timeToComplete;
 	
 	public Task(String n) {
 		name = n;			//for tree items on treetableview
 	}
 	//initialization constructor
-	public Task(int i, String n, String d, long dd, boolean ff, boolean of, String t, String ca, String swt) {
-		this(n,d,dd,of,t,ca);
+	public Task(int i, String n, String d, long dd, boolean ff, boolean of, String t,
+			String ca, String swt, int np, int ttc) {
+		this(n,d,dd,of,t,ca,np,ttc);
 		id = i;
 		finishFlag = ff;
 		scheduledWorkTime = swt;
 	}
 	//new task constructor
-	public Task(String n, String d, long dd, boolean of, String t, String ca) {
+	public Task(String n, String d, long dd, boolean of, String t, String ca, int np, int ttc) {
 		name = n;
 		description = d;
 		dueDate = dd;
@@ -37,6 +39,8 @@ public class Task {
 		onFlag = of;
 		type = t;
 		classAbr = ca;
+		noticePeriod = np;
+		timeToComplete = ttc;
 	}
 	public void setId(int i) {
 		id = i;
@@ -64,6 +68,12 @@ public class Task {
 	}
 	public void setScheduledWorkTime(String swt) {
 		scheduledWorkTime = swt;
+	}
+	public void setNoticePeriod(int np) {
+		noticePeriod = np;
+	}
+	public void setTimeToComplete(int ttc) {
+		timeToComplete = ttc;
 	}
 	public int getId() {
 		return id;
@@ -105,6 +115,12 @@ public class Task {
 	}
 	public String getScheduledWorkTime() {
 		return scheduledWorkTime;
+	}
+	public int getNoticePeriod() {
+		return noticePeriod;
+	}
+	public int getTimeToComplete() {
+		return timeToComplete;
 	}
 	public String toString() {
 		return "id: " + id + "\nname: " + name + "\ntype: "

@@ -37,7 +37,8 @@ public class ModelControl {
 			while(rs.next()) {
 				tasks.add(new Task(rs.getInt("id"), rs.getString("name"), rs.getString("description"),
 						 rs.getLong("dueDate"), rs.getBoolean("finishFlag"), rs.getBoolean("onFlag"),
-						 rs.getString("type"), rs.getString("class"), rs.getString("scheduledWorkTime")));
+						 rs.getString("type"), rs.getString("class"), rs.getString("scheduledWorkTime"),
+						 rs.getInt("noticePeriod"), rs.getInt("timeToComplete")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Solar\n" + e.getMessage());
@@ -81,8 +82,9 @@ public class ModelControl {
 	}
 	//obsolete
 	//TODO: need to test to see whether identical task already exists excluding description
-	public static void addTask(String name, String description, long dueDate, boolean onFlag, String type, String ca, String scheduledWorkTime) {
-		Task t = new Task(name, description, dueDate, onFlag, type, ca);
+	public static void addTask(String name, String description, long dueDate, boolean onFlag,
+			String type, String ca, String scheduledWorkTime, int noticePeriod, int timeToComplete) {
+		Task t = new Task(name, description, dueDate, onFlag, type, ca, noticePeriod, timeToComplete);
 		t.setScheduledWorkTime(scheduledWorkTime);
 		tasks.add(t);
 		Database.addTask(t);
@@ -134,7 +136,6 @@ public class ModelControl {
 		projects.add(p);
 		Database.addProject(p);
 	}
-	//TODO: need to test to see whether tasktype with same name already exists
 	public static void addTaskType(String name, String description, int warningPeriod, int timeToComplete) {
 		TaskType tt = new TaskType(name, description, warningPeriod, timeToComplete, 0);
 		taskTypes.add(tt);
@@ -174,7 +175,6 @@ public class ModelControl {
 		admins.add(a);
 		Database.addAdmin(a);
 	}
-	//make sure not duplicate abbreviation
 	public static void addClass(Class c) {
 		if(classes.size() == 0) {
 			c.setId(1);
@@ -214,6 +214,32 @@ public class ModelControl {
 		}
 		Database.updateTask(t);
 	}
+	//update total assignments count
+	//if class for task changes
+	public static void updateTaskAndClassDependency(Task t, String oldClassAbr, String newClassAbr) {
+		updateTask(t);
+		for(int count=0;count<classes.size();count++) {
+			if(classes.get(count).getAbbreviation().equals(oldClassAbr)) {
+				classes.get(count).removeOneFromTA();
+			}
+			else if(classes.get(count).getAbbreviation().equals(newClassAbr)) {
+				classes.get(count).addOneToTA();
+			}
+		}
+	}
+	//update total assignments count
+	//if type for task changes
+	public static void updateTaskAndTypeDependency(Task t, String oldTypeName, String newTypeName) {
+		updateTask(t);
+		for(int count=0;count<taskTypes.size();count++) {
+			if(taskTypes.get(count).getName().equals(oldTypeName)) {
+				taskTypes.get(count).removeOneFromTA();
+			}
+			else if(taskTypes.get(count).getName().equals(newTypeName)) {
+				taskTypes.get(count).addOneToTA();
+			}
+		}
+	}
 	public static void updateAdmin(Admin a) {
 		for(int count = 0;count<admins.size();count++) {
 			if(admins.get(count).getId() == a.getId()) {
@@ -231,6 +257,15 @@ public class ModelControl {
 			}
 		}
 		Database.updateClass(c);
+	}
+	//update abbreviations for tasks
+	public static void updateClassAndTaskDependency(Models.Class c, String oldClassAbr, String newClassAbr) {
+		updateClass(c);
+		for(int count=0;count<tasks.size();count++) {
+			if(tasks.get(count).getClassAbr().equals(oldClassAbr)) {
+				tasks.get(count).setClassAbr(newClassAbr);
+			}
+		}
 	}
 	public static void updateProject(Project p) {
 		for(int count = 0;count<projects.size();count++) {
@@ -250,11 +285,14 @@ public class ModelControl {
 		}
 		Database.updateTaskType(tt);
 	}
-	//update total assignment values on classes and task types
-	public static void updateDependencies() {
-		//TODO: write for task types and classes
-		//task types and classes rely on number of dependents
-		//tasks rely on names
+	//update task type name for tasks
+	public static void updateTaskTypeAndTaskDependency(TaskType tt, String oldTypeName, String newTypeName) {
+		updateTaskType(tt);
+		for(int count=0;count<tasks.size();count++) {
+			if(tasks.get(count).getType().equals(oldTypeName)) {
+				tasks.get(count).setType(newTypeName);
+			}
+		}
 	}
 	public static void deleteTask(Task t) {
 		String classAbr = t.getClassAbr();
@@ -266,6 +304,7 @@ public class ModelControl {
 			}
 		}
 		Database.deleteTask(t);
+		//update total assignment count
 		for(int count = 0;count<classes.size();count++) {
 			if(classes.get(count).getAbbreviation().equals(classAbr)) {
 				classes.get(count).removeOneFromTA();
@@ -306,7 +345,6 @@ public class ModelControl {
 		}
 		Database.deleteProject(p);
 	}
-	//need to not perform action when a task has a tasktype that is about to be deleted
 	public static void deleteTaskType(TaskType tt) {
 		for(int count = 0;count<taskTypes.size();count++) {
 			if(taskTypes.get(count).getId() == tt.getId()) {
@@ -561,6 +599,10 @@ public class ModelControl {
 	}
 	public static void closeConnection() {
 		DBConn.closeConnection();
+	}
+	public static boolean isDuplicate() {
+		//TODO: write for class abbreviations and tasktype names when adding or updating
+		return false;
 	}
 	public static boolean isBeingUsed(Models.Class c) {
 		for(int count=0;count<tasks.size();count++) {

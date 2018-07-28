@@ -33,12 +33,14 @@ public class ViewClassController implements Initializable{
 	@FXML private Label totalAssignments, warningLabel;
 	
 	private final Models.Class temp;
+	private String oldClassAbr, newClassAbr;
 	//TODO: fix all methods for dependency on these structures
 	//if these are deleted,t ask have to be changed or deleted as well
 	//probably should be done in modelcontrol for class and task type since
 	//other structures are dependent on it
 	public ViewClassController(Models.Class c) {
 		temp = c;
+		oldClassAbr = temp.getAbbreviation();
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -54,7 +56,7 @@ public class ViewClassController implements Initializable{
 		totalAssignments.setText(c.getTotalAssignments()+"");
 		
 		//initialize checkboxes
-		String binary = c.getDaysOfWeek();
+		String binary = c.getDaysOfWeek("");
 		monday.setSelected(getBooleanVal(binary.substring(0,1)));
 		tuesday.setSelected(getBooleanVal(binary.substring(1,2)));
 		wednesday.setSelected(getBooleanVal(binary.substring(2,3)));
@@ -76,7 +78,9 @@ public class ViewClassController implements Initializable{
 				getBinary(wednesday.isSelected())+getBinary(thursday.isSelected())+
 				getBinary(friday.isSelected())+getBinary(saturday.isSelected())+
 				getBinary(sunday.isSelected()));
-		ModelControl.updateClass(temp);
+		
+		newClassAbr = temp.getAbbreviation();
+		ModelControl.updateClassAndTaskDependency(temp, oldClassAbr, newClassAbr);
 		closeWindow();
 	}
 	@FXML
@@ -87,7 +91,6 @@ public class ViewClassController implements Initializable{
 	}
 	@FXML
 	private void deleteButtonClicked() {
-		warningLabel.setText("");
 		if(ModelControl.isBeingUsed(temp)) {
 			displayWarningLabel("Cannot delete Class: Already in use by Task");
 		}else {

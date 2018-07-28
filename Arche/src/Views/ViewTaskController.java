@@ -39,9 +39,13 @@ public class ViewTaskController implements Initializable{
 	@FXML private TextArea description;
 	@FXML private CheckBox completed;
 	private final Task temp;
+	private String oldClassAbr, newClassAbr;
+	private String oldTypeName, newTypeName;
 	
 	public ViewTaskController(Task t) {
 		temp = t;
+		oldClassAbr = t.getClassAbr();
+		oldTypeName = t.getType();
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -69,7 +73,12 @@ public class ViewTaskController implements Initializable{
 		temp.setDueDate(dueDate.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 		temp.setDescription(description.getText());
 		temp.setFinishFlag(completed.isSelected());
-		ModelControl.updateTask(temp);
+		
+		newClassAbr = temp.getClassAbr();
+		newTypeName = temp.getName();
+		
+		ModelControl.updateTaskAndClassDependency(temp, oldClassAbr, newClassAbr);
+		ModelControl.updateTaskAndTypeDependency(temp, oldTypeName, newTypeName);
 		closeWindow();
 	}
 	private void initializeData(Task t) {

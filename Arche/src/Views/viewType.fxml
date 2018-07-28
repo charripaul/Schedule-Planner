@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
-
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <top>
@@ -24,13 +24,17 @@
             <Label layoutX="42.0" layoutY="100.0" text="Description:" />
             <Label layoutX="241.0" layoutY="30.0" text="Notice Period: " />
             <Label layoutX="407.0" layoutY="30.0" text="Estimated Time to Complete:" />
-            <TextArea layoutX="42.0" layoutY="125.0" prefHeight="200.0" prefWidth="322.0" />
-            <TextField layoutX="42.0" layoutY="56.0" />
-            <TextField layoutX="241.0" layoutY="56.0" prefHeight="25.0" prefWidth="111.0" promptText="days" />
-            <TextField layoutX="407.0" layoutY="56.0" prefHeight="25.0" prefWidth="49.0" promptText="Hr" />
-            <TextField layoutX="484.0" layoutY="56.0" prefHeight="25.0" prefWidth="49.0" promptText="Min" />
-            <JFXButton buttonType="RAISED" layoutX="16.0" layoutY="334.0" style="-fx-background-color: #f2782f;" text="Delete" />
-            <JFXButton buttonType="RAISED" layoutX="520.0" layoutY="334.0" style="-fx-background-color: #f2782f;" text="Save/Close" />
+            <TextArea fx:id="description" layoutX="42.0" layoutY="125.0" prefHeight="200.0" prefWidth="322.0" />
+            <TextField fx:id="name" layoutX="42.0" layoutY="56.0" />
+            <TextField fx:id="noticePeriod" layoutX="241.0" layoutY="56.0" prefHeight="25.0" prefWidth="111.0" promptText="days" />
+            <TextField fx:id="hour" layoutX="407.0" layoutY="56.0" prefHeight="25.0" prefWidth="65.0" promptText="Hr" />
+            <TextField fx:id="minute" layoutX="493.0" layoutY="56.0" prefHeight="25.0" prefWidth="67.0" promptText="Min" />
+            <JFXButton fx:id="deleteButton" buttonType="RAISED" layoutX="14.0" layoutY="334.0" onAction="#deleteButtonClicked" style="-fx-background-color: #f2782f;" text="Delete" />
+            <JFXButton fx:id="saveButton" buttonType="RAISED" layoutX="512.0" layoutY="334.0" onAction="#saveButtonClicked" style="-fx-background-color: #f2782f;" text="Save/Close" />
+            <CheckBox layoutX="407.0" layoutY="92.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="78.0" text="Unknown" />
+            <Label fx:id="warningLabel" layoutX="220.0" layoutY="338.0" text="Warning Label" />
+            <Label layoutX="407.0" text="Total Assignments:" />
+            <Label fx:id="totalAssignments" layoutX="557.0" text="0" />
          </children>
       </AnchorPane>
    </center>

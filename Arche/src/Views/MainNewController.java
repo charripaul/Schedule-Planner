@@ -186,6 +186,7 @@ public class MainNewController implements Initializable{
 	}
 
 	private void initializeCalendar() {
+		
 	}
 	private void initializeTasks() {
 		taskNameColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("name"));
@@ -277,6 +278,7 @@ public class MainNewController implements Initializable{
 		
 		initializeClassData();
 	}
+	@SuppressWarnings("unchecked")
 	private void initializeHomeData() {
 		//dailyTreeTableView.getRoot().getChildren().clear();
 		ArrayList<Task> tableTasks = ModelControl.getDayTasks();

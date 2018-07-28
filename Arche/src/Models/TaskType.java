@@ -30,6 +30,7 @@ public class TaskType {
 	public void setWarningPeriod(int wp) {
 		warningPeriod = wp;
 	}
+	//stored in minutes
 	public void setTimeToComplete(int ttc) {
 		timeToComplete = ttc;
 	}
@@ -54,6 +55,7 @@ public class TaskType {
 	public int getWarningPeriod() {
 		return warningPeriod;
 	}
+	//stored in minutes
 	public int getTimeToComplete() {
 		return timeToComplete;
 	}
