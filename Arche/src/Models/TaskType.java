@@ -59,6 +59,17 @@ public class TaskType {
 	public int getTimeToComplete() {
 		return timeToComplete;
 	}
+	//for observable table
+	public String getTimeToComplete(String s) {
+		if(timeToComplete < 60) {
+			return timeToComplete + " mins";
+		}
+		else {
+			int hours = timeToComplete/60;
+    		int mins = timeToComplete%60;
+    		return hours + " Hr(s) " + mins + " min(s)";
+		}
+	}
 	public int getTotalAssignments() {
 		return totalAssignments;
 	}

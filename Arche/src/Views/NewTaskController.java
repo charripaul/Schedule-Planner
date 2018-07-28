@@ -77,6 +77,7 @@ public class NewTaskController implements Initializable{
 	}
 	@FXML
 	private void confirmButtonClicked() {
+		//cant do until we know how the agenda library stores and returns information
 		Task t = new Task(name.getText(), description.getText(),
 				date.getDateTimeValue().atZone(ZoneId.
 				systemDefault()).toInstant().toEpochMilli(),

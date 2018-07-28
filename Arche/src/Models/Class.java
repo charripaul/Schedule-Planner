@@ -23,6 +23,15 @@ public class Class {
 		startTime = LocalTime.parse(st);
 		endTime = LocalTime.parse(et);
 	}
+	public Class(String n, String a, String d, int ta, String dow, LocalTime st, LocalTime et) {
+		name = n;
+		abbreviation = a;
+		details = d;
+		totalAssignments = ta;
+		daysOfWeek = dow;
+		startTime = st;
+		endTime = et;
+	}
 	public void setId(int i) {
 		id = i;
 	}

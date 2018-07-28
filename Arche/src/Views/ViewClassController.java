@@ -94,7 +94,7 @@ public class ViewClassController implements Initializable{
 		if(ModelControl.isBeingUsed(temp)) {
 			displayWarningLabel("Cannot delete Class: Already in use by Task");
 		}else {
-			if(ConfirmExitView.display("Are you sure you want to delete this task?")) {
+			if(ConfirmExitView.display("Are you sure you want to delete this class?")) {
 				ModelControl.deleteClass(temp);
 				closeWindow();
 			}

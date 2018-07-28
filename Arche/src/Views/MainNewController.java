@@ -101,7 +101,7 @@ public class MainNewController implements Initializable{
 	@FXML private TableColumn<TaskType, String> typeNameColumn;
 	@FXML private TableColumn<TaskType, String> typeDescColumn;
 	@FXML private TableColumn<TaskType, Integer> typeWarnColumn;
-	@FXML private TableColumn<TaskType, Integer> typeTTCColumn;
+	@FXML private TableColumn<TaskType, String> typeTTCColumn;
 	@FXML private TableColumn<TaskType, Integer> typeTAColumn;
 	
 	//for measuring time between clicks for double click feature
@@ -260,7 +260,14 @@ public class MainNewController implements Initializable{
 		typeNameColumn.setCellValueFactory(new PropertyValueFactory<TaskType, String>("name"));
 		typeDescColumn.setCellValueFactory(new PropertyValueFactory<TaskType, String>("description"));
 		typeWarnColumn.setCellValueFactory(new PropertyValueFactory<TaskType, Integer>("warningPeriod"));
-		typeTTCColumn.setCellValueFactory(new PropertyValueFactory<TaskType, Integer>("timeToComplete"));
+		typeTTCColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TaskType, String>,
+				ObservableValue<String>>(){
+	        @Override
+	        public ObservableValue<String> call(
+	                TableColumn.CellDataFeatures<TaskType, String> tt) {
+	        	return new SimpleStringProperty(tt.getValue().getTimeToComplete(""));
+	        }
+		});
 		typeTAColumn.setCellValueFactory(new PropertyValueFactory<TaskType, Integer>("totalAssignments"));
 		
 		typeNameColumn.setStyle("-fx-alignment: CENTER;");
