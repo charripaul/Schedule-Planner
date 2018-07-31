@@ -105,7 +105,7 @@ public class NewTaskController implements Initializable{
 	        	setCloseEvent();
 	        	ArrayList<TaskType> types = ModelControl.getTaskTypes();
 	        	for(int count=0;count<types.size();count++) {
-	        		if(types.get(count).getName().equals(taskType.getSelectionModel().getSelectedItem())) {
+	        		if(types.get(count).getName().equals(taskType.getItems().get((Integer) number2))) {
 	        			int amountOfTime = types.get(count).getTimeToComplete();
 	        			hours.setText((amountOfTime/60)+"");
 	        			minutes.setText((amountOfTime%60)+"");
