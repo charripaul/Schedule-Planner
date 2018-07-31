@@ -35,7 +35,7 @@ public class ViewTaskController implements Initializable{
 	@FXML private TextField name;
 	@FXML private ChoiceBox<String> taskTypes;
 	@FXML private ChoiceBox<String> classAbrs;
-	@FXML private DateTimePicker dueDate;
+	@FXML private DateTimePicker dueDate, scheduledStartTime, scheduledEndTime;
 	@FXML private TextArea description;
 	@FXML private CheckBox completed;
 	@FXML private TextField noticePeriod;
@@ -74,6 +74,8 @@ public class ViewTaskController implements Initializable{
 		temp.setType(taskTypes.getSelectionModel().getSelectedItem());
 		temp.setClassAbr(classAbrs.getSelectionModel().getSelectedItem());
 		temp.setDueDate(dueDate.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+		temp.setScheduledStartTime((scheduledStartTime.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
+		temp.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 		temp.setDescription(description.getText());
 		temp.setFinishFlag(completed.isSelected());
 		int amountOfTime = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
@@ -139,8 +141,16 @@ public class ViewTaskController implements Initializable{
 		LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(t.getDueDate()), 
                 TimeZone.getDefault().toZoneId()); 
 		dueDate.setDateTimeValue(date);
+		date = LocalDateTime.ofInstant(Instant.ofEpochMilli(t.getScheduledStartTime()), 
+                TimeZone.getDefault().toZoneId()); 
+		scheduledStartTime.setDateTimeValue(date);
+		date = LocalDateTime.ofInstant(Instant.ofEpochMilli(t.getScheduledEndTime()), 
+                TimeZone.getDefault().toZoneId()); 
+		scheduledEndTime.setDateTimeValue(date);
 		
 		dueDate.setFormat("MM/dd/yyyy hh:mm");
+		scheduledStartTime.setFormat("MM/dd/yyyy hh:mm");
+		scheduledEndTime.setFormat("MM/dd/yyyy hh:mm");
 	}
 	//detect change, ask for save changes on close
 	private void initializeCloseEventProperty() {
@@ -173,6 +183,12 @@ public class ViewTaskController implements Initializable{
 	        }
 	    });
 	    dueDate.valueProperty().addListener((ov, oldValue, newValue) -> {
+            setCloseEvent();
+        });
+	    scheduledStartTime.valueProperty().addListener((ov, oldValue, newValue) -> {
+            setCloseEvent();
+        });
+	    scheduledEndTime.valueProperty().addListener((ov, oldValue, newValue) -> {
             setCloseEvent();
         });
 	    description.textProperty().addListener(new ChangeListener<String>() {

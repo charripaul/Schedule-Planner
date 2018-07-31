@@ -89,6 +89,10 @@ public class ModelControl {
 		Task t = new Task(name, description, dueDate, onFlag, type, ca, noticePeriod, timeToComplete);
 		t.setScheduledStartTime(sst);
 		t.setScheduledEndTime(set);
+		if(!t.isScheduled()) {
+			autoSchedule(t);
+		}
+		
 		tasks.add(t);
 		Database.addTask(t);
 		for(int count = 0;count<classes.size();count++) {
@@ -153,6 +157,10 @@ public class ModelControl {
 		else {
 			t.setId(tasks.get(tasks.size()-1).getId()+1);
 		}
+		if(!t.isScheduled()) {
+			autoSchedule(t);
+		}
+		
 		tasks.add(t);
 		Database.addTask(t);
 		for(int count = 0;count<classes.size();count++) {
@@ -621,6 +629,11 @@ public class ModelControl {
 				return true;
 			}
 		}
+		return false;
+	}
+	//returns false if no space in schedule
+	private static boolean autoSchedule(Task t) {
+		//TODO: write auto schedule feature for tasks
 		return false;
 	}
 	//convert number of days into long value for milliseconds

@@ -137,6 +137,14 @@ public class Task {
 	public int getTimeToComplete() {
 		return timeToComplete;
 	}
+	public boolean isScheduled() {
+		if(scheduledStartTime == 0 || scheduledEndTime == 0) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
 	public String toString() {
 		return "id: " + id + "\nname: " + name + "\ntype: "
 				+ type + "\nclass: " + classAbr + "\ndue date: "
