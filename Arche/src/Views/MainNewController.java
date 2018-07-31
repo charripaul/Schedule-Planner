@@ -41,6 +41,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 
 public class MainNewController implements Initializable{
 	@FXML private JFXButton homeButton;
@@ -58,6 +61,7 @@ public class MainNewController implements Initializable{
 	@FXML private JFXButton rightArrowButton;
 	@FXML private Label dailyTaskDateLabel;
 	
+	//tasks (subset of home)
 	@FXML private JFXTreeTableView homeTreeTable;
 	@FXML private TreeTableColumn<Task, String> nameTreeTableCol;
 	@FXML private TreeTableColumn<Task, String> descTreeTableCol;
@@ -65,6 +69,11 @@ public class MainNewController implements Initializable{
 	@FXML private TreeTableColumn<Task, String> classTreeTableCol;
 	@FXML private TreeTableColumn<Task, LocalDateTime> dueDateTreeTableCol;
 	@FXML private TreeTableColumn<Task, Boolean> completedTreeTableCol;
+	//schedule (subset of home)
+	@FXML private JFXButton homeScheduleViewButton;
+	@FXML private JFXButton homeScheduleAddButton;
+	@FXML private ICalendarAgenda schedule;
+	private VCalendar vcalendar;
 	
 	//calendar tab
 	@FXML private BorderPane calendarView;
@@ -82,7 +91,7 @@ public class MainNewController implements Initializable{
 	@FXML private JFXButton taskViewButton;
 	
 	//classes tab
-	//class tab (subset of classes)
+	//class (subset of classes)
 	@FXML private BorderPane classView;
 	@FXML private JFXButton classAddButton;
 	@FXML private JFXButton classViewButton;
@@ -93,8 +102,7 @@ public class MainNewController implements Initializable{
 	@FXML private TableColumn<Models.Class, String> classDOWColumn;
 	@FXML private TableColumn<Models.Class, String> classTimeColumn;
 	@FXML private TableColumn<Models.Class, Integer> classTAColumn;
-	
-	//type tab (subset of classes)
+	//type (subset of classes)
 	@FXML private TableView<TaskType> typeTable;
 	@FXML private JFXButton typeAddButton;
 	@FXML private JFXButton typeViewButton;
@@ -107,7 +115,7 @@ public class MainNewController implements Initializable{
 	//for measuring time between clicks for double click feature
 	Task taskTemp;
 	Models.Class classTemp;
-	Models.TaskType typeTemp;
+	TaskType typeTemp;
 	Date taskLastClickTime;
 	Date classLastClickTime;
 	Date typeLastClickTime;
@@ -138,7 +146,7 @@ public class MainNewController implements Initializable{
 		nameTreeTableCol.setCellValueFactory(
 	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
 	            new ReadOnlyStringWrapper(param.getValue().getValue().getName())
-	        );
+				);
 		descTreeTableCol.setCellValueFactory(
 	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
 	            new ReadOnlyStringWrapper(param.getValue().getValue().getDescription())
@@ -315,7 +323,10 @@ public class MainNewController implements Initializable{
 		root.getChildren().add(due);
 		root.getChildren().add(overdue);
 		root.getChildren().add(soon);
-		homeTreeTable.setRoot(root);		
+		homeTreeTable.setRoot(root);				//suppressed warning
+		
+		//schedule
+		
 	}
 	private void initializeCalendarData() {
 		//TODO: write

@@ -16,6 +16,7 @@ import java.util.TimeZone;
 import Runners.DBConn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import jfxtras.icalendarfx.components.VEvent;
 
 public class ModelControl {
 	private static ArrayList<Task> tasks = new ArrayList<Task>();
@@ -26,9 +27,10 @@ public class ModelControl {
 	public static LocalDate dayOfReference = LocalDate.now();
 	public static LocalDate today = LocalDate.now();
 	
+	
 	static {
 		initialize();
-		System.out.println("ModelControl layer instantiated");
+		System.out.println("ModelControl layer initialized");
 	}
 	private static void initialize() {
 		ResultSet rs;
@@ -37,8 +39,8 @@ public class ModelControl {
 			while(rs.next()) {
 				tasks.add(new Task(rs.getInt("id"), rs.getString("name"), rs.getString("description"),
 						 rs.getLong("dueDate"), rs.getBoolean("finishFlag"), rs.getBoolean("onFlag"),
-						 rs.getString("type"), rs.getString("class"), rs.getString("scheduledWorkTime"),
-						 rs.getInt("noticePeriod"), rs.getInt("timeToComplete")));
+						 rs.getString("type"), rs.getString("class"), rs.getInt("noticePeriod"), 
+						 rs.getInt("timeToComplete"), rs.getLong("scheduledStartTime"), rs.getLong("scheduledEndTime")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Solar\n" + e.getMessage());
@@ -83,9 +85,10 @@ public class ModelControl {
 	//obsolete
 	//TODO: need to test to see whether identical task already exists excluding description
 	public static void addTask(String name, String description, long dueDate, boolean onFlag,
-			String type, String ca, String scheduledWorkTime, int noticePeriod, int timeToComplete) {
+			String type, String ca, int noticePeriod, int timeToComplete, long sst, long set) {
 		Task t = new Task(name, description, dueDate, onFlag, type, ca, noticePeriod, timeToComplete);
-		t.setScheduledWorkTime(scheduledWorkTime);
+		t.setScheduledStartTime(sst);
+		t.setScheduledEndTime(set);
 		tasks.add(t);
 		Database.addTask(t);
 		for(int count = 0;count<classes.size();count++) {

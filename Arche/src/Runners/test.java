@@ -21,12 +21,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage; 
+import javafx.stage.Stage;
+import jfxtras.icalendarfx.components.VEvent; 
 
 public class test {
 	public static void main(String args[]) {
-		LocalTime time = LocalTime.now();
-		System.out.println(time.toString());
-		System.out.println(LocalTime.parse(time.toString()));
+		Date date = new Date();
+		VEvent event = new VEvent();
+		System.out.println(date);
 	}
 }

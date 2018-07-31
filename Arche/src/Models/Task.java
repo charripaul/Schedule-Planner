@@ -1,13 +1,11 @@
 package Models;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.TimeZone;
-
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import jfxtras.icalendarfx.properties.component.descriptive.Status;
 
 public class Task {
 	private int id;
@@ -15,20 +13,21 @@ public class Task {
 	private boolean finishFlag;
 	private boolean onFlag;					//true if appointment at this specific time, false if due by date
 	private String type;
-	private long dueDate;
-	private String classAbr, scheduledWorkTime;
+	private long dueDate, scheduledStartTime, scheduledEndTime;
+	private String classAbr;
 	private int noticePeriod, timeToComplete;
-	
+
 	public Task(String n) {
 		name = n;			//for tree items on treetableview
 	}
 	//initialization constructor
 	public Task(int i, String n, String d, long dd, boolean ff, boolean of, String t,
-			String ca, String swt, int np, int ttc) {
+			String ca, int np, int ttc, long sst, long set) {
 		this(n,d,dd,of,t,ca,np,ttc);
 		id = i;
 		finishFlag = ff;
-		scheduledWorkTime = swt;
+		scheduledStartTime = sst;
+		scheduledEndTime = set;
 	}
 	//new task constructor
 	public Task(String n, String d, long dd, boolean of, String t, String ca, int np, int ttc) {
@@ -66,8 +65,11 @@ public class Task {
 	public void setClassAbr(String ca) {
 		classAbr = ca;
 	}
-	public void setScheduledWorkTime(String swt) {
-		scheduledWorkTime = swt;
+	public void setScheduledStartTime(long sst) {
+		scheduledStartTime = sst;
+	}
+	public void setScheduledEndTime(long set) {
+		scheduledEndTime = set;
 	}
 	public void setNoticePeriod(int np) {
 		noticePeriod = np;
@@ -83,12 +85,6 @@ public class Task {
 	}
 	public String getDescription() {
 		return description;
-	}
-	//last resort if cant nest tree items
-	public String getInformation() {
-		String info = "";
-		info += "";
-		return info;
 	}
 	public long getDueDate() {
 		return dueDate;
@@ -113,8 +109,27 @@ public class Task {
 	public String getClassAbr() {
 		return classAbr;
 	}
-	public String getScheduledWorkTime() {
-		return scheduledWorkTime;
+	public long getScheduledStartTime() {
+		return scheduledStartTime;
+	}
+	public ObjectProperty<LocalDateTime> getScheduledStartTime(String s) {
+		LocalDateTime dd = LocalDateTime.ofInstant(Instant.ofEpochMilli(scheduledStartTime), 
+                TimeZone.getDefault().toZoneId());
+		ObjectProperty<LocalDateTime> ldt = new SimpleObjectProperty<LocalDateTime>();
+		ldt.set(dd);
+		
+		return ldt;
+	}
+	public long getScheduledEndTime() {
+		return scheduledEndTime;
+	}
+	public ObjectProperty<LocalDateTime> getScheduledEndTime(String s) {
+		LocalDateTime dd = LocalDateTime.ofInstant(Instant.ofEpochMilli(scheduledEndTime), 
+                TimeZone.getDefault().toZoneId());
+		ObjectProperty<LocalDateTime> ldt = new SimpleObjectProperty<LocalDateTime>();
+		ldt.set(dd);
+		
+		return ldt;
 	}
 	public int getNoticePeriod() {
 		return noticePeriod;
@@ -126,5 +141,13 @@ public class Task {
 		return "id: " + id + "\nname: " + name + "\ntype: "
 				+ type + "\nclass: " + classAbr + "\ndue date: "
 				+dueDate + "\ndescription: " + description;
+	}
+	private Status.StatusType getStatus() {
+		if(finishFlag == false) {
+			return Status.StatusType.NEEDS_ACTION;
+		}
+		else {
+			return Status.StatusType.COMPLETED;
+		}
 	}
 }

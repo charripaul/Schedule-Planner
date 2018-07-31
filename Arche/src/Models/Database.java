@@ -12,7 +12,7 @@ public class Database {
 	public static void addTask(Task t) {
 		PreparedStatement prep = null;
 		try {
-			prep = DBConn.getConnection().prepareStatement("INSERT INTO Tasks VALUES (?,?,?,?,?,?,?,?,?,?,?);");
+			prep = DBConn.getConnection().prepareStatement("INSERT INTO Tasks VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
 			//prep.setInt(1, t.getId());
 			prep.setString(2, t.getName());
 			prep.setString(3, t.getDescription());
@@ -21,9 +21,10 @@ public class Database {
 			prep.setBoolean(6, t.getOnFlag());
 			prep.setString(7, t.getType());
 			prep.setString(8, t.getClassAbr());
-			prep.setString(9, t.getScheduledWorkTime());
-			prep.setInt(10, t.getNoticePeriod());
-			prep.setInt(11, t.getTimeToComplete());
+			prep.setInt(9, t.getNoticePeriod());
+			prep.setInt(10, t.getTimeToComplete());
+			prep.setLong(11, t.getScheduledStartTime());
+			prep.setLong(12, t.getScheduledEndTime());
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {
@@ -96,8 +97,8 @@ public class Database {
 		PreparedStatement prep = null;
 		try {
 			prep = DBConn.getConnection().prepareStatement("UPDATE Tasks SET name = ?, description = ?, "
-					+ "dueDate = ?, finishFlag = ?, onFlag = ?, class = ?, type = ?, scheduledWorkTime = ?,"
-					+ " noticePeriod = ?, timeToComplete = ? WHERE id = ?;");
+					+ "dueDate = ?, finishFlag = ?, onFlag = ?, class = ?, type = ?, noticePeriod = ?,"
+					+ " timeToComplete = ?, scheduledStartTime = ?, scheduledEndTime = ? WHERE id = ?;");
 			prep.setString(1, t.getName());
 			prep.setString(2, t.getDescription());
 			prep.setLong(3, t.getDueDate());
@@ -105,10 +106,11 @@ public class Database {
 			prep.setBoolean(5, t.getOnFlag());
 			prep.setString(6, t.getClassAbr());
 			prep.setString(7, t.getType());
-			prep.setString(8, t.getScheduledWorkTime());
-			prep.setInt(9,  t.getNoticePeriod());
-			prep.setInt(10, t.getTimeToComplete());
-			prep.setInt(11, t.getId());
+			prep.setInt(8,  t.getNoticePeriod());
+			prep.setInt(9, t.getTimeToComplete());
+			prep.setLong(10,  t.getScheduledStartTime());
+			prep.setLong(11, t.getScheduledEndTime());
+			prep.setInt(12, t.getId());
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {

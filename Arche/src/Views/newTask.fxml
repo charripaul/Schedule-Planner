@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import tornadofx.control.DateTimePicker?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.NewTaskController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.NewTaskController">
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
@@ -34,14 +34,19 @@
          <children>
             <Label layoutX="33.0" layoutY="30.0" text="Name:" />
             <Label layoutX="33.0" layoutY="101.0" text="Description:" />
-            <Label layoutX="390.0" layoutY="30.0" text="Class:" />
-            <Label layoutX="209.0" layoutY="30.0" text="Task type:" />
+            <Label layoutX="209.0" layoutY="30.0" text="Class:" />
+            <Label layoutX="390.0" layoutY="30.0" text="Task type:" />
             <Label layoutX="390.0" layoutY="101.0" text="Due Date:" />
             <TextField fx:id="name" layoutX="33.0" layoutY="55.0" />
-            <ChoiceBox fx:id="className" layoutX="390.0" layoutY="55.0" prefWidth="150.0" />
-            <ChoiceBox fx:id="taskType" layoutX="209.0" layoutY="55.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="className" layoutX="209.0" layoutY="55.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="taskType" layoutX="391.0" layoutY="55.0" prefWidth="150.0" />
             <TextArea fx:id="description" layoutX="34.0" layoutY="129.0" prefHeight="200.0" prefWidth="322.0" />
-            <DateTimePicker fx:id="date" layoutX="390.0" layoutY="139.0" />
+            <DateTimePicker fx:id="date" layoutX="390.0" layoutY="129.0" />
+            <Label layoutX="391.0" layoutY="182.0" text="Notice Period:" />
+            <Label layoutX="391.0" layoutY="278.0" text="Estimated Time to Complete:" />
+            <TextField fx:id="noticePeriod" layoutX="391.0" layoutY="204.0" promptText="days" />
+            <TextField fx:id="minutes" layoutX="481.0" layoutY="304.0" prefHeight="25.0" prefWidth="62.0" promptText="mins" />
+            <TextField fx:id="hours" layoutX="391.0" layoutY="304.0" prefHeight="25.0" prefWidth="59.0" promptText="Hrs" />
          </children>
       </AnchorPane>
    </center>

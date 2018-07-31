@@ -38,6 +38,9 @@ public class ViewTaskController implements Initializable{
 	@FXML private DateTimePicker dueDate;
 	@FXML private TextArea description;
 	@FXML private CheckBox completed;
+	@FXML private TextField noticePeriod;
+	@FXML private TextField hours, minutes;
+	
 	private final Task temp;
 	private String oldClassAbr, newClassAbr;
 	private String oldTypeName, newTypeName;
@@ -73,6 +76,9 @@ public class ViewTaskController implements Initializable{
 		temp.setDueDate(dueDate.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 		temp.setDescription(description.getText());
 		temp.setFinishFlag(completed.isSelected());
+		int amountOfTime = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
+		temp.setTimeToComplete(amountOfTime);
+		temp.setNoticePeriod(Integer.parseInt(noticePeriod.getText()));
 		
 		newClassAbr = temp.getClassAbr();
 		newTypeName = temp.getName();
@@ -124,6 +130,11 @@ public class ViewTaskController implements Initializable{
 		
 		completed.setSelected(t.getFinishFlag());
 		
+		noticePeriod.setText(Integer.toString(t.getNoticePeriod()));
+		int amountOfTime = t.getTimeToComplete();
+		hours.setText((amountOfTime/60)+"");
+		minutes.setText((amountOfTime%60)+"");
+		
 		//TODO: fix for no due date
 		LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(t.getDueDate()), 
                 TimeZone.getDefault().toZoneId()); 
@@ -144,6 +155,15 @@ public class ViewTaskController implements Initializable{
 	        @Override
 	        public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
 	        	setCloseEvent();
+	        	ArrayList<TaskType> types = ModelControl.getTaskTypes();
+	        	for(int count=0;count<types.size();count++) {
+	        		if(types.get(count).getName().equals(taskTypes.getSelectionModel().getSelectedItem())) {
+	        			int amountOfTime = types.get(count).getTimeToComplete();
+	        			hours.setText((amountOfTime/60)+"");
+	        			minutes.setText((amountOfTime%60)+"");
+	        			break;
+	        		}
+	        	}
 	        }
 	    });
 	    classAbrs.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -168,6 +188,27 @@ public class ViewTaskController implements Initializable{
 	            setCloseEvent();
 	        }
 	    });
+	    noticePeriod.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> observable,
+		            String oldValue, String newValue) {
+		    	setCloseEvent();
+		    }
+		});
+	    hours.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> observable,
+		            String oldValue, String newValue) {
+		    	setCloseEvent();
+		    }
+		});
+	    minutes.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> observable,
+		            String oldValue, String newValue) {
+		    	setCloseEvent();
+		    }
+		});
 	}
 	private void setCloseEvent() {
 		Stage window = (Stage) description.getScene().getWindow();

@@ -27,7 +27,7 @@ import javafx.util.Duration;
 public class ViewTypeController implements Initializable{
 	@FXML private TextField name;
 	@FXML private TextField noticePeriod;
-	@FXML private TextField hour, minute;
+	@FXML private TextField hour, minute;		//timeToComplete
 	@FXML private TextArea description;
 	@FXML private JFXButton deleteButton, saveButton;
 	@FXML private Label warningLabel, totalAssignments;
