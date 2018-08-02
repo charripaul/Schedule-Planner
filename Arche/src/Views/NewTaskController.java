@@ -16,6 +16,7 @@ import Models.ModelControl;
 import Models.Task;
 import Models.TaskType;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -60,7 +61,7 @@ public class NewTaskController implements Initializable{
 	@FXML private TableColumn<Task, String> nameColumn, descriptionColumn;
 	@FXML private TableColumn<Task, Boolean> scheduledColumn;
 	
-	ObservableList<Task> taskList;
+	private ObservableList<Task> taskList;
 	private Task taskTemp;
 	private Date taskLastClickTime;
 	private boolean isOnAdd;			//test if got to confirmInfo from edit or add button
@@ -75,6 +76,7 @@ public class NewTaskController implements Initializable{
 		nameColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("name"));
 		descriptionColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
 		scheduledColumn.setCellValueFactory(c -> new SimpleBooleanProperty(c.getValue().isScheduled()));
+		scheduledColumn.setCellFactory(tc -> new CheckBoxTableCell<>());
 		
 		nameColumn.setStyle("-fx-alignment: CENTER;");
 		descriptionColumn.setStyle("-fx-alignment: CENTER;");
@@ -212,17 +214,16 @@ public class NewTaskController implements Initializable{
 					false, taskType.getSelectionModel().getSelectedItem(),
 					className.getSelectionModel().getSelectedItem(),
 					Integer.parseInt(noticePeriod.getText()), ttc);
-			if(scheduledStartTime.getDateTimeValue() != null || scheduledStartTime.getDateTimeValue() != null) {
+			if(scheduledStartTime.getDateTimeValue() != null && scheduledStartTime.getDateTimeValue() != null) {
 				t.setScheduledStartTime(scheduledStartTime.getDateTimeValue().atZone(ZoneId.
 						systemDefault()).toInstant().toEpochMilli());
 				t.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.
 						systemDefault()).toInstant().toEpochMilli());
 			}
 			taskList.add(t);
-			
-			newTasksTable.getItems().clear();
+			//newTasksTable.getItems().clear();
 			newTasksTable.setItems(taskList);
-			//newTasksTable.getSelectionModel().select(newTasksTable.getItems().size());
+			newTasksTable.getSelectionModel().select(newTasksTable.getItems().size());
 		}
 		else {						//got here from editButton
 			t = taskList.get(newTasksTable.getSelectionModel().getSelectedIndex());		//TODO: check
@@ -241,8 +242,7 @@ public class NewTaskController implements Initializable{
 				t.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.
 						systemDefault()).toInstant().toEpochMilli());
 			}
-			System.out.println("x");
-			newTasksTable.getItems().clear();
+			//newTasksTable.getItems().clear();
 			newTasksTable.setItems(taskList);
 			newTasksTable.getSelectionModel().select(sIndex);
 		}

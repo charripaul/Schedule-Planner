@@ -214,7 +214,7 @@ public class MainNewController implements Initializable{
 		            setText(String.format(item.format(formatter)));
 		    }
 		});
-		taskCompletedColumn.setCellValueFactory(c -> new SimpleBooleanProperty(c.getValue().getFinishFlag()));
+		taskCompletedColumn.setCellValueFactory(tc -> new SimpleBooleanProperty(tc.getValue().getFinishFlag()));
 		taskCompletedColumn.setCellFactory(tc -> new CheckBoxTableCell<>());
 		
 		//column autosizing

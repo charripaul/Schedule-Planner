@@ -138,7 +138,7 @@ public class Task {
 		return timeToComplete;
 	}
 	public boolean isScheduled() {
-		if(scheduledStartTime == 0 || scheduledEndTime == 0) {
+		if(scheduledStartTime == 0L || scheduledEndTime == 0L) {
 			return false;
 		}
 		else {
