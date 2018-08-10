@@ -2,6 +2,7 @@ package Models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -26,7 +27,6 @@ public class ModelControl {
 	private static ArrayList<TaskType> taskTypes = new ArrayList<TaskType>();
 	public static LocalDate dayOfReference = LocalDate.now();
 	public static LocalDate today = LocalDate.now();
-	
 	
 	static {
 		initialize();
@@ -633,7 +633,7 @@ public class ModelControl {
 	}
 	//returns false if no space in schedule
 	private static boolean autoSchedule(Task t) {
-		//TODO: write auto schedule feature for tasks
+		//TODO: write
 		return false;
 	}
 	//convert number of days into long value for milliseconds

@@ -2,13 +2,23 @@ package Views;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
@@ -17,13 +27,22 @@ import com.jfoenix.controls.JFXTreeTableView;
 import Models.ModelControl;
 import Models.Task;
 import Models.TaskType;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.css.PseudoClass;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,8 +54,11 @@ import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.CheckBoxTreeTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -57,8 +79,8 @@ public class MainNewController implements Initializable{
 	
 	//home tab
 	@FXML private BorderPane homeView;
-	@FXML private JFXButton leftArrowButton;
-	@FXML private JFXButton rightArrowButton;
+	@FXML private JFXButton leftHomeButton;
+	@FXML private JFXButton rightHomeButton;
 	@FXML private Label dailyTaskDateLabel;
 	
 	//tasks (subset of home)
@@ -72,11 +94,25 @@ public class MainNewController implements Initializable{
 	//schedule (subset of home)
 	@FXML private JFXButton homeScheduleViewButton;
 	@FXML private JFXButton homeScheduleAddButton;
-	@FXML private ICalendarAgenda schedule;
-	private VCalendar vcalendar;
 	
 	//calendar tab
 	@FXML private BorderPane calendarView;
+	@FXML private Label yearLabel;
+	@FXML private JFXButton leftCalendarButton;
+	@FXML private JFXButton rightCalendarButton;
+	@FXML private JFXButton january, february, march, april, may, june, july,
+	 						august, september, october, november, december;
+	@FXML private GridPane calendarGrid;
+	@FXML private Label sunday, monday, tuesday, wednesday, thursday,
+						friday, saturday;
+	@FXML private Label label00, label10, label20, label30, label40, label50, label60,
+						label01, label11, label21, label31, label41, label51, label61,
+						label02, label12, label22, label32, label42, label52, label62,
+						label03, label13, label23, label33, label43, label53, label63,
+						label04, label14, label24, label34, label44, label54, label64,
+						label05, label15, label25, label35, label45, label55, label65;
+	public Calendar calendarInstance = Calendar.getInstance();		//for position in time for reference
+	ArrayList<Label> labelList = new ArrayList<Label>();
 	
 	//task tab
 	@FXML private BorderPane taskView;
@@ -120,6 +156,9 @@ public class MainNewController implements Initializable{
 	Date classLastClickTime;
 	Date typeLastClickTime;
 	
+	//calendar
+	Calendar calendar;
+	
 	//button click properties
 	final String selectedColor = "-fx-background-color:  #f2782f;";
 	
@@ -127,6 +166,56 @@ public class MainNewController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initializeLabels();
 		homeButton.fire();
+		
+		//consolidate date labels into arraylist
+		//add in order of days according to gregorian calendar
+	    labelList.add(label00);
+	    labelList.add(label10);
+	    labelList.add(label20);
+	    labelList.add(label30);
+	    labelList.add(label40);
+	    labelList.add(label50);
+	    labelList.add(label60);
+	    
+	    labelList.add(label01);
+	    labelList.add(label11);
+	    labelList.add(label21);
+	    labelList.add(label31);
+	    labelList.add(label41);
+	    labelList.add(label51);
+	    labelList.add(label61);
+
+	    labelList.add(label02);
+	    labelList.add(label12);
+	    labelList.add(label22);
+	    labelList.add(label32);
+	    labelList.add(label42);
+	    labelList.add(label52);
+	    labelList.add(label62);
+	    
+	    labelList.add(label03);
+	    labelList.add(label13);
+	    labelList.add(label23);
+	    labelList.add(label33);
+	    labelList.add(label43);
+	    labelList.add(label53);
+	    labelList.add(label63);
+	    
+	    labelList.add(label04);
+	    labelList.add(label14);
+	    labelList.add(label24);
+	    labelList.add(label34);
+	    labelList.add(label44);
+	    labelList.add(label54);
+	    labelList.add(label64);
+	    
+	    labelList.add(label05);
+	    labelList.add(label15);
+	    labelList.add(label25);
+	    labelList.add(label35);
+	    labelList.add(label45);
+	    labelList.add(label55);
+	    labelList.add(label65);
 	}
 	private void initializeLabels() {
 		ArrayList<Task> tableTasks = ModelControl.getDayTasks("get for todays labels");
@@ -172,7 +261,7 @@ public class MainNewController implements Initializable{
 		    }
 		});
 		completedTreeTableCol.setCellValueFactory(c -> new SimpleBooleanProperty(c.getValue().getValue().getFinishFlag()));
-		//completedTreeTableCol.setCellFactory(c -> new CheckBoxTableCell<>());
+		completedTreeTableCol.setCellFactory(c -> new CheckBoxTreeTableCell<>());
 		
 		//column autosizing
 		nameTreeTableCol.prefWidthProperty().bind(homeTreeTable.widthProperty().multiply(.107));
@@ -194,7 +283,69 @@ public class MainNewController implements Initializable{
 	}
 
 	private void initializeCalendar() {
+		//label grid alignment
+		GridPane.setHalignment(sunday, HPos.CENTER);
+		GridPane.setHalignment(monday, HPos.CENTER);
+		GridPane.setHalignment(tuesday, HPos.CENTER);
+		GridPane.setHalignment(wednesday, HPos.CENTER);
+		GridPane.setHalignment(thursday, HPos.CENTER);
+		GridPane.setHalignment(friday, HPos.CENTER);
+		GridPane.setHalignment(saturday, HPos.CENTER);
 		
+		for(int count=0;count<labelList.size();count++) {
+			GridPane.setValignment(labelList.get(count), VPos.TOP);
+			GridPane.setMargin(labelList.get(count), new Insets(5, 5, 5, 5));
+		}
+		
+		calendar = Calendar.getInstance();
+		calendar.setTimeZone(TimeZone.getDefault());
+		
+		String firstDay = getFirstDayOfMonth().toLowerCase();
+		String firstLabel = "";
+		if(firstDay.equals("sunday")) {
+			firstLabel = "label00";
+		}
+		else if(firstDay.equals("monday")) {
+			firstLabel = "label10";
+		}
+		else if(firstDay.equals("tuesday")) {
+			firstLabel = "label20";
+		}
+		else if(firstDay.equals("wednesday")) {
+			firstLabel = "label30";
+		}
+		else if(firstDay.equals("thursday")) {
+			firstLabel = "label40";
+		}
+		else if(firstDay.equals("friday")) {
+			firstLabel = "label50";
+		}
+		else if(firstDay.equals("saturday")){
+			firstLabel = "label60";
+		}
+		
+		int days = getNumberOfDaysInMonth();
+		int firstIndex = -1;
+		//list should be size 42
+		for(int count=0;count<42;count++) {
+			if(labelList.get(count).getId().equals(firstLabel)) {
+				labelList.get(count).setText("1");
+				firstIndex = count;
+			}
+			else if(count < firstIndex || firstIndex == -1){
+				labelList.get(count).setText("");
+				//TODO: disable cell
+			}
+			else if(count >= firstIndex+days) {
+				labelList.get(count).setText("");
+				//TODO: disable cell
+			}
+			else {
+				labelList.get(count).setText((count-firstIndex+1)+"");
+			}
+		}
+		
+		initializeCalendarData();
 	}
 	private void initializeTasks() {
 		taskNameColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("name"));
@@ -589,7 +740,7 @@ public class MainNewController implements Initializable{
 	}
 	@FXML
 	private void homeButtonClicked() {
-		resetButtons();
+		resetHomeButtons();
 		homeButton.setStyle(selectedColor);
 		resetViews();
 		initializeHome();
@@ -597,7 +748,7 @@ public class MainNewController implements Initializable{
 	}
 	@FXML
 	private void calendarButtonClicked() {
-		resetButtons();
+		resetHomeButtons();
 		calendarButton.setStyle(selectedColor);
 		resetViews();
 		initializeCalendar();
@@ -605,7 +756,7 @@ public class MainNewController implements Initializable{
 	}
 	@FXML
 	private void taskButtonClicked() {
-		resetButtons();
+		resetHomeButtons();
 		taskButton.setStyle(selectedColor);
 		resetViews();
 		initializeTasks();
@@ -613,21 +764,49 @@ public class MainNewController implements Initializable{
 	}
 	@FXML
 	private void classButtonClicked() {
-		resetButtons();
+		resetHomeButtons();
 		classButton.setStyle(selectedColor);
 		resetViews();
 		initializeClass();
 		classView.setVisible(true);
 	}
 	@FXML
-	private void leftArrowClicked() {
+	private void leftCalendarClicked() {
+		
+	}
+	@FXML
+	private void rightCalendarClicked() {
+		
+	}
+	@FXML
+	private void monthButtonClicked(ActionEvent event) {
+		resetMonthButtons();
+		Button btn = (Button) event.getSource();
+		btn.setStyle(selectedColor);
+	}
+	@FXML
+	private void leftHomeClicked() {
 		ModelControl.removeDayFromDayOfReference();
 		initializeHome();
 	}
 	@FXML
-	private void rightArrowClicked() {
+	private void rightHomeClicked() {
 		ModelControl.addDayToDayOfReference();
 		initializeHome();
+	}
+	private String getFirstDayOfMonth() {
+	    //cal.set(Calendar.DATE, cal.getInstance().get(Calendar.DATE));
+	    //cal.set(Calendar.MONTH, cal.getInstance().get(Calendar.MONTH));
+	    //cal.set(Calendar.YEAR, cal.getInstance().get(Calendar.YEAR));
+	    Calendar cal = (Calendar) calendarInstance.clone();
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+	    
+	    Date firstDayOfMonth = cal.getTime();
+	    DateFormat sdf = new SimpleDateFormat("EEEEEEEE");   
+	    return sdf.format(firstDayOfMonth);
+	}
+	private int getNumberOfDaysInMonth() {
+		return calendarInstance.getActualMaximum(Calendar.DAY_OF_MONTH);
 	}
 	private void resetViews() {
 		homeView.setVisible(false);
@@ -635,10 +814,24 @@ public class MainNewController implements Initializable{
 		taskView.setVisible(false);
 		classView.setVisible(false);
 	}
-	private void resetButtons() {
+	private void resetHomeButtons() {
 		homeButton.setStyle(null);
 		calendarButton.setStyle(null);
 		taskButton.setStyle(null);
 		classButton.setStyle(null);
+	}
+	private void resetMonthButtons() {
+		january.setStyle(null);
+		february.setStyle(null);
+		march.setStyle(null);
+		april.setStyle(null);
+		may.setStyle(null);
+		june.setStyle(null);
+		july.setStyle(null);
+		august.setStyle(null);
+		september.setStyle(null);
+		october.setStyle(null);
+		november.setStyle(null);
+		december.setStyle(null);
 	}
 }

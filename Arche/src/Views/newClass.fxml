@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="637.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.NewClassController">
@@ -29,13 +30,17 @@
             <TextField fx:id="name" layoutX="47.0" layoutY="71.0" />
             <TextField fx:id="abbreviation" layoutX="233.0" layoutY="71.0" />
             <TextArea fx:id="details" layoutX="47.0" layoutY="146.0" prefHeight="200.0" prefWidth="322.0" />
-            <JFXCheckBox fx:id="monday" layoutX="445.0" layoutY="75.0" text="Monday" />
-            <JFXCheckBox fx:id="tuesday" layoutX="445.0" layoutY="96.0" text="Tuesday" />
-            <JFXCheckBox fx:id="wednesday" layoutX="445.0" layoutY="120.0" text="Wednesday" />
-            <JFXCheckBox fx:id="thursday" layoutX="445.0" layoutY="146.0" text="Thursday" />
-            <JFXCheckBox fx:id="friday" layoutX="445.0" layoutY="169.0" text="Friday" />
-            <JFXCheckBox fx:id="saturday" layoutX="445.0" layoutY="194.0" text="Saturday" />
-            <JFXCheckBox fx:id="sunday" layoutX="445.0" layoutY="218.0" text="Sunday" />
+            <VBox layoutX="445.0" layoutY="68.0" prefWidth="87.0" spacing="5.0">
+               <children>
+                  <JFXCheckBox fx:id="sunday" text="Sunday" />
+                  <JFXCheckBox fx:id="monday" text="Monday" />
+                  <JFXCheckBox fx:id="tuesday" text="Tuesday" />
+                  <JFXCheckBox fx:id="wednesday" text="Wednesday" />
+                  <JFXCheckBox fx:id="thursday" text="Thursday" />
+                  <JFXCheckBox fx:id="friday" text="Friday" />
+                  <JFXCheckBox fx:id="saturday" text="Saturday" />
+               </children>
+            </VBox>
             <JFXTimePicker fx:id="startTime" layoutX="410.0" layoutY="263.0" />
             <Label layoutX="382.0" layoutY="298.0" text="End Time:" />
             <JFXTimePicker fx:id="endTime" layoutX="410.0" layoutY="315.0" />

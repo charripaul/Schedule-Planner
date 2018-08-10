@@ -84,25 +84,25 @@ public class Class {
 	public String getDaysOfWeek() {
 		String val = "";
 		if(daysOfWeek.substring(0,1).equals("1")) {
-			val+="Monday, ";
+			val+="Sunday, ";
 		}
 		if(daysOfWeek.substring(1,2).equals("1")) {
-			val+="Tuesday, ";
+			val+="Monday, ";
 		}
 		if(daysOfWeek.substring(2,3).equals("1")) {
-			val+="Wednesday, ";
+			val+="Tuesday, ";
 		}
 		if(daysOfWeek.substring(3,4).equals("1")) {
-			val+="Thursday, ";
+			val+="Wednesday, ";
 		}
 		if(daysOfWeek.substring(4,5).equals("1")) {
-			val+="Friday, ";
+			val+="Thursday, ";
 		}
 		if(daysOfWeek.substring(5,6).equals("1")) {
-			val+="Saturday, ";
+			val+="Friday, ";
 		}
 		if(daysOfWeek.substring(6,7).equals("1")) {
-			val+="Sunday";
+			val+="Saturday";
 		}
 		return val;
 	}

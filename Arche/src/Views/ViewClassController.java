@@ -57,13 +57,13 @@ public class ViewClassController implements Initializable{
 		
 		//initialize checkboxes
 		String binary = c.getDaysOfWeek("");
-		monday.setSelected(getBooleanVal(binary.substring(0,1)));
-		tuesday.setSelected(getBooleanVal(binary.substring(1,2)));
-		wednesday.setSelected(getBooleanVal(binary.substring(2,3)));
-		thursday.setSelected(getBooleanVal(binary.substring(3,4)));
-		friday.setSelected(getBooleanVal(binary.substring(4,5)));
-		saturday.setSelected(getBooleanVal(binary.substring(5,6)));
-		sunday.setSelected(getBooleanVal(binary.substring(6,7)));
+		sunday.setSelected(getBooleanVal(binary.substring(0,1)));
+		monday.setSelected(getBooleanVal(binary.substring(1,2)));
+		tuesday.setSelected(getBooleanVal(binary.substring(2,3)));
+		wednesday.setSelected(getBooleanVal(binary.substring(3,4)));
+		thursday.setSelected(getBooleanVal(binary.substring(4,5)));
+		friday.setSelected(getBooleanVal(binary.substring(5,6)));
+		saturday.setSelected(getBooleanVal(binary.substring(6,7)));
 		
 		warningLabel.setVisible(false);
 	}

@@ -12,14 +12,18 @@
 <?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.ImageViewButton?>
-<?import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.MainNewController">
    <left>
@@ -27,9 +31,9 @@
          <children>
             <Pane prefHeight="127.0" prefWidth="244.0" style="-fx-background-color: #2a2a2b;">
                <children>
-                  <Label layoutX="37.0" layoutY="41.0" text="Project Arche" textFill="WHITE">
+                  <Label layoutX="33.0" layoutY="46.0" text="Schedule Planner" textFill="WHITE">
                      <font>
-                        <Font name="System Italic" size="30.0" />
+                        <Font name="System Italic" size="24.0" />
                      </font>
                      <effect>
                         <Bloom />
@@ -147,7 +151,7 @@
    <center>
       <StackPane BorderPane.alignment="CENTER">
          <children>
-            <BorderPane fx:id="homeView" prefHeight="200.0" prefWidth="200.0">
+            <BorderPane fx:id="homeView" prefHeight="200.0" prefWidth="200.0" visible="false">
                <center>
                   <JFXTabPane stylesheets="@ColorScheme.css" BorderPane.alignment="CENTER">
                      <tabs>
@@ -177,9 +181,6 @@
                                        </children>
                                     </HBox>
                                  </bottom>
-                                 <center>
-                                    <ICalendarAgenda fx:id="schedule" BorderPane.alignment="CENTER" />
-                                 </center>
                               </BorderPane>
                            </content></Tab>
                      </tabs>
@@ -194,7 +195,7 @@
                            </font>
                         </Label>
                         <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="SOMETIMES" />
-                        <JFXButton fx:id="leftArrowButton" onAction="#leftArrowClicked" HBox.hgrow="NEVER">
+                        <JFXButton fx:id="leftHomeButton" onAction="#leftHomeClicked" HBox.hgrow="NEVER">
                            <graphic>
                               <ImageViewButton fitHeight="25.0" fitWidth="25.0">
                                  <image>
@@ -204,7 +205,7 @@
                            </graphic>
                         </JFXButton>
                         <Label fx:id="dailyTaskDateLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="311.0" text="Date" textFill="WHITE" HBox.hgrow="ALWAYS" />
-                        <JFXButton fx:id="rightArrowButton" layoutX="979.0" layoutY="47.0" nodeOrientation="RIGHT_TO_LEFT" onAction="#rightArrowClicked" HBox.hgrow="NEVER">
+                        <JFXButton fx:id="rightHomeButton" layoutX="979.0" layoutY="47.0" nodeOrientation="RIGHT_TO_LEFT" onAction="#rightHomeClicked" HBox.hgrow="NEVER">
                            <graphic>
                               <ImageViewButton fitHeight="25.0" fitWidth="25.0">
                                  <image>
@@ -220,7 +221,154 @@
                   </HBox>
                </top>
             </BorderPane>
-            <BorderPane fx:id="calendarView" prefHeight="200.0" prefWidth="200.0" visible="false" />
+            <BorderPane fx:id="calendarView" prefHeight="200.0" prefWidth="200.0">
+               <top>
+                  <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label fx:id="title211" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="302.0" text="Calendar" textFill="WHITE">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets left="90.0" right="15.0" />
+                     </padding>
+                  </HBox>
+               </top>
+               <center>
+                  <VBox BorderPane.alignment="CENTER">
+                     <children>
+                        <GridPane alignment="CENTER" gridLinesVisible="true" prefHeight="57.0" prefWidth="852.0" style="-fx-background-color: #f2782f;" VBox.vgrow="NEVER">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label fx:id="sunday" alignment="CENTER" contentDisplay="CENTER" text="Sunday" />
+                              <Label fx:id="monday" text="Monday" GridPane.columnIndex="1" />
+                              <Label fx:id="tuesday" text="Tuesday" GridPane.columnIndex="2" />
+                              <Label fx:id="wednesday" text="Wednesday" GridPane.columnIndex="3" />
+                              <Label fx:id="thursday" text="Thursday" GridPane.columnIndex="4" />
+                              <Label fx:id="friday" text="Friday" GridPane.columnIndex="5" />
+                              <Label fx:id="saturday" text="Saturday" GridPane.columnIndex="6" />
+                           </children>
+                        </GridPane>
+                        <GridPane fx:id="calendarGrid" gridLinesVisible="true" VBox.vgrow="ALWAYS">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label fx:id="label00" text="Label" />
+                              <Label fx:id="label10" text="Label" GridPane.columnIndex="1" />
+                              <Label fx:id="label20" text="Label" GridPane.columnIndex="2" />
+                              <Label fx:id="label30" text="Label" GridPane.columnIndex="3" />
+                              <Label fx:id="label40" text="Label" GridPane.columnIndex="4" />
+                              <Label fx:id="label50" text="Label" GridPane.columnIndex="5" />
+                              <Label fx:id="label60" text="Label" GridPane.columnIndex="6" />
+                              <Label fx:id="label01" text="Label" GridPane.rowIndex="1" />
+                              <Label fx:id="label11" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="label21" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label fx:id="label31" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <Label fx:id="label41" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <Label fx:id="label51" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                              <Label fx:id="label61" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                              <Label fx:id="label02" text="Label" GridPane.rowIndex="2" />
+                              <Label fx:id="label12" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="label22" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <Label fx:id="label32" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                              <Label fx:id="label42" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                              <Label fx:id="label52" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                              <Label fx:id="label62" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+                              <Label fx:id="label03" text="Label" GridPane.rowIndex="3" />
+                              <Label fx:id="label13" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="label23" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                              <Label fx:id="label33" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                              <Label fx:id="label43" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                              <Label fx:id="label53" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                              <Label fx:id="label63" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+                              <Label fx:id="label04" text="Label" GridPane.rowIndex="4" />
+                              <Label fx:id="label14" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label fx:id="label24" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                              <Label fx:id="label34" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                              <Label fx:id="label44" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                              <Label fx:id="label54" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                              <Label fx:id="label64" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+                              <Label fx:id="label05" text="Label" GridPane.rowIndex="5" />
+                              <Label fx:id="label15" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Label fx:id="label25" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                              <Label fx:id="label35" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                              <Label fx:id="label45" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                              <Label fx:id="label55" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                              <Label fx:id="label65" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="5" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </center>
+               <right>
+                  <AnchorPane style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label fx:id="yearLabel" layoutX="79.0" layoutY="34.0" text="2018" textFill="WHITE" />
+                        <JFXButton fx:id="leftCalendarButton" contentDisplay="GRAPHIC_ONLY" layoutX="14.0" layoutY="30.0" onAction="#leftCalendarClicked" text=" ">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../resources/icons/white/left-arrow.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="rightCalendarButton" contentDisplay="GRAPHIC_ONLY" layoutX="136.0" layoutY="30.0" onAction="#rightCalendarClicked" text=" ">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../resources/icons/white/right-arrow.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="january" layoutY="68.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="January" textFill="WHITE" />
+                        <JFXButton fx:id="february" layoutY="111.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="February" textFill="WHITE" />
+                        <JFXButton fx:id="march" layoutX="1.0" layoutY="154.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="March" textFill="WHITE" />
+                        <JFXButton fx:id="april" layoutX="1.0" layoutY="197.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="April" textFill="WHITE" />
+                        <JFXButton fx:id="may" layoutY="240.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="May" textFill="WHITE" />
+                        <JFXButton fx:id="june" layoutX="1.0" layoutY="283.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="June" textFill="WHITE" />
+                        <JFXButton fx:id="july" layoutX="1.0" layoutY="326.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="July" textFill="WHITE" />
+                        <JFXButton fx:id="august" layoutX="1.0" layoutY="369.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="August" textFill="WHITE" />
+                        <JFXButton fx:id="september" layoutY="412.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="September" textFill="WHITE" />
+                        <JFXButton fx:id="october" layoutX="1.0" layoutY="455.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="October" textFill="WHITE" />
+                        <JFXButton fx:id="november" layoutY="498.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="November" textFill="WHITE" />
+                        <JFXButton fx:id="december" layoutY="541.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="December" textFill="WHITE" />
+                     </children>
+                  </AnchorPane>
+               </right></BorderPane>
             <BorderPane fx:id="taskView" prefHeight="200.0" prefWidth="200.0" visible="false">
                <top>
                   <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">

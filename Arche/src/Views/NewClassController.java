@@ -43,10 +43,10 @@ public class NewClassController implements Initializable{
 	}
 	@FXML
 	private void confirmButtonClicked() {
-		String dow = getBinary(monday.isSelected())+getBinary(tuesday.isSelected())+
-				getBinary(wednesday.isSelected())+getBinary(thursday.isSelected())+
-				getBinary(friday.isSelected())+getBinary(saturday.isSelected())+
-				getBinary(sunday.isSelected());
+		String dow = getBinary(sunday.isSelected()) + getBinary(monday.isSelected())+
+				getBinary(tuesday.isSelected())+getBinary(wednesday.isSelected())+
+				getBinary(thursday.isSelected())+getBinary(friday.isSelected())+
+				getBinary(saturday.isSelected());
 		Models.Class c = new Models.Class(name.getText(), abbreviation.getText(), details.getText(),
 				0, dow, startTime.getValue(), endTime.getValue());
 		
