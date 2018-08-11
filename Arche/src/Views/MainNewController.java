@@ -34,6 +34,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -58,7 +59,9 @@ import javafx.scene.control.cell.CheckBoxTreeTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -111,8 +114,19 @@ public class MainNewController implements Initializable{
 						label03, label13, label23, label33, label43, label53, label63,
 						label04, label14, label24, label34, label44, label54, label64,
 						label05, label15, label25, label35, label45, label55, label65;
-	public Calendar calendarInstance = Calendar.getInstance();		//for position in time for reference
+	
+	//for disabling cell, set visible
+	@FXML private Pane 	pane00, pane10, pane20, pane30, pane40, pane50, pane60,
+						pane01, pane11, pane21, pane31, pane41, pane51, pane61,
+						pane02, pane12, pane22, pane32, pane42, pane52, pane62,
+						pane03, pane13, pane23, pane33, pane43, pane53, pane63,
+						pane04, pane14, pane24, pane34, pane44, pane54, pane64,
+						pane05, pane15, pane25, pane35, pane45, pane55, pane65;
+	
+	public Calendar calendar = Calendar.getInstance();		//for calendar the gui is displaying
+	public final Calendar calendarToday = Calendar.getInstance();	//for highlighted date on calendar
 	ArrayList<Label> labelList = new ArrayList<Label>();
+	ArrayList<Pane> paneList = new ArrayList<Pane>();
 	
 	//task tab
 	@FXML private BorderPane taskView;
@@ -156,9 +170,6 @@ public class MainNewController implements Initializable{
 	Date classLastClickTime;
 	Date typeLastClickTime;
 	
-	//calendar
-	Calendar calendar;
-	
 	//button click properties
 	final String selectedColor = "-fx-background-color:  #f2782f;";
 	
@@ -166,56 +177,7 @@ public class MainNewController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initializeLabels();
 		homeButton.fire();
-		
-		//consolidate date labels into arraylist
-		//add in order of days according to gregorian calendar
-	    labelList.add(label00);
-	    labelList.add(label10);
-	    labelList.add(label20);
-	    labelList.add(label30);
-	    labelList.add(label40);
-	    labelList.add(label50);
-	    labelList.add(label60);
-	    
-	    labelList.add(label01);
-	    labelList.add(label11);
-	    labelList.add(label21);
-	    labelList.add(label31);
-	    labelList.add(label41);
-	    labelList.add(label51);
-	    labelList.add(label61);
-
-	    labelList.add(label02);
-	    labelList.add(label12);
-	    labelList.add(label22);
-	    labelList.add(label32);
-	    labelList.add(label42);
-	    labelList.add(label52);
-	    labelList.add(label62);
-	    
-	    labelList.add(label03);
-	    labelList.add(label13);
-	    labelList.add(label23);
-	    labelList.add(label33);
-	    labelList.add(label43);
-	    labelList.add(label53);
-	    labelList.add(label63);
-	    
-	    labelList.add(label04);
-	    labelList.add(label14);
-	    labelList.add(label24);
-	    labelList.add(label34);
-	    labelList.add(label44);
-	    labelList.add(label54);
-	    labelList.add(label64);
-	    
-	    labelList.add(label05);
-	    labelList.add(label15);
-	    labelList.add(label25);
-	    labelList.add(label35);
-	    labelList.add(label45);
-	    labelList.add(label55);
-	    labelList.add(label65);
+		createLists();
 	}
 	private void initializeLabels() {
 		ArrayList<Task> tableTasks = ModelControl.getDayTasks("get for todays labels");
@@ -297,8 +259,8 @@ public class MainNewController implements Initializable{
 			GridPane.setMargin(labelList.get(count), new Insets(5, 5, 5, 5));
 		}
 		
-		calendar = Calendar.getInstance();
 		calendar.setTimeZone(TimeZone.getDefault());
+		resetPanes();
 		
 		String firstDay = getFirstDayOfMonth().toLowerCase();
 		String firstLabel = "";
@@ -326,6 +288,7 @@ public class MainNewController implements Initializable{
 		
 		int days = getNumberOfDaysInMonth();
 		int firstIndex = -1;
+		
 		//list should be size 42
 		for(int count=0;count<42;count++) {
 			if(labelList.get(count).getId().equals(firstLabel)) {
@@ -334,15 +297,33 @@ public class MainNewController implements Initializable{
 			}
 			else if(count < firstIndex || firstIndex == -1){
 				labelList.get(count).setText("");
-				//TODO: disable cell
+				paneList.get(count).setVisible(true);		//disable cell
 			}
 			else if(count >= firstIndex+days) {
 				labelList.get(count).setText("");
-				//TODO: disable cell
+				paneList.get(count).setVisible(true);		//disable cell
 			}
 			else {
 				labelList.get(count).setText((count-firstIndex+1)+"");
 			}
+		}
+		
+		yearLabel.setText(getYear()+"");
+		int month = getMonth();
+		switch(month) {
+		case 0: january.setStyle(selectedColor);	break;
+		case 1: february.setStyle(selectedColor);	break;
+		case 2: march.setStyle(selectedColor);		break;
+		case 3: april.setStyle(selectedColor);		break;
+		case 4: may.setStyle(selectedColor);		break;
+		case 5: june.setStyle(selectedColor);		break;
+		case 6: july.setStyle(selectedColor);		break;
+		case 7: august.setStyle(selectedColor);		break;
+		case 8: september.setStyle(selectedColor);	break;
+		case 9: october.setStyle(selectedColor);	break;
+		case 10: november.setStyle(selectedColor);	break;
+		case 11: december.setStyle(selectedColor);	break;
+		default: january.setStyle(selectedColor); 	break;
 		}
 		
 		initializeCalendarData();
@@ -751,6 +732,12 @@ public class MainNewController implements Initializable{
 		resetHomeButtons();
 		calendarButton.setStyle(selectedColor);
 		resetViews();
+		
+		//make calendar reset after clicking on different tab
+		calendar = Calendar.getInstance();
+		resetMonthButtons();
+		resetPanes();
+		
 		initializeCalendar();
 		calendarView.setVisible(true);
 	}
@@ -772,17 +759,46 @@ public class MainNewController implements Initializable{
 	}
 	@FXML
 	private void leftCalendarClicked() {
+		calendar.add(Calendar.YEAR, -1);
+		initializeCalendar();
 		
+		Date year = calendar.getTime();
+		DateFormat sdf = new SimpleDateFormat("yyyy");   
+	    yearLabel.setText(sdf.format(year));
 	}
 	@FXML
 	private void rightCalendarClicked() {
+		calendar.add(Calendar.YEAR, 1);
+		initializeCalendar();
 		
+		Date year = calendar.getTime();
+		DateFormat sdf = new SimpleDateFormat("yyyy");   
+	    yearLabel.setText(sdf.format(year));
 	}
 	@FXML
 	private void monthButtonClicked(ActionEvent event) {
 		resetMonthButtons();
 		Button btn = (Button) event.getSource();
 		btn.setStyle(selectedColor);
+		
+		String month = btn.getId();
+		switch(month) {
+		case "january": calendar.set(Calendar.MONTH, 0);	break;
+		case "february": calendar.set(Calendar.MONTH, 1);	break;
+		case "march": calendar.set(Calendar.MONTH, 2);		break;
+		case "april": calendar.set(Calendar.MONTH, 3);		break;
+		case "may": calendar.set(Calendar.MONTH, 4);		break;
+		case "june": calendar.set(Calendar.MONTH, 5);		break;
+		case "july": calendar.set(Calendar.MONTH, 6);		break;
+		case "august": calendar.set(Calendar.MONTH, 7);		break;
+		case "september": calendar.set(Calendar.MONTH, 8);	break;
+		case "october": calendar.set(Calendar.MONTH, 9);	break;
+		case "november": calendar.set(Calendar.MONTH, 10);	break;
+		case "december": calendar.set(Calendar.MONTH, 11);	break;
+		default: calendar.set(Calendar.MONTH, 0);			break;
+		}
+		
+		initializeCalendar();
 	}
 	@FXML
 	private void leftHomeClicked() {
@@ -798,7 +814,7 @@ public class MainNewController implements Initializable{
 	    //cal.set(Calendar.DATE, cal.getInstance().get(Calendar.DATE));
 	    //cal.set(Calendar.MONTH, cal.getInstance().get(Calendar.MONTH));
 	    //cal.set(Calendar.YEAR, cal.getInstance().get(Calendar.YEAR));
-	    Calendar cal = (Calendar) calendarInstance.clone();
+	    Calendar cal = (Calendar) calendar.clone();
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 	    
 	    Date firstDayOfMonth = cal.getTime();
@@ -806,7 +822,19 @@ public class MainNewController implements Initializable{
 	    return sdf.format(firstDayOfMonth);
 	}
 	private int getNumberOfDaysInMonth() {
-		return calendarInstance.getActualMaximum(Calendar.DAY_OF_MONTH);
+		return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+	}
+	private int getToday() {
+		return calendarToday.get(Calendar.DAY_OF_MONTH);
+	}
+	private int getDay() {
+		return calendar.get(Calendar.DAY_OF_MONTH);
+	}
+	private int getMonth() {
+		return calendar.get(Calendar.MONTH);
+	}
+	private int getYear() {
+		return calendar.get(Calendar.YEAR);
 	}
 	private void resetViews() {
 		homeView.setVisible(false);
@@ -819,6 +847,11 @@ public class MainNewController implements Initializable{
 		calendarButton.setStyle(null);
 		taskButton.setStyle(null);
 		classButton.setStyle(null);
+	}
+	private void resetPanes() {
+		for(int count=0;count<paneList.size();count++) {
+			paneList.get(count).setVisible(false);
+		}
 	}
 	private void resetMonthButtons() {
 		january.setStyle(null);
@@ -833,5 +866,105 @@ public class MainNewController implements Initializable{
 		october.setStyle(null);
 		november.setStyle(null);
 		december.setStyle(null);
+	}
+	private void createLists() {
+		//consolidate date labels into arraylist
+		//add in order of days according to gregorian calendar
+	    labelList.add(label00);
+	    labelList.add(label10);
+	    labelList.add(label20);
+	    labelList.add(label30);
+	    labelList.add(label40);
+	    labelList.add(label50);
+	    labelList.add(label60);
+	    
+	    labelList.add(label01);
+	    labelList.add(label11);
+	    labelList.add(label21);
+	    labelList.add(label31);
+	    labelList.add(label41);
+	    labelList.add(label51);
+	    labelList.add(label61);
+
+	    labelList.add(label02);
+	    labelList.add(label12);
+	    labelList.add(label22);
+	    labelList.add(label32);
+	    labelList.add(label42);
+	    labelList.add(label52);
+	    labelList.add(label62);
+	    
+	    labelList.add(label03);
+	    labelList.add(label13);
+	    labelList.add(label23);
+	    labelList.add(label33);
+	    labelList.add(label43);
+	    labelList.add(label53);
+	    labelList.add(label63);
+	    
+	    labelList.add(label04);
+	    labelList.add(label14);
+	    labelList.add(label24);
+	    labelList.add(label34);
+	    labelList.add(label44);
+	    labelList.add(label54);
+	    labelList.add(label64);
+	    
+	    labelList.add(label05);
+	    labelList.add(label15);
+	    labelList.add(label25);
+	    labelList.add(label35);
+	    labelList.add(label45);
+	    labelList.add(label55);
+	    labelList.add(label65);
+	    
+	    //pane lists
+	    paneList.add(pane00);
+	    paneList.add(pane10);
+	    paneList.add(pane20);
+	    paneList.add(pane30);
+	    paneList.add(pane40);
+	    paneList.add(pane50);
+	    paneList.add(pane60);
+	    
+	    paneList.add(pane01);
+	    paneList.add(pane11);
+	    paneList.add(pane21);
+	    paneList.add(pane31);
+	    paneList.add(pane41);
+	    paneList.add(pane51);
+	    paneList.add(pane61);
+
+	    paneList.add(pane02);
+	    paneList.add(pane12);
+	    paneList.add(pane22);
+	    paneList.add(pane32);
+	    paneList.add(pane42);
+	    paneList.add(pane52);
+	    paneList.add(pane62);
+	    
+	    paneList.add(pane03);
+	    paneList.add(pane13);
+	    paneList.add(pane23);
+	    paneList.add(pane33);
+	    paneList.add(pane43);
+	    paneList.add(pane53);
+	    paneList.add(pane63);
+	    
+	    paneList.add(pane04);
+	    paneList.add(pane14);
+	    paneList.add(pane24);
+	    paneList.add(pane34);
+	    paneList.add(pane44);
+	    paneList.add(pane54);
+	    paneList.add(pane64);
+	    
+	    paneList.add(pane05);
+	    paneList.add(pane15);
+	    paneList.add(pane25);
+	    paneList.add(pane35);
+	    paneList.add(pane45);
+	    paneList.add(pane55);
+	    paneList.add(pane65);
 	}
 }

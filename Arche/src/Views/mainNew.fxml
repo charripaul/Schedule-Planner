@@ -324,6 +324,48 @@
                               <Label fx:id="label45" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="5" />
                               <Label fx:id="label55" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="5" />
                               <Label fx:id="label65" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane00" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" />
+                              <Pane fx:id="pane10" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" />
+                              <Pane fx:id="pane20" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" />
+                              <Pane fx:id="pane30" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" />
+                              <Pane fx:id="pane40" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" />
+                              <Pane fx:id="pane50" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" />
+                              <Pane fx:id="pane60" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" />
+                              <Pane fx:id="pane01" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane11" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane21" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane31" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane41" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane51" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane61" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane02" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane12" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane22" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane32" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane42" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane52" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane62" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane03" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane13" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane23" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane33" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane43" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane53" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane63" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane04" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane14" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane24" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane34" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane44" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane54" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane64" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane05" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane15" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane25" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane35" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane45" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane55" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane65" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="5" />
                            </children>
                            <VBox.margin>
                               <Insets />
@@ -356,14 +398,14 @@
                         </JFXButton>
                         <JFXButton fx:id="january" layoutY="68.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="January" textFill="WHITE" />
                         <JFXButton fx:id="february" layoutY="111.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="February" textFill="WHITE" />
-                        <JFXButton fx:id="march" layoutX="1.0" layoutY="154.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="March" textFill="WHITE" />
-                        <JFXButton fx:id="april" layoutX="1.0" layoutY="197.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="April" textFill="WHITE" />
+                        <JFXButton fx:id="march" layoutY="154.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="March" textFill="WHITE" />
+                        <JFXButton fx:id="april" layoutY="197.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="April" textFill="WHITE" />
                         <JFXButton fx:id="may" layoutY="240.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="May" textFill="WHITE" />
-                        <JFXButton fx:id="june" layoutX="1.0" layoutY="283.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="June" textFill="WHITE" />
-                        <JFXButton fx:id="july" layoutX="1.0" layoutY="326.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="July" textFill="WHITE" />
-                        <JFXButton fx:id="august" layoutX="1.0" layoutY="369.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="August" textFill="WHITE" />
+                        <JFXButton fx:id="june" layoutY="283.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="June" textFill="WHITE" />
+                        <JFXButton fx:id="july" layoutY="326.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="July" textFill="WHITE" />
+                        <JFXButton fx:id="august" layoutY="369.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="August" textFill="WHITE" />
                         <JFXButton fx:id="september" layoutY="412.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="September" textFill="WHITE" />
-                        <JFXButton fx:id="october" layoutX="1.0" layoutY="455.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="October" textFill="WHITE" />
+                        <JFXButton fx:id="october" layoutY="455.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="October" textFill="WHITE" />
                         <JFXButton fx:id="november" layoutY="498.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="November" textFill="WHITE" />
                         <JFXButton fx:id="december" layoutY="541.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="December" textFill="WHITE" />
                      </children>
