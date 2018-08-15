@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -263,7 +264,7 @@
                               <Label fx:id="saturday" text="Saturday" GridPane.columnIndex="6" />
                            </children>
                         </GridPane>
-                        <GridPane fx:id="calendarGrid" gridLinesVisible="true" VBox.vgrow="ALWAYS">
+                        <GridPane fx:id="calendarGrid" gridLinesVisible="true" stylesheets="@ColorScheme.css" VBox.vgrow="ALWAYS">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -282,6 +283,222 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
+                              <JFXTextArea fx:id="text00" disable="true" editable="false">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text10" disable="true" editable="false" GridPane.columnIndex="1">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text20" disable="true" editable="false" GridPane.columnIndex="2">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text30" disable="true" editable="false" GridPane.columnIndex="3">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text40" disable="true" editable="false" GridPane.columnIndex="4">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text50" disable="true" editable="false" GridPane.columnIndex="5">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text60" disable="true" editable="false" GridPane.columnIndex="6">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text01" disable="true" editable="false" GridPane.rowIndex="1">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text11" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text21" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text31" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text41" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text51" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text61" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text02" disable="true" editable="false" GridPane.rowIndex="2">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text12" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text22" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text32" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text42" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text52" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text62" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="2">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text03" disable="true" editable="false" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text13" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text23" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text33" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text43" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text53" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text63" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text04" disable="true" editable="false" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text14" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text24" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text34" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text44" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text54" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text64" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text05" disable="true" editable="false" GridPane.rowIndex="5">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text15" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text25" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text35" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text45" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="5">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text55" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="5">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
+                              <JFXTextArea fx:id="text65" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="5">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                 </padding>
+                              </JFXTextArea>
                               <Label fx:id="label00" text="Label" />
                               <Label fx:id="label10" text="Label" GridPane.columnIndex="1" />
                               <Label fx:id="label20" text="Label" GridPane.columnIndex="2" />
@@ -324,48 +541,48 @@
                               <Label fx:id="label45" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="5" />
                               <Label fx:id="label55" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="5" />
                               <Label fx:id="label65" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane00" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" />
-                              <Pane fx:id="pane10" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" />
-                              <Pane fx:id="pane20" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" />
-                              <Pane fx:id="pane30" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" />
-                              <Pane fx:id="pane40" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" />
-                              <Pane fx:id="pane50" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" />
-                              <Pane fx:id="pane60" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" />
-                              <Pane fx:id="pane01" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane11" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane21" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane31" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane41" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane51" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane61" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane02" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane12" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane22" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane32" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane42" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane52" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane62" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane03" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane13" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane23" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane33" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane43" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane53" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane63" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane04" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane14" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane24" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane34" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane44" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane54" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane64" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane05" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane15" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane25" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane35" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane45" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane55" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="5" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane65" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" visible="false" GridPane.columnIndex="6" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane00" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" />
+                              <Pane fx:id="pane10" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" />
+                              <Pane fx:id="pane20" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" />
+                              <Pane fx:id="pane30" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" />
+                              <Pane fx:id="pane40" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" />
+                              <Pane fx:id="pane50" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" />
+                              <Pane fx:id="pane60" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" />
+                              <Pane fx:id="pane01" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane11" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane21" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane31" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane41" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane51" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane61" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                              <Pane fx:id="pane02" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane12" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane22" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane32" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane42" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane52" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane62" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+                              <Pane fx:id="pane03" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane13" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane23" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane33" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane43" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane53" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane63" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+                              <Pane fx:id="pane04" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane14" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane24" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane34" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane44" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane54" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane64" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+                              <Pane fx:id="pane05" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane15" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane25" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane35" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane45" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane55" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                              <Pane fx:id="pane65" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="5" />
                            </children>
                            <VBox.margin>
                               <Insets />

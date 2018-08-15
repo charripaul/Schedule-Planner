@@ -25,8 +25,8 @@ public class ModelControl {
 	private static ArrayList<Class> classes = new ArrayList<Class>();
 	private static ArrayList<Project> projects = new ArrayList<Project>();
 	private static ArrayList<TaskType> taskTypes = new ArrayList<TaskType>();
-	public static LocalDate dayOfReference = LocalDate.now();
-	public static LocalDate today = LocalDate.now();
+	public static Calendar dayOfReference = Calendar.getInstance();
+	public static Calendar today = Calendar.getInstance();
 	
 	static {
 		initialize();
@@ -375,8 +375,8 @@ public class ModelControl {
 		}
 		return false;
 	}
-	//for reference day
-	public static ArrayList<Task> getDayTasks(){
+	//for reference day on home page, stays locked to day of reference (arrowed date)
+	public static ArrayList<Task> getUrgentTasks(){
 		long day = getReferenceDateVal();
 		ArrayList<Task> vals = new ArrayList<Task>();
 		for(int count=0;count<tasks.size();count++) {
@@ -388,19 +388,10 @@ public class ModelControl {
 				}
 			}
 			long startOfWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays);
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 			
-			Instant instant = Instant.ofEpochMilli(startOfWarningPeriod);
-			ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
-			LocalDate start = zdt.toLocalDate();
-			//LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(startOfWarningPeriod),TimeZone.getDefault().toZoneId());  //se 9
-			
-			Date date1 = Date.from(dayOfReference.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			Date date2 = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			Calendar cal1 = Calendar.getInstance();
+			Calendar cal1 = (Calendar) dayOfReference.clone();
 			Calendar cal2 = Calendar.getInstance();
-			cal1.setTime(date1);
-			cal2.setTime(date2);
+			cal2.setTimeInMillis(startOfWarningPeriod);
 			
 			boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
 			                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
@@ -421,33 +412,28 @@ public class ModelControl {
 		}
 		return vals;
 	}
-	public static ArrayList<Task> getSoonDueTasks(){
+	public static ArrayList<Task> getApproachingTasks(){
 		long day = getReferenceDateVal();
 		ArrayList<Task> vals = new ArrayList<Task>();
 		for(int count=0;count<tasks.size();count++) {
 			String n = tasks.get(count).getType();
 			int numOfDays = 0;
+			int adjustment = 0;
 			for(int x = 0;x<taskTypes.size();x++) {
 				if(taskTypes.get(x).getName().equals(n)) {
 					numOfDays = taskTypes.get(x).getWarningPeriod();
+					if(numOfDays == 1) {
+						adjustment = 1;
+					}
 				}
 			}
 			//add extra half a period(time between warning period and due date) as a warning
 			long startOfWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays);
-			long extraWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays) - getDayValue(numOfDays/2);
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+			long extraWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays) - getDayValue((numOfDays/2)+adjustment);
 			
-			Instant instant = Instant.ofEpochMilli(startOfWarningPeriod);
-			ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
-			LocalDate start = zdt.toLocalDate();
-			//LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(startOfWarningPeriod),TimeZone.getDefault().toZoneId());  //se 9
-			
-			Date date1 = Date.from(dayOfReference.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			Date date2 = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			Calendar cal1 = Calendar.getInstance();
+			Calendar cal1 = (Calendar) dayOfReference.clone();
 			Calendar cal2 = Calendar.getInstance();
-			cal1.setTime(date1);
-			cal2.setTime(date2);
+			cal2.setTimeInMillis(extraWarningPeriod);
 			
 			boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
 			                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
@@ -458,8 +444,8 @@ public class ModelControl {
 		}
 		return vals;
 	}
-	//for today labels
-	public static ArrayList<Task> getDayTasks(String s){
+	//for today labels on left sidebar, stays locked to today
+	public static ArrayList<Task> getUrgentTasks(String s){
 		long day = getTodaysDateVal();
 		ArrayList<Task> vals = new ArrayList<Task>();
 		for(int count=0;count<tasks.size();count++) {
@@ -471,19 +457,10 @@ public class ModelControl {
 				}
 			}
 			long startOfWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays);
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 			
-			Instant instant = Instant.ofEpochMilli(startOfWarningPeriod);
-			ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
-			LocalDate start = zdt.toLocalDate();
-			//LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(startOfWarningPeriod),TimeZone.getDefault().toZoneId());  //se 9
-			
-			Date date1 = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			Date date2 = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			Calendar cal1 = Calendar.getInstance();
+			Calendar cal1 = (Calendar) dayOfReference.clone();
 			Calendar cal2 = Calendar.getInstance();
-			cal1.setTime(date1);
-			cal2.setTime(date2);
+			cal2.setTimeInMillis(startOfWarningPeriod);
 			
 			boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
 			                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
@@ -504,33 +481,28 @@ public class ModelControl {
 		}
 		return vals;
 	}
-	public static ArrayList<Task> getSoonDueTasks(String s){
+	public static ArrayList<Task> getApproachingTasks(String s){
 		long day = getTodaysDateVal();
 		ArrayList<Task> vals = new ArrayList<Task>();
 		for(int count=0;count<tasks.size();count++) {
 			String n = tasks.get(count).getType();
 			int numOfDays = 0;
+			int adjustment = 0;
 			for(int x = 0;x<taskTypes.size();x++) {
 				if(taskTypes.get(x).getName().equals(n)) {
 					numOfDays = taskTypes.get(x).getWarningPeriod();
+					if(numOfDays == 1) {
+						adjustment = 1;
+					}
 				}
 			}
 			//add extra half a period(time between warning period and due date) as a warning
 			long startOfWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays);
-			long extraWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays) - getDayValue(numOfDays/2);
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+			long extraWarningPeriod = tasks.get(count).getDueDate() - getDayValue(numOfDays) - getDayValue((numOfDays/2)+adjustment);
 			
-			Instant instant = Instant.ofEpochMilli(startOfWarningPeriod);
-			ZonedDateTime zdt = instant.atZone(ZoneId.systemDefault());
-			LocalDate start = zdt.toLocalDate();
-			//LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(startOfWarningPeriod),TimeZone.getDefault().toZoneId());  //se 9
-			
-			Date date1 = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			Date date2 = Date.from(start.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			Calendar cal1 = Calendar.getInstance();
+			Calendar cal1 = (Calendar) dayOfReference.clone();
 			Calendar cal2 = Calendar.getInstance();
-			cal1.setTime(date1);
-			cal2.setTime(date2);
+			cal2.setTimeInMillis(extraWarningPeriod);
 			
 			boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
 			                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
@@ -541,11 +513,28 @@ public class ModelControl {
 		}
 		return vals;
 	}
+	//for gui calendar days
+	public static ArrayList<Task> getDayTasks(Calendar cal){
+		ArrayList<Task> t = new ArrayList<Task>();
+		Calendar calTest = Calendar.getInstance();
+		
+		for(int count=0;count<tasks.size();count++) {
+			calTest.setTimeInMillis(tasks.get(count).getDueDate());
+			if((cal.get(Calendar.YEAR) == calTest.get(Calendar.YEAR)) &&
+					(cal.get(Calendar.MONTH) == calTest.get(Calendar.MONTH)) &&
+					(cal.get(Calendar.DATE) == calTest.get(Calendar.DATE))) {
+				t.add(tasks.get(count));
+			}
+		}
+		return t;
+	}
 	public static void addDayToDayOfReference() {
-		dayOfReference = dayOfReference.plusDays(1);
+		//dayOfReference = dayOfReference.plusDays(1);
+		dayOfReference.add(Calendar.DATE, 1);
 	}
 	public static void removeDayFromDayOfReference() {
-		dayOfReference = dayOfReference.minusDays(1);
+		//dayOfReference = dayOfReference.minusDays(1);
+		dayOfReference.add(Calendar.DATE, -1);
 	}
 	public static ArrayList<Task> getTasks(){
 		return tasks;
@@ -643,14 +632,18 @@ public class ModelControl {
 		return day;
 	}
 	private static long getReferenceDateVal() {
-		//Date t = Calendar.getInstance().getTime();
-		Date t = java.sql.Date.valueOf(dayOfReference);
-		long val = t.getTime();
-		return val;
+		/*//Date t = Calendar.getInstance().getTime();
+		//Date t = java.sql.Date.valueOf(dayOfReference);
+		Date date = Date.from(dayOfReference.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		long val = date.getTime();
+		return val;*/
+		return dayOfReference.getTimeInMillis();
 	}
 	private static long getTodaysDateVal() {
-		Date t = java.sql.Date.valueOf(today);
-		long val = t.getTime();
+		Calendar cal = Calendar.getInstance();
+		long val = cal.getTimeInMillis();
 		return val;
 	}
 }

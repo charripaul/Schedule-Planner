@@ -1,8 +1,17 @@
 /*@charset "ISO-8859-1";*/
 
 .tab-header-background {
-    -fx-background-color: #f2782f ;
+    -fx-background-color: #f2782f;
 }
 .button {
-    background-color: #f2782f ;
+    background-color: #f2782f;
 }
+.input-line{
+	-fx-opacity: 0;
+}
+.text-area:disabled { 
+    -fx-opacity: 1; 
+}
+.text-input > .scroll-pane:disabled { 
+    -fx-opacity: 1; 
+} 

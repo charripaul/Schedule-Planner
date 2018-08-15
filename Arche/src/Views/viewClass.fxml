@@ -25,7 +25,7 @@
             <Label layoutX="47.0" layoutY="45.0" text="Name:" />
             <Label layoutX="233.0" layoutY="45.0" text="Abbreviation:" />
             <Label layoutX="47.0" layoutY="120.0" text="Details:" />
-            <Label layoutX="445.0" layoutY="45.0" text="Days of Week:" />
+            <Label layoutX="446.0" layoutY="45.0" text="Days of Week:" />
             <Label layoutX="382.0" layoutY="246.0" text="Start Time:" />
             <Label layoutX="446.0" layoutY="14.0" text="Total Assignments:" />
             <TextField fx:id="name" layoutX="47.0" layoutY="71.0" />

@@ -135,8 +135,8 @@ public class MainController implements Initializable{
 				dailyTabPane.widthProperty().divide(dailyTabPane.getTabs().size()).subtract(25));
 		//date label formatting
 		SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM d, yyyy");
-		Date date = Date.from(ModelControl.dayOfReference.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		dailyTaskDateLabel.setText(sdf.format(date));
+		//Date date = Date.from(ModelControl.dayOfReference.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		dailyTaskDateLabel.setText(sdf.format(ModelControl.dayOfReference));
 		
 		nameTreeTableCol.setCellValueFactory(
 	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
@@ -246,9 +246,9 @@ public class MainController implements Initializable{
 	@FXML
 	private void initializeDailyTabData() {
 		//dailyTreeTableView.getRoot().getChildren().clear();
-		ArrayList<Task> tableTasks = ModelControl.getDayTasks();
+		ArrayList<Task> tableTasks = ModelControl.getUrgentTasks();
 		ArrayList<Task> overDueTasks = ModelControl.getOverdueTasks();
-		ArrayList<Task> dueSoonTasks = ModelControl.getSoonDueTasks();
+		ArrayList<Task> dueSoonTasks = ModelControl.getApproachingTasks();
 		
 		dailyTreeTableView.setShowRoot(false);
 		incompleteTodayLabel.setText(tableTasks.size() + " Immaediate Incomplete Tasks");
