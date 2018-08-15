@@ -410,7 +410,7 @@ public class MainNewController implements Initializable{
 		
 		TreeItem<Task> root = new TreeItem<>();
 		TreeItem<Task> overdue = new TreeItem<>(new Task("Overdue"));
-		TreeItem<Task> due = new TreeItem<>(new Task("Immediate"));
+		TreeItem<Task> due = new TreeItem<>(new Task("Urgent"));
 		TreeItem<Task> soon = new TreeItem<>(new Task("Approaching"));
 		
 		for(int count = 0;count<tableTasks.size();count++) {

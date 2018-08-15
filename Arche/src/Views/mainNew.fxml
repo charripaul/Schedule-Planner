@@ -156,7 +156,7 @@
                <center>
                   <JFXTabPane stylesheets="@ColorScheme.css" BorderPane.alignment="CENTER">
                      <tabs>
-                        <Tab closable="false" text="Tasks">
+                        <Tab closable="false" text="Notifications">
                            <content>
                               <JFXTreeTableView fx:id="homeTreeTable">
                                  <columns>
