@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import tornadofx.control.DateTimePicker?>
+
+<JFXTabPane fx:id="tabPane" prefHeight="476.0" prefWidth="600.0" stylesheets="@ColorScheme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <tabs>
+      <Tab fx:id="tableTab" closable="false" text="Table">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <center>
+                  <TableView fx:id="newTasksTable" prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
+                     <columns>
+                        <TableColumn fx:id="nameColumn" prefWidth="92.0" text="Name" />
+                        <TableColumn fx:id="descriptionColumn" prefWidth="348.0" text="Description" />
+                        <TableColumn fx:id="scheduledColumn" text="Scheduled?" />
+                     </columns>
+                  </TableView>
+               </center>
+               <bottom>
+                  <HBox>
+                     <children>
+                        <JFXButton fx:id="cancelAll" onAction="#cancelAllButtonClicked" style="-fx-background-color: #f2782f;" text="Cancel">
+                           <HBox.margin>
+                              <Insets left="10.0" top="10.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                        <Pane prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <JFXButton fx:id="confirmAll" onAction="#confirmAllButtonClicked" style="-fx-background-color: #f2782f;" text="Confirm">
+                           <HBox.margin>
+                              <Insets bottom="10.0" right="10.0" top="10.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+               </bottom>
+               <right>
+                  <VBox alignment="CENTER" prefHeight="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <JFXButton fx:id="add" onAction="#addButtonClicked" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #f2782f;" text="Add">
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="edit" onAction="#editButtonClicked" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #f2782f;" text="Edit">
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="delete" onAction="#deleteButtonClicked" prefHeight="25.0" prefWidth="57.0" style="-fx-background-color: #f2782f;" text="Delete">
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </BorderPane.margin>
+                  </VBox>
+               </right>
+            </BorderPane>
+         </content>
+      </Tab>
+      <Tab fx:id="infoTab" closable="false" text="Information">
+         <content>
+            <BorderPane>
+               <bottom>
+                  <HBox BorderPane.alignment="CENTER">
+                     <children>
+                        <JFXButton fx:id="cancelInfo" onAction="#cancelInfoButtonClicked" style="-fx-background-color: #f2782f;" text="Cancel" />
+                        <Pane prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <JFXButton fx:id="confirmInfo" onAction="#confirmInfoButtonClicked" style="-fx-background-color: #f2782f;" text="Confirm" />
+                     </children>
+                  </HBox>
+               </bottom>
+               <top>
+                  <Label fx:id="label" text="New Task" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </top>
+               <center>
+                  <AnchorPane prefHeight="200.0" prefWidth="625.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label layoutX="34.0" layoutY="6.0" text="Name:" />
+                        <Label layoutX="33.0" layoutY="67.0" text="Description:" />
+                        <Label layoutX="209.0" layoutY="6.0" text="Class:" />
+                        <Label layoutX="390.0" layoutY="6.0" text="Task type:" />
+                        <Label layoutX="390.0" layoutY="67.0" text="Due Date:" />
+                        <TextField fx:id="name" layoutX="33.0" layoutY="26.0" />
+                        <ChoiceBox fx:id="className" layoutX="209.0" layoutY="26.0" prefWidth="150.0" />
+                        <ChoiceBox fx:id="taskType" layoutX="392.0" layoutY="26.0" prefWidth="150.0" />
+                        <TextArea fx:id="description" layoutX="33.0" layoutY="93.0" prefHeight="200.0" prefWidth="322.0" />
+                        <DateTimePicker fx:id="dueDate" layoutX="390.0" layoutY="93.0" />
+                        <Label layoutX="391.0" layoutY="130.0" text="Notice Period:" />
+                        <Label layoutX="391.0" layoutY="199.0" text="Estimated Time to Complete:" />
+                        <TextField fx:id="noticePeriod" layoutX="390.0" layoutY="155.0" promptText="days" />
+                        <TextField fx:id="minutes" layoutX="482.0" layoutY="242.0" prefHeight="25.0" prefWidth="62.0" promptText="mins" />
+                        <TextField fx:id="hours" layoutX="392.0" layoutY="242.0" prefHeight="25.0" prefWidth="59.0" promptText="Hrs" />
+                        <DateTimePicker fx:id="scheduledStartTime" layoutX="209.0" layoutY="303.0" prefHeight="25.0" prefWidth="146.0" />
+                        <Label layoutX="33.0" layoutY="348.0" text="Scheduled End Time:" />
+                        <Label layoutX="33.0" layoutY="307.0" text="Scheduled Start Time:" />
+                        <DateTimePicker fx:id="scheduledEndTime" layoutX="209.0" layoutY="344.0" prefHeight="25.0" prefWidth="146.0" />
+                     </children>
+                  </AnchorPane>
+               </center>
+            </BorderPane>
+         </content>
+      </Tab>
+   </tabs>
+</JFXTabPane>
