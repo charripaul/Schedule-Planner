@@ -61,12 +61,16 @@ public class NewTaskController implements Initializable{
 	@FXML private TableColumn<Task, String> nameColumn, descriptionColumn;
 	@FXML private TableColumn<Task, Boolean> scheduledColumn;
 	
-	private ObservableList<Task> taskList;
+	private ObservableList<Task> viewableTaskList;
+	private ArrayList<Task> taskList;
 	private Task taskTemp;
 	private Date taskLastClickTime;
 	private boolean isOnAdd;			//test if got to confirmInfo from edit or add button
 	private int sIndex;
 	
+	public NewTaskController() {
+		taskList = new ArrayList<Task>();
+	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		dueDate.setFormat("MM/dd/yyyy hh:mm");
@@ -105,7 +109,7 @@ public class NewTaskController implements Initializable{
 		descriptionColumn.setSortable(false);
 		scheduledColumn.setSortable(false);
 		
-		taskList = FXCollections.observableArrayList();
+		viewableTaskList = FXCollections.observableArrayList();
 		initializeCloseEventProperty();
 		resetTabPane();
 	}
@@ -189,8 +193,8 @@ public class NewTaskController implements Initializable{
 	@FXML
 	private void deleteButtonClicked() {
 		taskList.remove(newTasksTable.getSelectionModel().getSelectedIndex());
-		newTasksTable.getItems().clear();
-		newTasksTable.setItems(taskList);
+		updateTaskList();
+		newTasksTable.setItems(viewableTaskList);
 	}
 	@FXML
 	private void confirmAllButtonClicked() {
@@ -221,8 +225,9 @@ public class NewTaskController implements Initializable{
 						systemDefault()).toInstant().toEpochMilli());
 			}
 			taskList.add(t);
+			updateTaskList();
 			//newTasksTable.getItems().clear();
-			newTasksTable.setItems(taskList);
+			newTasksTable.setItems(viewableTaskList);
 			newTasksTable.getSelectionModel().select(newTasksTable.getItems().size());
 		}
 		else {						//got here from editButton
@@ -242,8 +247,9 @@ public class NewTaskController implements Initializable{
 				t.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.
 						systemDefault()).toInstant().toEpochMilli());
 			}
+			updateTaskList();
 			//newTasksTable.getItems().clear();
-			newTasksTable.setItems(taskList);
+			newTasksTable.setItems(viewableTaskList);
 			newTasksTable.getSelectionModel().select(sIndex);
 		}
 		resetTabPane();
@@ -284,7 +290,7 @@ public class NewTaskController implements Initializable{
 		});
 	}
 	private void initializeCloseEventProperty() {
-		taskList.addListener(new ListChangeListener<Task>(){
+		viewableTaskList.addListener(new ListChangeListener<Task>(){
             @Override
             public void onChanged(javafx.collections.ListChangeListener.Change<? extends Task> pChange) {
                 while(pChange.next()) {
@@ -302,6 +308,12 @@ public class NewTaskController implements Initializable{
 			else {
 				confirmInfoButtonClicked();
 			}
+		}
+	}
+	private void updateTaskList() {
+		viewableTaskList.clear();
+		for(int count=0;count<taskList.size();count++) {
+			viewableTaskList.add(taskList.get(count));
 		}
 	}
 	private void resetTabPane() {

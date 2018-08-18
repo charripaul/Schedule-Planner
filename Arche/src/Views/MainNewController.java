@@ -139,6 +139,7 @@ public class MainNewController implements Initializable{
 	
 	public Calendar guicalendar = Calendar.getInstance();		//for calendar the gui is displaying
 	public Calendar calendarToday = Calendar.getInstance();		//for highlighted date on calendar
+	
 	ArrayList<Label> labelList = new ArrayList<Label>();
 	ArrayList<Pane> paneList = new ArrayList<Pane>();
 	ArrayList<TextArea> textList = new ArrayList<TextArea>();
@@ -181,9 +182,11 @@ public class MainNewController implements Initializable{
 	Task taskTemp;
 	Models.Class classTemp;
 	TaskType typeTemp;
+	Pane paneTemp;
 	Date taskLastClickTime;
 	Date classLastClickTime;
 	Date typeLastClickTime;
+	Date cellLastClickTime;
 	
 	//button click properties
 	final String buttonSelectedColor = "-fx-background-color:  #f2782f;";
@@ -586,6 +589,37 @@ public class MainNewController implements Initializable{
 		//update labels in case anything changed
 		initializeLabels();
 	}
+	private void taskViewCellClicked(Pane p) {
+	    int dateNum = -1;
+	    for(int count=0;count<paneList.size();count++) {
+	    	if(p == paneList.get(count)) {
+	    		dateNum = Integer.parseInt(labelList.get(count).getText());
+	    		break;
+	    	}
+	    }
+	    Calendar cal = (Calendar) guicalendar.clone();
+		cal.set(Calendar.DATE, dateNum);
+		ArrayList<Task> tasks = ModelControl.getDayTasks(cal);
+		
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("viewCellTasks.fxml"));
+			//pass in values from selected row
+			ViewCellTasksController controller = new ViewCellTasksController(tasks);
+			loader.setController(controller);
+			Scene viewWindow = new Scene(loader.load());
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.initStyle(StageStyle.UTILITY);
+			stage.setScene(viewWindow);
+			stage.showAndWait();
+			initializeCalendar();
+			//select cell
+			cellSelectedUpdate(p);
+		}catch(IOException e) {
+			System.out.println("\nError code: Shine\n" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 	@FXML
 	private void classAddButtonClicked() {
 		int size = classTable.getItems().size();
@@ -626,7 +660,6 @@ public class MainNewController implements Initializable{
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("viewClass.fxml"));
 				
 				//pass in values from selected row
-				//TODO: create controller and layouts for different views
 				ViewClassController controller = new ViewClassController(selected);
 				
 				loader.setController(controller);
@@ -701,7 +734,7 @@ public class MainNewController implements Initializable{
 				initializeClass();
 				typeTable.getSelectionModel().select(sIndex);
 			}catch(IOException e) {
-				System.out.println("\nError code: Satchel\n" + e.getMessage());
+				System.out.println("\nError code: Amazon\n" + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -763,20 +796,21 @@ public class MainNewController implements Initializable{
 	}
 	@FXML
 	private void handleCellClicked(MouseEvent event) {
-		resetTextAreasStyle();
 		Pane pane = (Pane) event.getSource();
-		TextArea textArea = null;
-		int dateNum = -1;
-		for(int count=0;count<paneList.size();count++) {
-			if(paneList.get(count) == pane && pane.getOpacity() == 0.0) {
-				dateNum = Integer.parseInt(labelList.get(count).getText());
-				textArea = textList.get(count);
-				break;
-			}
-		}
-		if(testIfToday(dateNum) == false && pane.getOpacity() == 0.0) {
-			textArea.setStyle(cellSelectedColor);
-		}
+		cellSelectedUpdate(pane);
+	    if(pane == null) return;
+	    if(pane != paneTemp){
+	        paneTemp = pane;
+	        cellLastClickTime = new Date();
+	    } else if(pane == paneTemp) {
+	        Date now = new Date();
+	        long diff = now.getTime() - cellLastClickTime.getTime();
+	        if (diff < 300){ //another click registered in 300 millis
+	             taskViewCellClicked(pane);
+	        } else {
+	            cellLastClickTime = new Date();
+	        }
+	    }
 	}
 	@FXML
 	private void homeButtonClicked() {
@@ -857,16 +891,16 @@ public class MainNewController implements Initializable{
 		
 		String month = btn.getId();
 		switch(month) {
-		case "january": guicalendar.set(Calendar.MONTH, 0);	break;
+		case "january": guicalendar.set(Calendar.MONTH, 0);		break;
 		case "february": guicalendar.set(Calendar.MONTH, 1);	break;
 		case "march": guicalendar.set(Calendar.MONTH, 2);		break;
 		case "april": guicalendar.set(Calendar.MONTH, 3);		break;
-		case "may": guicalendar.set(Calendar.MONTH, 4);		break;
+		case "may": guicalendar.set(Calendar.MONTH, 4);			break;
 		case "june": guicalendar.set(Calendar.MONTH, 5);		break;
 		case "july": guicalendar.set(Calendar.MONTH, 6);		break;
 		case "august": guicalendar.set(Calendar.MONTH, 7);		break;
 		case "september": guicalendar.set(Calendar.MONTH, 8);	break;
-		case "october": guicalendar.set(Calendar.MONTH, 9);	break;
+		case "october": guicalendar.set(Calendar.MONTH, 9);		break;
 		case "november": guicalendar.set(Calendar.MONTH, 10);	break;
 		case "december": guicalendar.set(Calendar.MONTH, 11);	break;
 		default: guicalendar.set(Calendar.MONTH, 0);			break;
@@ -883,6 +917,21 @@ public class MainNewController implements Initializable{
 	private void rightHomeClicked() {
 		ModelControl.addDayToDayOfReference();
 		initializeHome();
+	}
+	private void cellSelectedUpdate(Pane pane) {
+		resetTextAreasStyle();
+		TextArea textArea = null;
+		int dateNum = -1;
+		for(int count=0;count<paneList.size();count++) {
+			if(paneList.get(count) == pane && pane.getOpacity() == 0.0) {
+				dateNum = Integer.parseInt(labelList.get(count).getText());
+				textArea = textList.get(count);
+				break;
+			}
+		}
+		if(testIfToday(dateNum) == false && pane.getOpacity() == 0.0) {
+			textArea.setStyle(cellSelectedColor);
+		}
 	}
 	//for dates in gui calendar on initialization
 	private boolean testIfToday(int dateNum) {
