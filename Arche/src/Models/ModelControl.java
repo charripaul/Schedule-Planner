@@ -82,72 +82,7 @@ public class ModelControl {
 			System.out.println("\nError Code: Center\n" + e.getMessage());
 		}
 	}
-	//obsolete
 	//TODO: need to test to see whether identical task already exists excluding description
-	public static void addTask(String name, String description, long dueDate, boolean onFlag,
-			String type, String ca, int noticePeriod, int timeToComplete, long sst, long set) {
-		Task t = new Task(name, description, dueDate, onFlag, type, ca, noticePeriod, timeToComplete);
-		t.setScheduledStartTime(sst);
-		t.setScheduledEndTime(set);
-		if(!t.isScheduled()) {
-			autoSchedule(t);
-		}
-		
-		tasks.add(t);
-		Database.addTask(t);
-		for(int count = 0;count<classes.size();count++) {
-			if(classes.get(count).getAbbreviation().equals(ca)) {
-				classes.get(count).addOneToTA();
-				Database.updateClass(classes.get(count));
-			}
-		}
-		for(int count=0;count<taskTypes.size();count++) {
-			if(taskTypes.get(count).getName().equals(type)) {
-				taskTypes.get(count).addOneToTA();;
-				Database.updateTaskType(taskTypes.get(count));
-			}
-		}
-	}
-	public static void addAdmin(String username, String password) {
-		Admin a = new Admin(username, DataLock.encrypt(password));
-		admins.add(a);
-		Database.addAdmin(a);
-	}
-	public static void addClass(String name, String abbreviation, String details, String daysOfWeek,
-			String startTime, String endTime) {
-		Class c = new Class(name, abbreviation, details, 0, daysOfWeek, startTime, endTime);
-		classes.add(c);
-		Database.addClass(c);
-	}
-	public static void addProject(String name, String description, String currentStep, int priorityLevel) {
-		//move all priority levels under passed in priority down by 1
-		for(int count = 0;count<projects.size();count++) {
-			if(projects.get(count).getPriorityLevel() >= priorityLevel) {
-				Project p = projects.get(count);
-				p.setPriorityLevel(projects.get(count).getPriorityLevel()+1);
-				projects.set(count, p);
-			}
-		}
-		Project p = new Project(name, description, currentStep, priorityLevel);
-		projects.add(p);
-		Database.addProject(p);
-	}
-	public static void addProject(String name, String description, String currentStep) {
-		int maxLevel = 0;
-		for(int count = 0;count<projects.size();count++) {
-			if(projects.get(count).getPriorityLevel() > maxLevel){
-				maxLevel = projects.get(count).getPriorityLevel();
-			}
-		}
-		Project p = new Project(name, description, currentStep, maxLevel+1);
-		projects.add(p);
-		Database.addProject(p);
-	}
-	public static void addTaskType(String name, String description, int warningPeriod, int timeToComplete) {
-		TaskType tt = new TaskType(name, description, warningPeriod, timeToComplete, 0);
-		taskTypes.add(tt);
-		Database.addTaskType(tt);
-	}
 	public static void addTask(Task t) {
 		String classAbr = t.getClassAbr();
 		String type = t.getType();

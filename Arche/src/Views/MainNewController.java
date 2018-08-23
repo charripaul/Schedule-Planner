@@ -512,7 +512,7 @@ public class MainNewController implements Initializable{
 					}
 				}
 				else {
-					text += "\\u2022\\u00A0" + tasks.size() + " tasks due";
+					text += "\u2022\u00A0" + tasks.size() + " tasks due";
 					textList.get(count).setText(text);
 				}
 			}
@@ -629,6 +629,7 @@ public class MainNewController implements Initializable{
 			System.out.println("\nError code: Shine\n" + e.getMessage());
 			e.printStackTrace();
 		}
+		initializeLabels();
 	}
 	@FXML
 	private void classAddButtonClicked() {
