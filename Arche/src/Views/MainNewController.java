@@ -50,6 +50,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -501,8 +502,17 @@ public class MainNewController implements Initializable{
 				cal.set(Calendar.DATE, dateNum);
 				ArrayList<Task> tasks = ModelControl.getDayTasks(cal);
 				String text = "";
-				for(int x=0;x<tasks.size();x++) {
-					text += "\u2022\u00A0" + tasks.get(x).getName() + "\n"; 
+				if(tasks.size() == 0) {
+					//do nothing
+				}
+				else if(tasks.size() == 1 || tasks.size() == 2){
+					for(int x=0;x<tasks.size();x++) {
+						text += "\u2022\u00A0" + tasks.get(x).getName() + "\n"; 
+						textList.get(count).setText(text);
+					}
+				}
+				else {
+					text += "\\u2022\\u00A0" + tasks.size() + " tasks due";
 					textList.get(count).setText(text);
 				}
 			}
@@ -987,8 +997,10 @@ public class MainNewController implements Initializable{
 	}
 	private void resetTextAreasStyle() {
 		for(int count=0;count<textList.size();count++) {
-			if(paneList.get(count).getOpacity() == 0.0 &&
-					calendarToday.get(Calendar.DATE) != Integer.parseInt(labelList.get(count).getText())) {
+			if((paneList.get(count).getOpacity() == 0.0) &&
+					(calendarToday.get(Calendar.DATE) != Integer.parseInt(labelList.get(count).getText()) ||
+					calendarToday.get(Calendar.MONTH) != guicalendar.get(Calendar.MONTH) ||
+					calendarToday.get(Calendar.YEAR) != guicalendar.get(Calendar.YEAR))) {
 				textList.get(count).setStyle(null);
 			}
 		}
@@ -997,6 +1009,10 @@ public class MainNewController implements Initializable{
 		for(int count=0;count<textList.size();count++) {
 			textList.get(count).setText("");
 			textList.get(count).setStyle(null);
+			
+			//disable scrollbar
+			ScrollBar scrollbar = (ScrollBar) textList.get(count).lookup(".scroll-bar:vertical");
+			scrollbar.setVisible(false);
 		}
 	}
 	private void resetPanes() {

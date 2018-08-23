@@ -6,12 +6,19 @@
 .button {
     background-color: #f2782f;
 }
+/*get rid of input line on jfx text area */
 .input-line{
 	-fx-opacity: 0;
 }
+
+/*next 2: make text normal on disabled textareas */
 .text-area:disabled { 
     -fx-opacity: 1; 
 }
 .text-input > .scroll-pane:disabled { 
     -fx-opacity: 1; 
-} 
+}
+/*disable text area scrollbar */
+.text-area .scroll-bar:vertical:disabled {
+    -fx-opacity: 0;
+}
