@@ -94,7 +94,7 @@ public class MainNewController implements Initializable{
 	@FXML private JFXButton rightHomeButton;
 	@FXML private Label dailyTaskDateLabel;
 	
-	//tasks (subset of home)
+	//notifications (subset of home)
 	@FXML private JFXTreeTableView homeTreeTable;
 	@FXML private TreeTableColumn<Task, String> nameTreeTableCol;
 	@FXML private TreeTableColumn<Task, String> descTreeTableCol;
@@ -187,10 +187,12 @@ public class MainNewController implements Initializable{
 	@FXML private TableColumn<TaskType, Integer> typeTAColumn;
 	
 	//for measuring time between clicks for double click feature
+	Task homeTemp;
 	Task taskTemp;
 	Models.Class classTemp;
 	TaskType typeTemp;
 	Pane paneTemp;
+	Date homeLastClickTime;
 	Date taskLastClickTime;
 	Date classLastClickTime;
 	Date typeLastClickTime;
@@ -761,6 +763,53 @@ public class MainNewController implements Initializable{
 		}
 	}
 	//open view window on double click
+	@FXML
+	private void handleHomeClick() {
+		TreeItem<Task> item = (TreeItem<Task>) homeTreeTable.getSelectionModel().getSelectedItem();
+		Task row = null;
+		if(item.getValue() != null) {
+			row = (Task) item.getValue();
+		}
+	    if(row == null) return;
+	    if(row != homeTemp){
+	        homeTemp = row;
+	        homeLastClickTime = new Date();
+	    } else if(row == homeTemp) {
+	        Date now = new Date();
+	        long diff = now.getTime() - homeLastClickTime.getTime();
+	        if (diff < 300){ //another click registered in 300 millis
+	        	//execute
+	    		//highlighted row in table
+	    		int sIndex = homeTreeTable.getSelectionModel().getSelectedIndex();
+	    		if(row != null) {
+	    			try {
+	    				FXMLLoader loader = new FXMLLoader(getClass().getResource("viewTask.fxml"));
+	    				
+	    				//pass in values from selected row
+	    				ViewTaskController controller = new ViewTaskController(row);
+	    				
+	    				loader.setController(controller);
+	    				Scene viewWindow = new Scene(loader.load());
+	    				
+	    				Stage stage = new Stage();
+	    				stage.initModality(Modality.APPLICATION_MODAL);
+	    				stage.initStyle(StageStyle.UTILITY);
+	    				stage.setScene(viewWindow);
+	    				stage.showAndWait();
+	    				initializeTasks();
+	    				homeTreeTable.getSelectionModel().select(sIndex);
+	    			}catch(IOException e) {
+	    				System.out.println("\nError code: Satchel\n" + e.getMessage());
+	    				e.printStackTrace();
+	    			}
+	    		}
+	    		//update labels in case anything changed
+	    		initializeLabels();
+	        } else {
+	            homeLastClickTime = new Date();
+	        }
+	    }
+	}
 	@FXML
 	private void handleTaskClick() {
 	    Task row = taskTable.getSelectionModel().getSelectedItem();

@@ -158,7 +158,7 @@
                      <tabs>
                         <Tab closable="false" text="Notifications">
                            <content>
-                              <JFXTreeTableView fx:id="homeTreeTable">
+                              <JFXTreeTableView fx:id="homeTreeTable" onMouseClicked="#handleHomeClick">
                                  <columns>
                                     <TreeTableColumn fx:id="nameTreeTableCol" prefWidth="125.0" text="Name" />
                                     <TreeTableColumn fx:id="descTreeTableCol" prefWidth="336.0" text="Description" />

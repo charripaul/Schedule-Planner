@@ -11,6 +11,7 @@ import java.util.TimeZone;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.JFXCheckBox;
 
 import Models.ModelControl;
 import Models.Task;
@@ -51,6 +52,7 @@ public class ViewCellTasksController implements Initializable{
 	@FXML private JFXButton confirmInfo, cancelInfo;
 	@FXML private TextField noticePeriod;
 	@FXML private TextField hours, minutes;		//timeToComplete
+	@FXML private JFXCheckBox completed;
 	
 	//table tab
 	@FXML private JFXButton confirmAll, cancelAll;
@@ -134,6 +136,7 @@ public class ViewCellTasksController implements Initializable{
 		
 		name.setText(selected.getName());
 		description.setText(selected.getDescription());
+		completed.setSelected(selected.getFinishFlag());
 		
 		noticePeriod.setText(Integer.toString(selected.getNoticePeriod()));
 		int amountOfTime = selected.getTimeToComplete();

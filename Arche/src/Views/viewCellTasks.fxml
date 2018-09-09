@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -111,12 +112,13 @@
                         <Label layoutX="391.0" layoutY="130.0" text="Notice Period:" />
                         <Label layoutX="391.0" layoutY="199.0" text="Estimated Time to Complete:" />
                         <TextField fx:id="noticePeriod" layoutX="390.0" layoutY="155.0" promptText="days" />
-                        <TextField fx:id="minutes" layoutX="482.0" layoutY="242.0" prefHeight="25.0" prefWidth="62.0" promptText="mins" />
-                        <TextField fx:id="hours" layoutX="392.0" layoutY="242.0" prefHeight="25.0" prefWidth="59.0" promptText="Hrs" />
+                        <TextField fx:id="minutes" layoutX="477.0" layoutY="230.0" prefHeight="25.0" prefWidth="62.0" promptText="mins" />
+                        <TextField fx:id="hours" layoutX="387.0" layoutY="230.0" prefHeight="25.0" prefWidth="59.0" promptText="Hrs" />
                         <DateTimePicker fx:id="scheduledStartTime" layoutX="209.0" layoutY="303.0" prefHeight="25.0" prefWidth="146.0" />
                         <Label layoutX="33.0" layoutY="348.0" text="Scheduled End Time:" />
                         <Label layoutX="33.0" layoutY="307.0" text="Scheduled Start Time:" />
                         <DateTimePicker fx:id="scheduledEndTime" layoutX="209.0" layoutY="344.0" prefHeight="25.0" prefWidth="146.0" />
+                        <JFXCheckBox fx:id="completed" layoutX="455.0" layoutY="275.0" text="Completed" />
                      </children>
                   </AnchorPane>
                </center>
