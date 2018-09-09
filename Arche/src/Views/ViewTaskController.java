@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -139,18 +140,18 @@ public class ViewTaskController implements Initializable{
 		
 		//TODO: fix for no due date
 		LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(t.getDueDate()), 
-                TimeZone.getDefault().toZoneId()); 
+                TimeZone.getTimeZone(ZoneId.systemDefault()).toZoneId()); 
 		dueDate.setDateTimeValue(date);
 		date = LocalDateTime.ofInstant(Instant.ofEpochMilli(t.getScheduledStartTime()), 
-                TimeZone.getDefault().toZoneId()); 
+                TimeZone.getTimeZone(ZoneId.systemDefault()).toZoneId()); 
 		scheduledStartTime.setDateTimeValue(date);
 		date = LocalDateTime.ofInstant(Instant.ofEpochMilli(t.getScheduledEndTime()), 
-                TimeZone.getDefault().toZoneId()); 
+                TimeZone.getTimeZone(ZoneId.systemDefault()).toZoneId()); 
 		scheduledEndTime.setDateTimeValue(date);
 		
-		dueDate.setFormat("MM/dd/yyyy hh:mm");
-		scheduledStartTime.setFormat("MM/dd/yyyy hh:mm");
-		scheduledEndTime.setFormat("MM/dd/yyyy hh:mm");
+		dueDate.setFormat("MM/dd/yyyy hh:mm a");
+		scheduledStartTime.setFormat("MM/dd/yyyy hh:mm a");
+		scheduledEndTime.setFormat("MM/dd/yyyy hh:mm a");
 	}
 	//detect change, ask for save changes on close
 	private void initializeCloseEventProperty() {
@@ -166,11 +167,13 @@ public class ViewTaskController implements Initializable{
 	        public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
 	        	setCloseEvent();
 	        	ArrayList<TaskType> types = ModelControl.getTaskTypes();
+	        	//make changes based on the selected type in combobox
 	        	for(int count=0;count<types.size();count++) {
 	        		if(types.get(count).getName().equals(taskTypes.getItems().get((Integer) number2))) {
 	        			int amountOfTime = types.get(count).getTimeToComplete();
 	        			hours.setText((amountOfTime/60)+"");
 	        			minutes.setText((amountOfTime%60)+"");
+	        			noticePeriod.setText(types.get(count).getWarningPeriod()+"");
 	        			break;
 	        		}
 	        	}

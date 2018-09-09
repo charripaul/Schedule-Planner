@@ -74,10 +74,10 @@ public class ViewClassController implements Initializable{
 		temp.setDetails(details.getText());
 		temp.setStartTime(startTime.getValue());
 		temp.setEndTime(endTime.getValue());
-		temp.setDaysOfWeek(getBinary(monday.isSelected())+getBinary(tuesday.isSelected())+
-				getBinary(wednesday.isSelected())+getBinary(thursday.isSelected())+
-				getBinary(friday.isSelected())+getBinary(saturday.isSelected())+
-				getBinary(sunday.isSelected()));
+		temp.setDaysOfWeek(getBinary(sunday.isSelected())+getBinary(monday.isSelected())+
+				getBinary(tuesday.isSelected())+getBinary(wednesday.isSelected())+
+				getBinary(thursday.isSelected())+getBinary(friday.isSelected())+
+				getBinary(saturday.isSelected()));
 		
 		newClassAbr = temp.getAbbreviation();
 		ModelControl.updateClassAndTaskDependency(temp, oldClassAbr, newClassAbr);

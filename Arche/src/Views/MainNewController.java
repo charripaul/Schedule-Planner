@@ -65,9 +65,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -103,6 +105,11 @@ public class MainNewController implements Initializable{
 	//schedule (subset of home)
 	@FXML private JFXButton homeScheduleViewButton;
 	@FXML private JFXButton homeScheduleAddButton;
+	
+	@FXML private HBox scheduleHBox;
+	@FXML private VBox scheduleTimes;
+	@FXML private VBox scheduleSunday, scheduleMonday, scheduleTuesday, scheduleWednesday,
+					   scheduleThursday, scheduleFriday, scheduleSaturday;
 	
 	//calendar tab
 	@FXML private BorderPane calendarView;
@@ -312,7 +319,7 @@ public class MainNewController implements Initializable{
 		taskTypeColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("type"));
 		taskClassColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("classAbr"));
 		
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm");
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
 		taskDueDateColumn.setCellValueFactory(Task -> Task.getValue().getDueDate(""));
 		taskDueDateColumn.setCellFactory(taskDueDateColumn -> new TableCell<Task, LocalDateTime>() {
 		    @Override
@@ -354,8 +361,8 @@ public class MainNewController implements Initializable{
 	        @Override
 	        public ObservableValue<String> call(
 	                TableColumn.CellDataFeatures<Models.Class, String> c) {
-	            return new SimpleStringProperty(c.getValue().getStartTime("")
-	                    + " - " + c.getValue().getEndTime(""));
+	            return new SimpleStringProperty(c.getValue().getStartTime("format")
+	                    + " - " + c.getValue().getEndTime("format"));
 	        }
 		});
 		classTAColumn.setCellValueFactory(new PropertyValueFactory<Models.Class, Integer>("totalAssignments"));

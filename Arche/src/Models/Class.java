@@ -1,6 +1,7 @@
 package Models;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Class {
 	private int id;
@@ -102,9 +103,9 @@ public class Class {
 			val+="Friday, ";
 		}
 		if(daysOfWeek.substring(6,7).equals("1")) {
-			val+="Saturday";
+			val+="Saturday, ";
 		}
-		return val;
+		return val.substring(0,val.length()-2);
 	}
 	//for data flow and database
 	public String getDaysOfWeek(String s) {
@@ -117,12 +118,24 @@ public class Class {
 		return startTime;
 	}
 	public String getStartTime(String s) {
-		return startTime.toString();
+		if(s.equalsIgnoreCase("format")) {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a");
+			return startTime.format(dtf).toString();
+		}
+		else {
+			return startTime.toString();
+		}
 	}
 	public LocalTime getEndTime() {
 		return endTime;
 	}
 	public String getEndTime(String s) {
-		return endTime.toString();
+		if(s.equalsIgnoreCase("format")) {
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a");
+			return endTime.format(dtf).toString();
+		}
+		else {
+			return endTime.toString();
+		}
 	}
 }

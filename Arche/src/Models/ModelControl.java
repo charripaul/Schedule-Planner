@@ -104,6 +104,7 @@ public class ModelControl {
 				Database.updateClass(classes.get(count));
 			}
 		}
+		
 		for(int count=0;count<taskTypes.size();count++) {
 			if(taskTypes.get(count).getName().equals(type)) {
 				taskTypes.get(count).addOneToTA();;
@@ -234,7 +235,7 @@ public class ModelControl {
 	//update task type name for tasks
 	public static void updateTaskTypeAndTaskDependency(TaskType tt, String oldTypeName, String newTypeName) {
 		updateTaskType(tt);
-		for(int count=0;count<tasks.size();count++) {
+		for(int count = 0;count<tasks.size();count++) {
 			if(tasks.get(count).getType().equals(oldTypeName)) {
 				tasks.get(count).setType(newTypeName);
 			}
@@ -243,6 +244,7 @@ public class ModelControl {
 	public static void deleteTask(Task t) {
 		String classAbr = t.getClassAbr();
 		String type = t.getType();
+		
 		for(int count = 0;count<tasks.size();count++) {
 			if(tasks.get(count).getId() == t.getId()) {
 				tasks.remove(count);
@@ -257,7 +259,7 @@ public class ModelControl {
 				Database.updateClass(classes.get(count));
 			}
 		}
-		for(int count=0;count<taskTypes.size();count++) {
+		for(int count = 0;count<taskTypes.size();count++) {
 			if(taskTypes.get(count).getName().equals(type)) {
 				taskTypes.get(count).removeOneFromTA();
 				Database.updateTaskType(taskTypes.get(count));
@@ -548,7 +550,7 @@ public class ModelControl {
 		return false;
 	}
 	public static boolean isBeingUsed(TaskType tt) {
-		for(int count=0;count<taskTypes.size();count++) {
+		for(int count=0;count<tasks.size();count++) {
 			if(tasks.get(count).getType().equals(tt.getName())) {
 				return true;
 			}

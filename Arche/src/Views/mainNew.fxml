@@ -152,7 +152,7 @@
    <center>
       <StackPane BorderPane.alignment="CENTER">
          <children>
-            <BorderPane fx:id="homeView" prefHeight="200.0" prefWidth="200.0" visible="false">
+            <BorderPane fx:id="homeView" prefHeight="200.0" prefWidth="200.0">
                <center>
                   <JFXTabPane stylesheets="@ColorScheme.css" BorderPane.alignment="CENTER">
                      <tabs>
@@ -182,6 +182,20 @@
                                        </children>
                                     </HBox>
                                  </bottom>
+                                 <center>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <VBox prefHeight="200.0" prefWidth="100.0" />
+                                          <VBox prefHeight="200.0" prefWidth="100.0" />
+                                          <VBox prefHeight="200.0" prefWidth="100.0" />
+                                          <VBox prefHeight="200.0" prefWidth="100.0" />
+                                          <VBox prefHeight="200.0" prefWidth="100.0" />
+                                          <VBox prefHeight="200.0" prefWidth="100.0" />
+                                          <VBox prefHeight="200.0" prefWidth="100.0" />
+                                          <VBox prefHeight="200.0" prefWidth="100.0" />
+                                       </children>
+                                    </HBox>
+                                 </center>
                               </BorderPane>
                            </content></Tab>
                      </tabs>
@@ -222,7 +236,7 @@
                   </HBox>
                </top>
             </BorderPane>
-            <BorderPane fx:id="calendarView" prefHeight="200.0" prefWidth="200.0">
+            <BorderPane fx:id="calendarView" prefHeight="200.0" prefWidth="200.0" visible="false">
                <top>
                   <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
                      <children>

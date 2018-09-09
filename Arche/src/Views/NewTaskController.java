@@ -73,9 +73,9 @@ public class NewTaskController implements Initializable{
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		dueDate.setFormat("MM/dd/yyyy hh:mm");
-		scheduledStartTime.setFormat("MM/dd/yyyy hh:mm");
-		scheduledEndTime.setFormat("MM/dd/yyyy hh:mm");
+		dueDate.setFormat("MM/dd/yyyy hh:mm a");
+		scheduledStartTime.setFormat("MM/dd/yyyy hh:mm a");
+		scheduledEndTime.setFormat("MM/dd/yyyy hh:mm a");
 		
 		nameColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("name"));
 		descriptionColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
@@ -135,15 +135,16 @@ public class NewTaskController implements Initializable{
 		hours.setText((amountOfTime/60)+"");
 		minutes.setText((amountOfTime%60)+"");
 		
+		//set datetime picker format
 		LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(selected.getDueDate()), 
-                TimeZone.getDefault().toZoneId()); 
+                TimeZone.getTimeZone(ZoneId.systemDefault()).toZoneId()); 
 		dueDate.setDateTimeValue(dateTime);
 		if(selected.isScheduled()) {
 			dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(selected.getScheduledStartTime()), 
-	                TimeZone.getDefault().toZoneId()); 
+	                TimeZone.getTimeZone(ZoneId.systemDefault()).toZoneId()); 
 			scheduledStartTime.setDateTimeValue(dateTime);
 			dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(selected.getScheduledEndTime()), 
-	                TimeZone.getDefault().toZoneId()); 
+	                TimeZone.getTimeZone(ZoneId.systemDefault()).toZoneId()); 
 			scheduledEndTime.setDateTimeValue(dateTime);
 		}
 		
@@ -298,6 +299,22 @@ public class NewTaskController implements Initializable{
                 }
             }
         });
+		taskType.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+	        @Override
+	        public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+	        	ArrayList<TaskType> types = ModelControl.getTaskTypes();
+	        	//make changes based on the selected type in combobox
+	        	for(int count=0;count<types.size();count++) {
+	        		if(types.get(count).getName().equals(taskType.getItems().get((Integer) number2))) {
+	        			int amountOfTime = types.get(count).getTimeToComplete();
+	        			hours.setText((amountOfTime/60)+"");
+	        			minutes.setText((amountOfTime%60)+"");
+	        			noticePeriod.setText(types.get(count).getWarningPeriod()+"");
+	        			break;
+	        		}
+	        	}
+	        }
+	    });
 	}
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
