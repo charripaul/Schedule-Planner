@@ -767,7 +767,14 @@ public class MainNewController implements Initializable{
 	private void handleHomeClick() {
 		TreeItem<Task> item = (TreeItem<Task>) homeTreeTable.getSelectionModel().getSelectedItem();
 		Task row = null;
-		if(item.getValue() != null) {
+		Object test = null;
+		try {
+			test = item.getValue();
+		}catch(NullPointerException e) {
+			//null pointer
+		}
+		
+		if(test != null) {
 			row = (Task) item.getValue();
 		}
 	    if(row == null) return;
