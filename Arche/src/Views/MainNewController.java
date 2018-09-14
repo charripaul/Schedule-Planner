@@ -242,7 +242,7 @@ public class MainNewController implements Initializable{
 	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
 	            new ReadOnlyStringWrapper(param.getValue().getValue().getClassAbr())
 	        );
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm");
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
 		dueDateTreeTableCol.setCellValueFactory(T -> T.getValue().getValue().getDueDate(""));
 		dueDateTreeTableCol.setCellFactory(dueDateColumn -> new TreeTableCell<Task, LocalDateTime>() {
 		    @Override
