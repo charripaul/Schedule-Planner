@@ -803,7 +803,7 @@ public class MainNewController implements Initializable{
 	    				stage.initStyle(StageStyle.UTILITY);
 	    				stage.setScene(viewWindow);
 	    				stage.showAndWait();
-	    				initializeTasks();
+	    				initializeHome();
 	    				homeTreeTable.getSelectionModel().select(sIndex);
 	    			}catch(IOException e) {
 	    				System.out.println("\nError code: Satchel\n" + e.getMessage());
