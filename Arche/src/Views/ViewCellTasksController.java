@@ -80,9 +80,9 @@ public class ViewCellTasksController implements Initializable{
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		dueDate.setFormat("MM/dd/yyyy hh:mm");
-		scheduledStartTime.setFormat("MM/dd/yyyy hh:mm");
-		scheduledEndTime.setFormat("MM/dd/yyyy hh:mm");
+		dueDate.setFormat("MM/dd/yyyy hh:mm a");
+		scheduledStartTime.setFormat("MM/dd/yyyy hh:mm a");
+		scheduledEndTime.setFormat("MM/dd/yyyy hh:mm a");
 		
 		nameColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("name"));
 		descriptionColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
@@ -256,6 +256,7 @@ public class ViewCellTasksController implements Initializable{
 			t.setClassAbr(className.getSelectionModel().getSelectedItem());
 			t.setDueDate(dueDate.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 			t.setDescription(description.getText());
+			t.setFinishFlag(completed.isSelected());
 			int amountOfTime = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
 			t.setTimeToComplete(amountOfTime);
 			t.setNoticePeriod(Integer.parseInt(noticePeriod.getText()));
