@@ -409,8 +409,8 @@ public class ModelControl {
 			boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
 			                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
 			
-			if((day >= startOfWarningPeriod || sameDay) && tasks.get(count).getDueDate() >= day && tasks.get(count).getFinishFlag() == false) {
-				vals.add(tasks.get(count)); //test
+			if((day >= startOfWarningPeriod || sameDay) && tasks.get(count).getDueDate() >= day ) {
+				vals.add(tasks.get(count));
 			}
 		}
 		return vals;
