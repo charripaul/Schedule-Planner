@@ -16,5 +16,5 @@ Task list section
 Class list section
 ![alt text](https://raw.githubusercontent.com/charripaul/Schedule-Planner/master/Arche/src/resources/readme-pics/classes.png)
 
-Task Types list section
+Task types list section
 ![alt text](https://raw.githubusercontent.com/charripaul/Schedule-Planner/master/Arche/src/resources/readme-pics/task-types.png)
