@@ -47,7 +47,7 @@ public class NewClassController implements Initializable{
 				getBinary(tuesday.isSelected())+getBinary(wednesday.isSelected())+
 				getBinary(thursday.isSelected())+getBinary(friday.isSelected())+
 				getBinary(saturday.isSelected());
-		Models.Class c = new Models.Class(name.getText(), abbreviation.getText(), details.getText(),
+		Models.Class c = new Models.Class(ModelControl.mainUID, name.getText(), abbreviation.getText(), details.getText(),
 				0, dow, startTime.getValue(), endTime.getValue());
 		
 		ModelControl.addClass(c);

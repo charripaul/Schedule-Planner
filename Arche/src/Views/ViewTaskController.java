@@ -113,6 +113,7 @@ public class ViewTaskController implements Initializable{
 				break;
 			}
 		}
+		
 		//move names and abbreviations into observable lists
 		ObservableList<String> tts = FXCollections.observableArrayList();
 		ObservableList<String> cls = FXCollections.observableArrayList();

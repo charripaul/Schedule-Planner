@@ -8,41 +8,44 @@ import javafx.beans.property.SimpleObjectProperty;
 import jfxtras.icalendarfx.properties.component.descriptive.Status;
 
 public class Task {
-	private int id;
+	private int id, uid;
 	private String name, description;
 	private boolean finishFlag;
 	private boolean onFlag;					//true if appointment at this specific time, false if due by date
-	private String type;
+	private String type, classAbr;
 	private long dueDate, scheduledStartTime, scheduledEndTime;
-	private String classAbr;
 	private int noticePeriod, timeToComplete;
 
 	public Task(String n) {
 		name = n;			//for tree items on treetableview
 	}
 	//initialization constructor
-	public Task(int i, String n, String d, long dd, boolean ff, boolean of, String t,
-			String ca, int np, int ttc, long sst, long set) {
-		this(n,d,dd,of,t,ca,np,ttc);
+	public Task(int i, int u, String n, String d, long dd, boolean ff, boolean of, String t,
+			String c, int np, int ttc, long sst, long set) {
+		this(u,n,d,dd,of,t,c,np,ttc);
 		id = i;
 		finishFlag = ff;
 		scheduledStartTime = sst;
 		scheduledEndTime = set;
 	}
 	//new task constructor
-	public Task(String n, String d, long dd, boolean of, String t, String ca, int np, int ttc) {
+	public Task(int u, String n, String d, long dd, boolean of, String t, String c, int np, int ttc) {
+		uid = u;
 		name = n;
 		description = d;
 		dueDate = dd;
 		finishFlag = false;
 		onFlag = of;
 		type = t;
-		classAbr = ca;
+		classAbr = c;
 		noticePeriod = np;
 		timeToComplete = ttc;
 	}
 	public void setId(int i) {
 		id = i;
+	}
+	public void setUid(int u) {
+		uid = u;
 	}
 	public void setName(String n) {
 		name = n;
@@ -79,6 +82,9 @@ public class Task {
 	}
 	public int getId() {
 		return id;
+	}
+	public int getUid() {
+		return uid;
 	}
 	public String getName() {
 		return name;

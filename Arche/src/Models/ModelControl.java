@@ -25,26 +25,17 @@ public class ModelControl {
 	private static ArrayList<Class> classes = new ArrayList<Class>();
 	private static ArrayList<Project> projects = new ArrayList<Project>();
 	private static ArrayList<TaskType> taskTypes = new ArrayList<TaskType>();
+	private static ArrayList<User> users = new ArrayList<User>();
 	public static Calendar dayOfReference = Calendar.getInstance();
 	public static Calendar today = Calendar.getInstance();
+	public static int mainUID;
 	
 	static {
-		initialize();
+		initializeAuthentication();
 		System.out.println("ModelControl layer initialized");
 	}
-	private static void initialize() {
+	private static void initializeAuthentication() {
 		ResultSet rs;
-		try {
-			rs = Database.getTasks();
-			while(rs.next()) {
-				tasks.add(new Task(rs.getInt("id"), rs.getString("name"), rs.getString("description"),
-						 rs.getLong("dueDate"), rs.getBoolean("finishFlag"), rs.getBoolean("onFlag"),
-						 rs.getString("type"), rs.getString("class"), rs.getInt("noticePeriod"), 
-						 rs.getInt("timeToComplete"), rs.getLong("scheduledStartTime"), rs.getLong("scheduledEndTime")));
-			}
-		}catch(SQLException e) {
-			System.out.println("\nError Code: Solar\n" + e.getMessage());
-		}
 		try {
 			rs = Database.getAdmins();
 			while(rs.next()) {
@@ -54,11 +45,25 @@ public class ModelControl {
 			System.out.println("\nError Code: Pong\n" + e.getMessage());
 		}
 		try {
+			rs = Database.getUsers();
+			while(rs.next()) {
+				users.add(new User(rs.getInt("id"), rs.getString("username"), rs.getString("password")));
+			}
+		}catch(SQLException e) {
+			System.out.println("\nError Code: Ferocity\n" + e.getMessage());
+		}
+	}
+	public static void initialize() {
+		ResultSet rs;
+		try {
 			rs = Database.getClasses();
 			while(rs.next()) {
-				classes.add(new Class(rs.getInt("id"), rs.getString("name"), rs.getString("abbreviation"),
-						rs.getString("details"), rs.getInt("totalAssignments"), rs.getString("daysOfWeek"),
-						rs.getString("startTime"), rs.getString("endTime")));
+				int uid = rs.getInt("uid");
+				if(uid == mainUID || mainUID == -1) {
+					classes.add(new Class(rs.getInt("id"), uid, rs.getString("name"), rs.getString("abbreviation"),
+							rs.getString("details"), rs.getInt("totalAssignments"), rs.getString("daysOfWeek"),
+							rs.getString("startTime"), rs.getString("endTime")));
+				}
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Swab\n" + e.getMessage());
@@ -66,8 +71,11 @@ public class ModelControl {
 		try {
 			rs = Database.getProjects();
 			while(rs.next()) {
-				projects.add(new Project(rs.getInt("id"), rs.getString("name"), rs.getString("description"),
-						rs.getString("currentStep"), rs.getInt("priorityLevel")));
+				int uid = rs.getInt("uid");
+				if(uid == mainUID || mainUID == -1) {
+					projects.add(new Project(rs.getInt("id"), uid, rs.getString("name"), rs.getString("description"),
+							 rs.getString("currentStep"), rs.getInt("priorityLevel")));
+				}
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Puff\n" + e.getMessage());
@@ -75,11 +83,31 @@ public class ModelControl {
 		try {
 			rs = Database.getTaskTypes();
 			while(rs.next()) {
-				taskTypes.add(new TaskType(rs.getInt("id"), rs.getString("name"), rs.getString("description"),
-						rs.getInt("warningPeriod"), rs.getInt("timeToComplete"), rs.getInt("totalAssignments")));
+				int uid = rs.getInt("uid");
+				if(uid == mainUID || mainUID == -1) {
+					taskTypes.add(new TaskType(rs.getInt("id"), uid, rs.getString("name"), rs.getString("description"),
+							  rs.getInt("warningPeriod"), rs.getInt("timeToComplete"), rs.getInt("totalAssignments")));
+				}
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Center\n" + e.getMessage());
+		}
+		//has to be last
+		try {
+			rs = Database.getTasks();
+			while(rs.next()) {
+				int uid = rs.getInt("uid");
+				if(uid == mainUID || mainUID == -1) {
+					int classID = rs.getInt("classID");
+					int typeID = rs.getInt("typeID");
+					tasks.add(new Task(rs.getInt("id"), uid, rs.getString("name"), rs.getString("description"),
+							 rs.getLong("dueDate"), rs.getBoolean("finishFlag"), rs.getBoolean("onFlag"),
+							 getTypeName(typeID), getClassAbr(classID), rs.getInt("noticePeriod"), 
+							 rs.getInt("timeToComplete"), rs.getLong("scheduledStartTime"), rs.getLong("scheduledEndTime")));
+				}
+			}
+		}catch(SQLException e) {
+			System.out.println("\nError Code: Solar\n" + e.getMessage());
 		}
 	}
 	//TODO: need to test to see whether identical task already exists excluding description
@@ -151,6 +179,16 @@ public class ModelControl {
 		}
 		taskTypes.add(tt);
 		Database.addTaskType(tt);
+	}
+	public static void addUser(User u) {
+		if(users.size() == 0) {
+			u.setId(1);
+		}
+		else {
+			u.setId(users.get(users.size()-1).getId()+1);
+		}
+		users.add(u);
+		Database.addUser(u);
 	}
 	public static void updateTask(Task t) {
 		for(int count = 0;count<tasks.size();count++) {
@@ -241,6 +279,15 @@ public class ModelControl {
 			}
 		}
 	}
+	public static void updateUser(User u) {
+		for(int count = 0;count<users.size();count++) {
+			if(users.get(count).getId() == u.getId()) {
+				users.set(count, u);
+				break;
+			}
+		}
+		Database.updateUser(u);
+	}
 	public static void deleteTask(Task t) {
 		String classAbr = t.getClassAbr();
 		String type = t.getType();
@@ -302,10 +349,31 @@ public class ModelControl {
 		}
 		Database.deleteTaskType(tt);
 	}
+	public static void deleteUser(User u) {
+		for(int count = 0;count<users.size();count++) {
+			if(users.get(count).getId() == u.getId()) {
+				users.remove(count);
+				break;
+			}
+		}
+		Database.deleteUser(u);
+	}
 	public static boolean isAdmin(String username, String password) {
 		for(int count = 0;count<admins.size();count++) {
 			if(username.equals(admins.get(count).getUsername())) {
 				if(password.equals(DataLock.decrypt(admins.get(count).getPassword()))) {
+					mainUID = -1;		//superusers sign uid as -1
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public static boolean isUser(String username, String password) {
+		for(int count = 0;count<users.size();count++) {
+			if(username.equals(users.get(count).getUsername())) {
+				if(password.equals(DataLock.decrypt(users.get(count).getPassword()))) {
+					mainUID = users.get(count).getId();
 					return true;
 				}
 			}
@@ -544,6 +612,42 @@ public class ModelControl {
 			tt.add(taskTypes.get(count));
 		}
 		return tt;
+	}
+	public static String getTypeName(int id) {
+		for(int count=0;count<taskTypes.size();count++) {
+			if(id == taskTypes.get(count).getId()) {
+				return taskTypes.get(count).getName();
+			}
+		}
+		System.out.println("Error MCT01");
+		return "Error Retrieving Data";
+	}
+	public static String getClassAbr(int id) {
+		for(int count=0;count<classes.size();count++) {
+			if(id == classes.get(count).getId()) {
+				return classes.get(count).getAbbreviation();
+			}
+		}
+		System.out.println("Error MCT02");
+		return "Error Retrieving Data";
+	}
+	public static int getTypeID(String name) {
+		for(int count=0;count<taskTypes.size();count++) {
+			if(name == taskTypes.get(count).getName()) {
+				return taskTypes.get(count).getId();
+			}
+		}
+		System.out.println("Error MCT03");
+		return -1;
+	}
+	public static int getClassID(String abr) {
+		for(int count=0;count<classes.size();count++) {
+			if(abr == classes.get(count).getAbbreviation()) {
+				return classes.get(count).getId();
+			}
+		}
+		System.out.println("Error MCT04");
+		return -1;
 	}
 	public static boolean isSuperUser(int id) {
 		if(id == 1) {

@@ -62,8 +62,27 @@ public class LoginController implements Initializable{
 		String u = username.getText();
 		String p = password.getText();
 		
-		//TODO: revert to normal (u,p)
-		if(ModelControl.isAdmin("ventex1000","trinity77")) {
+		//TODO: revert to normal (enable authentication by using u, p)
+		if(ModelControl.isUser("ventex1000","trinity77")) {
+			ModelControl.initialize();
+			loginWindow.hide();
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/mainNew.fxml"));
+			Parent root = loader.load();
+			mainWindow = new Stage();
+			mainWindow.setMinWidth(900);
+			mainWindow.setMinHeight(600);
+			mainWindow.setOnCloseRequest(e -> {
+				e.consume();
+				closeProgram(ConfirmExitView.display("Are you sure you want to exit?"));
+			});
+			//stage.initStyle(StageStyle.DECORATED);
+			mainWindow.setScene(new Scene(root));
+			mainWindow.show();
+			//closeWindow();
+		}
+		else if(ModelControl.isAdmin("ventex1000","trinity77")) {
+			ModelControl.initialize();
 			loginWindow.hide();
 			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/mainNew.fxml"));

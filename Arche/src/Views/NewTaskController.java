@@ -213,7 +213,7 @@ public class NewTaskController implements Initializable{
 		Task t;
 		if(isOnAdd) {				//got here from addButton
 			int ttc = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
-			t = new Task(name.getText(), description.getText(),
+			t = new Task(ModelControl.mainUID, name.getText(), description.getText(),
 					dueDate.getDateTimeValue().atZone(ZoneId.
 					systemDefault()).toInstant().toEpochMilli(),
 					false, taskType.getSelectionModel().getSelectedItem(),

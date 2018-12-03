@@ -35,7 +35,7 @@ public class NewTypeController implements Initializable{
 	@FXML
 	private void confirmButtonClicked() {
 		int ttc = (Integer.parseInt(hour.getText())*60) + Integer.parseInt(minute.getText());
-		TaskType tt = new TaskType(name.getText(), description.getText(),
+		TaskType tt = new TaskType(ModelControl.mainUID, name.getText(), description.getText(),
 				Integer.parseInt(noticePeriod.getText()), ttc, 0);
 		
 		ModelControl.addTaskType(tt);

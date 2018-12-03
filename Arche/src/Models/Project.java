@@ -1,17 +1,18 @@
 package Models;
 
 public class Project {
-	private int id;
+	private int id, uid;
 	private String name, description, currentStep;
 	private int priorityLevel;
 	
 	//initialization constructor
-	public Project(int i, String n, String d, String cs, int pl) {
-		this(n,d,cs,pl);
+	public Project(int i, int u, String n, String d, String cs, int pl) {
+		this(u,n,d,cs,pl);
 		id = i;
 	}
 	//new project constructor
-	public Project(String n, String d, String cs, int pl) {
+	public Project(int u, String n, String d, String cs, int pl) {
+		uid= u;
 		name = n;
 		description = d;
 		currentStep = cs;
@@ -19,6 +20,9 @@ public class Project {
 	}
 	public void setId(int i) {
 		id = i;
+	}
+	public void setUid(int u) {
+		uid = u;
 	}
 	public void setName(String n) {
 		name = n;
@@ -34,6 +38,9 @@ public class Project {
 	}
 	public int getId() {
 		return id;
+	}
+	public int getUid() {
+		return uid;
 	}
 	public String getName() {
 		return name;

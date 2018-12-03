@@ -1,16 +1,16 @@
 package Models;
 
-public class Admin {
-	private int id, uid;
+public class User {
+	private int id;
 	private String username, password;
 	
 	//initialization constructor
-	public Admin(int i, String u, String p) {
+	public User(int i, String u, String p) {
 		this(u,p);
 		id = i;
 	}
 	//new admin constructor
-	public Admin(String u, String p) {
+	public User(String u, String p) {
 		username = u;
 		password = p;
 	}

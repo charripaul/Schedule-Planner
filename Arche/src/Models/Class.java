@@ -4,18 +4,19 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Class {
-	private int id;
+	private int id, uid;
 	private String name, abbreviation, details, daysOfWeek;
 	private LocalTime startTime, endTime;
 	private int totalAssignments;
 	
 	//initialization constructor
-	public Class(int i, String n, String a, String d, int ta, String dow, String st, String et) {
-		this(n,a,d,ta,dow,st,et);
+	public Class(int i, int u, String n, String a, String d, int ta, String dow, String st, String et) {
+		this(u,n,a,d,ta,dow,st,et);
 		id = i;
 	}
 	//new class constructor
-	public Class(String n, String a, String d, int ta, String dow, String st, String et) {
+	public Class(int u, String n, String a, String d, int ta, String dow, String st, String et) {
+		uid = u;
 		name = n;
 		abbreviation = a;
 		details = d;
@@ -24,7 +25,8 @@ public class Class {
 		startTime = LocalTime.parse(st);
 		endTime = LocalTime.parse(et);
 	}
-	public Class(String n, String a, String d, int ta, String dow, LocalTime st, LocalTime et) {
+	public Class(int u, String n, String a, String d, int ta, String dow, LocalTime st, LocalTime et) {
+		uid = u;
 		name = n;
 		abbreviation = a;
 		details = d;
@@ -35,6 +37,9 @@ public class Class {
 	}
 	public void setId(int i) {
 		id = i;
+	}
+	public void setUid(int u) {
+		uid = u;
 	}
 	public void setName(String n) {
 		name = n;
@@ -71,6 +76,9 @@ public class Class {
 	}
 	public int getId() {
 		return id;
+	}
+	public int getUid() {
+		return uid;
 	}
 	public String getName() {
 		return name;
