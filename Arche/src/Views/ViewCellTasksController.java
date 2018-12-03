@@ -323,7 +323,8 @@ public class ViewCellTasksController implements Initializable{
 	        	ArrayList<TaskType> types = ModelControl.getTaskTypes();
 	        	//make changes based on the selected type in combobox
 	        	for(int count=0;count<types.size();count++) {
-	        		if(types.get(count).getName().equals(taskType.getItems().get((Integer) number2))) {
+	        		int selectIndex = (Integer) number2;
+	        		if(selectIndex != -1 && types.get(count).getName().equals(taskType.getItems().get(selectIndex))) {
 	        			int amountOfTime = types.get(count).getTimeToComplete();
 	        			hours.setText((amountOfTime/60)+"");
 	        			minutes.setText((amountOfTime%60)+"");

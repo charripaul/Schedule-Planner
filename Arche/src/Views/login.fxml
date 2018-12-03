@@ -15,14 +15,14 @@
    <children>
       <ImageView fx:id="bg" fitHeight="539.0" fitWidth="1059.0" layoutX="-111.0" layoutY="-15.0" opacity="0.36" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../resources/icons/login2.png" />
+            <Image url="@../resources/icons/login2.png" />
          </image></ImageView>
       <AnchorPane layoutX="526.0" layoutY="48.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="301.0" style="-fx-background-color: #2fa9f2;">
          <children>
             <JFXPasswordField fx:id="password" layoutX="41.0" layoutY="190.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="219.0" promptText="password" style="-fx-background-color: #299adb;" />
             <ImageView fitHeight="82.0" fitWidth="89.0" layoutX="110.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/icons/user_icon.png" />
+                  <Image url="@../resources/icons/user_icon.png" />
                </image>
             </ImageView>
             <CheckBox fx:id="remember" layoutX="41.0" layoutY="250.0" mnemonicParsing="false" text="Remember Me" />
@@ -45,7 +45,7 @@
          <graphic>
             <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/icons/x.png" />
+                  <Image url="@../resources/icons/x.png" />
                </image>
             </ImageView>
          </graphic>

@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+
 import Models.ModelControl;
 import Models.Task;
 import Models.TaskType;
@@ -31,14 +34,14 @@ import javafx.scene.control.CheckBox;
 
 
 public class ViewTaskController implements Initializable{
-	@FXML private Button deleteButton;
-	@FXML private Button saveCloseButton;
+	@FXML private JFXButton deleteButton;
+	@FXML private JFXButton saveCloseButton;
 	@FXML private TextField name;
 	@FXML private ChoiceBox<String> taskTypes;
 	@FXML private ChoiceBox<String> classAbrs;
 	@FXML private DateTimePicker dueDate, scheduledStartTime, scheduledEndTime;
 	@FXML private TextArea description;
-	@FXML private CheckBox completed;
+	@FXML private JFXCheckBox completed;
 	@FXML private TextField noticePeriod;
 	@FXML private TextField hours, minutes;
 	

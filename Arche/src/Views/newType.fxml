@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.scene.control.CheckBox?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -31,8 +31,8 @@
             <TextField fx:id="minute" layoutX="493.0" layoutY="56.0" prefHeight="25.0" prefWidth="67.0" promptText="Min" />
             <JFXButton fx:id="cancelButton" buttonType="RAISED" layoutX="14.0" layoutY="334.0" onAction="#cancelButtonClicked" style="-fx-background-color: #f2782f;" text="Cancel" />
             <JFXButton fx:id="confirmButton" buttonType="RAISED" layoutX="531.0" layoutY="334.0" onAction="#confirmButtonClicked" style="-fx-background-color: #f2782f;" text="Confirm" />
-            <CheckBox layoutX="407.0" layoutY="92.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="78.0" text="Unknown" />
             <Label fx:id="warningLabel" layoutX="220.0" layoutY="338.0" text="Warning Label" />
+            <JFXCheckBox layoutX="407.0" layoutY="100.0" text="Unknown" />
          </children>
       </AnchorPane>
    </center>

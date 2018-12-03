@@ -51,6 +51,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -105,6 +106,7 @@ public class MainNewController implements Initializable{
 	//schedule (subset of home)
 	@FXML private JFXButton homeScheduleViewButton;
 	@FXML private JFXButton homeScheduleAddButton;
+	@FXML private Tab scheduleTab;
 	
 	@FXML private HBox scheduleHBox;
 	@FXML private VBox scheduleTimes;
@@ -220,6 +222,10 @@ public class MainNewController implements Initializable{
 		approachingLabel.setText(dueSoonTasks.size() + "");
 	}
 	private void initializeHome() {
+		//disable schedule
+		scheduleTab.setDisable(true);
+		scheduleTab.setText("");
+		
 		//date label formatting
 		SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM d, yyyy");
 		//Date date = Date.from(ModelControl.dayOfReference.atStartOfDay(ZoneId.systemDefault()).toInstant());

@@ -1,5 +1,6 @@
 package Runners;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -36,7 +37,10 @@ public class main extends Application{
 		LoginController controller = loader.getController();
 		controller.setStage(window);
 		
-		window.getIcons().add(new Image("file:resources/icons/icons8-idea-40.png"));
+		File directory = new File("./");
+		   System.out.println(directory.getAbsolutePath());
+		
+		window.getIcons().add(new Image("file:./src/resources/icons/icons8-idea-40.png"));
 		window.initStyle(StageStyle.UNDECORATED);
 		window.setResizable(false);
 		window.setScene(new Scene(root));
@@ -73,7 +77,7 @@ public class main extends Application{
 		LoginController controller = loader.getController();
 		controller.setStage(stage);					//send stage to controller
 		
-		stage.getIcons().add(new Image("file:resources/icons/icons8-idea-40.png"));
+		stage.getIcons().add(new Image("file:./src/resources/icons/icons8-idea-40.png"));
 		stage.initStyle(StageStyle.UNDECORATED);
 		stage.setResizable(false);
 		stage.setScene(new Scene(root));

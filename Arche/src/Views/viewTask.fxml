@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
@@ -17,9 +17,9 @@
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButtonClicked" onKeyPressed="#handleKeyPressed" text="Delete" />
+            <JFXButton fx:id="deleteButton" onAction="#deleteButtonClicked" onKeyPressed="#handleKeyPressed" style="-fx-background-color: #f2782f;" text="Delete" />
             <Pane prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="saveCloseButton" mnemonicParsing="false" onAction="#closeButtonClicked" text="Save/Close" />
+            <JFXButton fx:id="saveCloseButton" onAction="#closeButtonClicked" style="-fx-background-color: #f2782f;" text="Save/Close" />
          </children>
       </HBox>
    </bottom>
@@ -42,8 +42,6 @@
             <ChoiceBox fx:id="classAbrs" layoutX="209.0" layoutY="55.0" prefWidth="150.0" />
             <ChoiceBox fx:id="taskTypes" layoutX="390.0" layoutY="55.0" prefWidth="150.0" />
             <TextArea fx:id="description" layoutX="34.0" layoutY="129.0" prefHeight="200.0" prefWidth="322.0" />
-            <Label layoutX="435.0" layoutY="333.0" text="Completed:" />
-            <CheckBox fx:id="completed" layoutX="519.0" layoutY="333.0" mnemonicParsing="false" />
             <DateTimePicker fx:id="dueDate" layoutX="390.0" layoutY="125.0" />
             <Label layoutX="390.0" layoutY="168.0" text="Notice Period:" />
             <Label layoutX="389.0" layoutY="235.0" text="Estimated Time to Complete:" />
@@ -54,6 +52,7 @@
             <Label layoutX="33.0" layoutY="354.0" text="Scheduled Start Time:" />
             <Label layoutX="33.0" layoutY="388.0" text="Scheduled End Time:" />
             <DateTimePicker fx:id="scheduledEndTime" layoutX="205.0" layoutY="384.0" prefHeight="25.0" prefWidth="151.0" />
+            <JFXCheckBox fx:id="completed" layoutX="435.0" layoutY="354.0" text="Completed" />
          </children>
       </AnchorPane>
    </center>
