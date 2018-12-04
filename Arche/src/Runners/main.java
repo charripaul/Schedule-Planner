@@ -41,29 +41,6 @@ public class main extends Application{
 		window.setResizable(false);
 		window.setScene(new Scene(root));
 		window.show();
-		
-		/*window.setTitle("Arche");
-		window.setMinWidth(900);
-		window.setMinHeight(600);
-		window.setOnCloseRequest(e -> {
-			e.consume();
-			closeProgram(ConfirmExitView.display("Are you sure you want to exit?"));
-		});
-		
-		window.setScene(new Scene(root));
-		window.show();
-		
-		Stage loginWindow = new Stage();
-		Parent root2 = FXMLLoader.load(getClass().getResource("/Views/login.fxml"));
-		loginWindow.setTitle("Arche");
-		loginWindow.getIcons().add(new Image("file:resources/icons/icons8-idea-40.png"));
-		loginWindow.initModality(Modality.APPLICATION_MODAL);
-		loginWindow.initStyle(StageStyle.UTILITY);
-		loginWindow.setOnCloseRequest(e -> {
-			//DBConn.closeConnection();
-		});
-		loginWindow.setScene(new Scene(root2));
-		loginWindow.showAndWait();*/
 	}
 	public void showLoginWindow() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/login.fxml"));
