@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import Views.ConfirmExitView;
 import Views.LoginController;
-import Views.MainView;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,9 +35,6 @@ public class main extends Application{
 		
 		LoginController controller = loader.getController();
 		controller.setStage(window);
-		
-		File directory = new File("./");
-		   System.out.println(directory.getAbsolutePath());
 		
 		window.getIcons().add(new Image("file:./src/resources/icons/icons8-idea-40.png"));
 		window.initStyle(StageStyle.UNDECORATED);
