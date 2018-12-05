@@ -380,6 +380,14 @@ public class ModelControl {
 		}
 		return false;
 	}
+	public static boolean usernameExists(String u) {
+		for(int count=0;count<users.size();count++) {
+			if(users.get(count).getUsername().equals(u)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	//for reference day on home page, stays locked to day of reference (arrowed date)
 	public static ArrayList<Task> getUrgentTasks(){
 		long day = getReferenceDateVal();
@@ -648,12 +656,6 @@ public class ModelControl {
 		}
 		System.out.println("Error MCT04");
 		return -1;
-	}
-	public static boolean isSuperUser(int id) {
-		if(id == 1) {
-			return true;
-		}
-		return false;
 	}
 	public static void closeConnection() {
 		DBConn.closeConnection();

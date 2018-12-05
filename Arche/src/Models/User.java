@@ -9,7 +9,7 @@ public class User {
 		this(u,p);
 		id = i;
 	}
-	//new admin constructor
+	//new user constructor
 	public User(String u, String p) {
 		username = u;
 		password = p;

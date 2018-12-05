@@ -10,7 +10,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
+import Models.DataLock;
 import Models.ModelControl;
+import Models.User;
 import Runners.DBConn;
 import javafx.animation.PauseTransition;
 import javafx.event.EventHandler;
@@ -30,6 +32,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import jfxtras.scene.control.ImageViewButton;
 
 public class LoginController implements Initializable{
 	@FXML private JFXButton loginButton;
@@ -39,10 +42,19 @@ public class LoginController implements Initializable{
 	@FXML private JFXPasswordField password;
 	@FXML private Label title;
 	@FXML private Label description;
-	@FXML private Label alert;
+	@FXML private Label loginAlert;
 	@FXML private CheckBox remember;
 	@FXML private ImageView bg;
-	@FXML private AnchorPane pane;
+	@FXML private AnchorPane entirePane;
+	@FXML private AnchorPane loginPane;
+	
+	@FXML private AnchorPane registerPane;
+	@FXML private JFXButton registerConfirmButton;
+	@FXML private JFXTextField usernameRegister;
+	@FXML private JFXPasswordField firstPassRegister;
+	@FXML private JFXPasswordField secondPassRegister;
+	@FXML private Button backButton;
+	@FXML private Label registerAlert;
 	
 	private double xOffset = 0;
 	private double yOffset = 0;
@@ -51,7 +63,9 @@ public class LoginController implements Initializable{
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+		registerAlert.setVisible(false);
+		registerPane.setVisible(false);
+		loginPane.setVisible(true);
 	}
 	@FXML
 	private void closeButtonClicked() {
@@ -63,7 +77,7 @@ public class LoginController implements Initializable{
 		String p = password.getText();
 		
 		//TODO: revert to normal (enable authentication by using u, p)
-		if(ModelControl.isUser("ventex1000","trinity77")) {
+		if(ModelControl.isUser(u,p)) {
 			ModelControl.initialize();
 			loginWindow.hide();
 			
@@ -81,7 +95,7 @@ public class LoginController implements Initializable{
 			mainWindow.show();
 			//closeWindow();
 		}
-		else if(ModelControl.isAdmin("ventex1000","trinity77")) {
+		else if(ModelControl.isAdmin(u,p)) {
 			ModelControl.initialize();
 			loginWindow.hide();
 			
@@ -100,12 +114,13 @@ public class LoginController implements Initializable{
 			//closeWindow();
 		}
 		else {
-			alert.setVisible(true);
+			loginAlert.setText("Incorrect username/password combination");
+			loginAlert.setVisible(true);
 			PauseTransition visiblePause = new PauseTransition(
 			        Duration.seconds(5)
 			);
 			visiblePause.setOnFinished(
-			        event -> alert.setVisible(false)
+			        event -> loginAlert.setVisible(false)
 			);
 			visiblePause.play();
 		}
@@ -115,8 +130,40 @@ public class LoginController implements Initializable{
 		//TODO: if tab and enter pressed in either text field
 	}
 	@FXML
+	private void backButtonClicked() {
+		usernameRegister.clear();
+		firstPassRegister.clear();
+		secondPassRegister.clear();
+		registerPane.setVisible(false);
+		loginPane.setVisible(true);
+	}
+	@FXML
 	private void registerButtonClicked() {
-		//TODO: write
+		loginPane.setVisible(false);
+		registerPane.setVisible(true);
+	}
+	@FXML
+	private void confirmRegisterButtonClicked() {
+		if(usernameRegister.getText().equals("")) {
+			displayRegisterAlert("Please enter a username");
+		}
+		else if(ModelControl.usernameExists(usernameRegister.getText()) == false) {
+			if(firstPassRegister.getText().equals(secondPassRegister.getText())) {
+				if(!firstPassRegister.getText().equals("")) {
+					ModelControl.addUser(new User(usernameRegister.getText(),DataLock.encrypt(firstPassRegister.getText())));
+					backButton.fire();
+				}
+				else {
+					displayRegisterAlert("Please enter a password");
+				}
+			}
+			else {
+				displayRegisterAlert("Password do not match");
+			}
+		}
+		else {
+			displayRegisterAlert("Username already exists");
+		}
 	}
 	public void setStage(Stage stage) {
 		loginWindow = stage;
@@ -134,6 +181,17 @@ public class LoginController implements Initializable{
                 loginWindow.setY(event.getScreenY() - yOffset);
             }
         });
+	}
+	private void displayRegisterAlert(String msg) {
+		registerAlert.setText(msg);
+		registerAlert.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(5)
+		);
+		visiblePause.setOnFinished(
+		        event -> registerAlert.setVisible(false)
+		);
+		visiblePause.play();
 	}
 	private void closeWindow() {
 		Stage window = (Stage) loginButton.getScene().getWindow();

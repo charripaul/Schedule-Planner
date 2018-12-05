@@ -11,36 +11,41 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.LoginController">
+<AnchorPane fx:id="entirePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.LoginController">
    <children>
       <ImageView fx:id="bg" fitHeight="539.0" fitWidth="1059.0" layoutX="-111.0" layoutY="-15.0" opacity="0.36" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/icons/login2.png" />
          </image></ImageView>
-      <AnchorPane layoutX="526.0" layoutY="48.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="301.0" style="-fx-background-color: #2fa9f2;">
+      <AnchorPane fx:id="loginPane" layoutX="58.0" layoutY="48.0" visible="false">
          <children>
-            <JFXPasswordField fx:id="password" layoutX="41.0" layoutY="190.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="219.0" promptText="password" style="-fx-background-color: #299adb;" />
-            <ImageView fitHeight="82.0" fitWidth="89.0" layoutX="110.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../resources/icons/user_icon.png" />
-               </image>
-            </ImageView>
-            <CheckBox fx:id="remember" layoutX="41.0" layoutY="250.0" mnemonicParsing="false" text="Remember Me" />
-            <JFXButton fx:id="loginButton" layoutX="172.0" layoutY="246.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#loginButtonClicked" prefHeight="25.0" prefWidth="89.0" ripplerFill="BLACK" style="-fx-background-color: #f2782f;" text="Login" />
-            <JFXTextField fx:id="username" layoutX="41.0" layoutY="136.0" onKeyPressed="#tabPressed" prefHeight="25.0" prefWidth="219.0" promptText="username" style="-fx-background-color: #299adb;" />
-            <Label fx:id="alert" layoutX="38.0" layoutY="301.0" text="Incorrect username/password combination" visible="false" />
+            <AnchorPane layoutX="468.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="301.0" style="-fx-background-color: #2fa9f2;">
+               <children>
+                  <JFXPasswordField fx:id="password" layoutX="41.0" layoutY="190.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="219.0" promptText="password" style="-fx-background-color: #299adb;" />
+                  <ImageView fitHeight="82.0" fitWidth="89.0" layoutX="110.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/icons/user_icon.png" />
+                     </image>
+                  </ImageView>
+                  <CheckBox fx:id="remember" layoutX="41.0" layoutY="250.0" mnemonicParsing="false" text="Remember Me" />
+                  <JFXButton fx:id="loginButton" layoutX="172.0" layoutY="246.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#loginButtonClicked" prefHeight="25.0" prefWidth="89.0" ripplerFill="BLACK" style="-fx-background-color: #f2782f;" text="Login" />
+                  <JFXTextField fx:id="username" layoutX="41.0" layoutY="136.0" onKeyPressed="#tabPressed" prefHeight="25.0" prefWidth="219.0" promptText="username" style="-fx-background-color: #299adb;" />
+                  <Label fx:id="loginAlert" layoutX="38.0" layoutY="301.0" text="Incorrect username/password combination" visible="false" />
+               </children>
+            </AnchorPane>
+            <Label fx:id="title" layoutY="125.0" text="Welcome to Project Arche" textFill="WHITE">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+            <Label fx:id="description" layoutX="7.0" layoutY="185.0" text="A student planner built off of JavaFX used to schedule&#10;and monitor daily tasks and assignments." textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="registerButton" layoutX="7.0" layoutY="247.0" onAction="#registerButtonClicked" prefHeight="25.0" prefWidth="203.0" style="-fx-background-color: #f2782f;" text="Register" />
          </children>
       </AnchorPane>
-      <Label fx:id="title" layoutX="58.0" layoutY="173.0" text="Welcome to Project Arche" textFill="WHITE">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-      <Label fx:id="description" layoutX="65.0" layoutY="233.0" text="A student planner built off of JavaFX used to schedule&#10;and monitor daily tasks and assignments." textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
       <Button fx:id="closeButton" layoutX="855.0" mnemonicParsing="false" onAction="#closeButtonClicked" style="-fx-background-color: #05080C;">
          <graphic>
             <ImageView fitHeight="29.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
@@ -50,6 +55,37 @@
             </ImageView>
          </graphic>
       </Button>
-      <JFXButton fx:id="registerButton" layoutX="65.0" layoutY="295.0" onAction="#registerButtonClicked" prefHeight="25.0" prefWidth="203.0" style="-fx-background-color: #f2782f;" text="Register" />
+      <AnchorPane fx:id="registerPane" layoutX="7.0" layoutY="5.0">
+         <children>
+            <Button fx:id="backButton" layoutX="-5.0" layoutY="-1.0" mnemonicParsing="false" onAction="#backButtonClicked" prefWidth="28.0" style="-fx-background-color: #05080C;">
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/icons/white/left-arrow.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <AnchorPane layoutX="243.0" layoutY="83.0" prefHeight="343.0" prefWidth="386.0" style="-fx-background-color: #2fa9f2;">
+               <children>
+                  <Label layoutX="154.0" layoutY="14.0" text="Register">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </Label>
+                  <JFXButton fx:id="registerConfirmButton" layoutX="126.0" layoutY="276.0" onAction="#confirmRegisterButtonClicked" prefHeight="25.0" prefWidth="135.0" style="-fx-background-color: #f2782f;" text="Confirm Registration" />
+                  <JFXTextField fx:id="usernameRegister" layoutX="109.0" layoutY="103.0" prefHeight="25.0" prefWidth="170.0" promptText="Username" />
+                  <JFXPasswordField fx:id="firstPassRegister" layoutX="109.0" layoutY="159.0" prefHeight="25.0" prefWidth="170.0" promptText="Password" />
+                  <JFXPasswordField fx:id="secondPassRegister" layoutX="109.0" layoutY="217.0" prefHeight="25.0" prefWidth="170.0" promptText="Re-enter Password" />
+                  <ImageView fitHeight="46.0" fitWidth="45.0" layoutX="171.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/icons/user_icon.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="registerAlert" layoutX="130.0" layoutY="312.0" text="Username already exists" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
