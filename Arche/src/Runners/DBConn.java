@@ -20,8 +20,8 @@ public class DBConn {
     	try
         {
         	Class.forName("org.sqlite.JDBC").newInstance();
-			//con = DriverManager.getConnection("jdbc:sqlite::resource:database.sqlite");		//comment out this if not already
-			con = DriverManager.getConnection("jdbc:sqlite:./src/database.sqlite");			//uncomment this this if not already
+			//con = DriverManager.getConnection("jdbc:sqlite::resource:database.sqlite");		//for production
+			con = DriverManager.getConnection("jdbc:sqlite:./src/database.sqlite");			//for testing
         }
         catch(Exception e)
         {

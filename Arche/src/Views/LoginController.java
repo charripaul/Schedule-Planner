@@ -15,6 +15,7 @@ import Models.ModelControl;
 import Models.User;
 import Runners.DBConn;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -66,6 +69,8 @@ public class LoginController implements Initializable{
 		registerAlert.setVisible(false);
 		registerPane.setVisible(false);
 		loginPane.setVisible(true);
+		
+		selectNode(username);
 	}
 	@FXML
 	private void closeButtonClicked() {
@@ -126,8 +131,16 @@ public class LoginController implements Initializable{
 		}
 	}
 	@FXML
-	private void tabPressed() {
-		//TODO: if tab and enter pressed in either text field
+	private void tabPressed(KeyEvent event) {
+		if(event.getCode() == KeyCode.TAB) {
+			selectNode(password);
+		}
+	}
+	@FXML
+	private void reenterTabPressed(KeyEvent event) {
+		if(event.getCode() == KeyCode.TAB) {
+			selectNode(registerConfirmButton);
+		}
 	}
 	@FXML
 	private void backButtonClicked() {
@@ -136,11 +149,13 @@ public class LoginController implements Initializable{
 		secondPassRegister.clear();
 		registerPane.setVisible(false);
 		loginPane.setVisible(true);
+		selectNode(username);
 	}
 	@FXML
 	private void registerButtonClicked() {
 		loginPane.setVisible(false);
 		registerPane.setVisible(true);
+		selectNode(usernameRegister);
 	}
 	@FXML
 	private void confirmRegisterButtonClicked() {
@@ -158,7 +173,7 @@ public class LoginController implements Initializable{
 				}
 			}
 			else {
-				displayRegisterAlert("Password do not match");
+				displayRegisterAlert("Passwords do not match");
 			}
 		}
 		else {
@@ -179,6 +194,30 @@ public class LoginController implements Initializable{
             public void handle(MouseEvent event) {
                 loginWindow.setX(event.getScreenX() - xOffset);
                 loginWindow.setY(event.getScreenY() - yOffset);
+            }
+        });
+	}
+	private void selectNode(JFXTextField field) {
+		Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                field.requestFocus();			//select username on start
+            }
+        });
+	}
+	private void selectNode(JFXPasswordField field) {
+		Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                field.requestFocus();			//select username on start
+            }
+        });
+	}
+	private void selectNode(JFXButton button) {
+		Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                button.requestFocus();			//select username on start
             }
         });
 	}

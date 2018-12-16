@@ -2,6 +2,7 @@ package Models;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -16,8 +17,9 @@ public class Task {
 	private long dueDate, scheduledStartTime, scheduledEndTime;
 	private int noticePeriod, timeToComplete;
 
-	public Task(String n) {
-		name = n;			//for tree items on treetableview
+	public Task(String n, boolean c) {
+		name = n;							//for tree items on treetableview
+		finishFlag = c;
 	}
 	//initialization constructor
 	public Task(int i, int u, String n, String d, long dd, boolean ff, boolean of, String t,
@@ -102,6 +104,16 @@ public class Task {
 		ldt.set(dd);
 		
 		return ldt;
+	}
+	public String getDueDate(int x) {
+		if(dueDate == 0) {
+			return "";
+		}
+		LocalDateTime dd = LocalDateTime.ofInstant(Instant.ofEpochMilli(dueDate), 
+                TimeZone.getDefault().toZoneId());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
+		String s = dd.format(formatter).toString();
+		return s;
 	}
 	public boolean getFinishFlag() {
 		return finishFlag;

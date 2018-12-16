@@ -76,7 +76,7 @@
                   <JFXButton fx:id="registerConfirmButton" layoutX="126.0" layoutY="276.0" onAction="#confirmRegisterButtonClicked" prefHeight="25.0" prefWidth="135.0" style="-fx-background-color: #f2782f;" text="Confirm Registration" />
                   <JFXTextField fx:id="usernameRegister" layoutX="109.0" layoutY="103.0" prefHeight="25.0" prefWidth="170.0" promptText="Username" />
                   <JFXPasswordField fx:id="firstPassRegister" layoutX="109.0" layoutY="159.0" prefHeight="25.0" prefWidth="170.0" promptText="Password" />
-                  <JFXPasswordField fx:id="secondPassRegister" layoutX="109.0" layoutY="217.0" prefHeight="25.0" prefWidth="170.0" promptText="Re-enter Password" />
+                  <JFXPasswordField fx:id="secondPassRegister" layoutX="109.0" layoutY="217.0" onKeyPressed="#reenterTabPressed" prefHeight="25.0" prefWidth="170.0" promptText="Re-enter Password" />
                   <ImageView fitHeight="46.0" fitWidth="45.0" layoutX="171.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../resources/icons/user_icon.png" />

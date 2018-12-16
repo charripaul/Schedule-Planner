@@ -101,7 +101,7 @@ public class MainNewController implements Initializable{
 	@FXML private TreeTableColumn<Task, String> descTreeTableCol;
 	@FXML private TreeTableColumn<Task, String> typeTreeTableCol;
 	@FXML private TreeTableColumn<Task, String> classTreeTableCol;
-	@FXML private TreeTableColumn<Task, LocalDateTime> dueDateTreeTableCol;
+	@FXML private TreeTableColumn<Task, String> dueDateTreeTableCol;
 	@FXML private TreeTableColumn<Task, Boolean> completedTreeTableCol;
 	//schedule (subset of home)
 	@FXML private JFXButton homeScheduleViewButton;
@@ -248,7 +248,11 @@ public class MainNewController implements Initializable{
 	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
 	            new ReadOnlyStringWrapper(param.getValue().getValue().getClassAbr())
 	        );
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
+		dueDateTreeTableCol.setCellValueFactory(
+	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
+	            new ReadOnlyStringWrapper(param.getValue().getValue().getDueDate(0))
+	        );
+		/*final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
 		dueDateTreeTableCol.setCellValueFactory(T -> T.getValue().getValue().getDueDate(""));
 		dueDateTreeTableCol.setCellFactory(dueDateColumn -> new TreeTableCell<Task, LocalDateTime>() {
 		    @Override
@@ -259,7 +263,7 @@ public class MainNewController implements Initializable{
 		        else
 		            setText(String.format(item.format(formatter)));
 		    }
-		});
+		});*/
 		completedTreeTableCol.setCellValueFactory(c -> new SimpleBooleanProperty(c.getValue().getValue().getFinishFlag()));
 		completedTreeTableCol.setCellFactory(c -> new CheckBoxTreeTableCell<>());
 		
@@ -428,9 +432,14 @@ public class MainNewController implements Initializable{
 		homeTreeTable.setShowRoot(false);
 		
 		TreeItem<Task> root = new TreeItem<>();
-		TreeItem<Task> overdue = new TreeItem<>(new Task("Overdue"));
-		TreeItem<Task> due = new TreeItem<>(new Task("Urgent"));
-		TreeItem<Task> soon = new TreeItem<>(new Task("Approaching"));
+		
+		boolean dueComplete = generateCompleteBoolean(tableTasks);
+		boolean overdueComplete = generateCompleteBoolean(overDueTasks);
+		boolean soonComplete = generateCompleteBoolean(dueSoonTasks);
+			
+		TreeItem<Task> due = new TreeItem<>(new Task("Urgent",dueComplete));	
+		TreeItem<Task> overdue = new TreeItem<>(new Task("Overdue",overdueComplete));
+		TreeItem<Task> soon = new TreeItem<>(new Task("Approaching",soonComplete));
 		
 		for(int count = 0;count<tableTasks.size();count++) {
 			TreeItem<Task> val = new TreeItem<>(tableTasks.get(count));
@@ -1025,6 +1034,19 @@ public class MainNewController implements Initializable{
 		}
 		else {
 			return false;
+		}
+	}
+	private boolean generateCompleteBoolean(ArrayList<Task> vals) {
+		if(vals.size()==0) {
+			return true;
+		}
+		else{
+			for(int count=0;count<vals.size();count++) {
+				if(vals.get(count).getFinishFlag() == false) {
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 	private String getFirstDayOfMonth() {

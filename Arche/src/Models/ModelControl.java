@@ -56,55 +56,43 @@ public class ModelControl {
 	public static void initialize() {
 		ResultSet rs;
 		try {
-			rs = Database.getClasses();
+			rs = Database.getClasses(mainUID);
 			while(rs.next()) {
-				int uid = rs.getInt("uid");
-				if(uid == mainUID || mainUID == -1) {
-					classes.add(new Class(rs.getInt("id"), uid, rs.getString("name"), rs.getString("abbreviation"),
-							rs.getString("details"), rs.getInt("totalAssignments"), rs.getString("daysOfWeek"),
-							rs.getString("startTime"), rs.getString("endTime")));
-				}
+				classes.add(new Class(rs.getInt("id"), rs.getInt("uid"), rs.getString("name"), rs.getString("abbreviation"),
+						rs.getString("details"), rs.getInt("totalAssignments"), rs.getString("daysOfWeek"),
+						rs.getString("startTime"), rs.getString("endTime")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Swab\n" + e.getMessage());
 		}
 		try {
-			rs = Database.getProjects();
+			rs = Database.getProjects(mainUID);
 			while(rs.next()) {
-				int uid = rs.getInt("uid");
-				if(uid == mainUID || mainUID == -1) {
-					projects.add(new Project(rs.getInt("id"), uid, rs.getString("name"), rs.getString("description"),
-							 rs.getString("currentStep"), rs.getInt("priorityLevel")));
-				}
+				projects.add(new Project(rs.getInt("id"), rs.getInt("uid"), rs.getString("name"), rs.getString("description"),
+						 rs.getString("currentStep"), rs.getInt("priorityLevel")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Puff\n" + e.getMessage());
 		}
 		try {
-			rs = Database.getTaskTypes();
+			rs = Database.getTaskTypes(mainUID);
 			while(rs.next()) {
-				int uid = rs.getInt("uid");
-				if(uid == mainUID || mainUID == -1) {
-					taskTypes.add(new TaskType(rs.getInt("id"), uid, rs.getString("name"), rs.getString("description"),
-							  rs.getInt("warningPeriod"), rs.getInt("timeToComplete"), rs.getInt("totalAssignments")));
-				}
+				taskTypes.add(new TaskType(rs.getInt("id"), rs.getInt("uid"), rs.getString("name"), rs.getString("description"),
+						  rs.getInt("warningPeriod"), rs.getInt("timeToComplete"), rs.getInt("totalAssignments")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Center\n" + e.getMessage());
 		}
 		//has to be last
 		try {
-			rs = Database.getTasks();
+			rs = Database.getTasks(mainUID);
 			while(rs.next()) {
-				int uid = rs.getInt("uid");
-				if(uid == mainUID || mainUID == -1) {
-					int classID = rs.getInt("classID");
-					int typeID = rs.getInt("typeID");
-					tasks.add(new Task(rs.getInt("id"), uid, rs.getString("name"), rs.getString("description"),
-							 rs.getLong("dueDate"), rs.getBoolean("finishFlag"), rs.getBoolean("onFlag"),
-							 getTypeName(typeID), getClassAbr(classID), rs.getInt("noticePeriod"), 
-							 rs.getInt("timeToComplete"), rs.getLong("scheduledStartTime"), rs.getLong("scheduledEndTime")));
-				}
+				int classID = rs.getInt("classID");
+				int typeID = rs.getInt("typeID");
+				tasks.add(new Task(rs.getInt("id"), rs.getInt("uid"), rs.getString("name"), rs.getString("description"),
+						 rs.getLong("dueDate"), rs.getBoolean("finishFlag"), rs.getBoolean("onFlag"),
+						 getTypeName(typeID), getClassAbr(classID), rs.getInt("noticePeriod"), 
+						 rs.getInt("timeToComplete"), rs.getLong("scheduledStartTime"), rs.getLong("scheduledEndTime")));
 			}
 		}catch(SQLException e) {
 			System.out.println("\nError Code: Solar\n" + e.getMessage());
@@ -641,7 +629,7 @@ public class ModelControl {
 	}
 	public static int getTypeID(String name) {
 		for(int count=0;count<taskTypes.size();count++) {
-			if(name == taskTypes.get(count).getName()) {
+			if(name.equals(taskTypes.get(count).getName())) {
 				return taskTypes.get(count).getId();
 			}
 		}
@@ -650,7 +638,7 @@ public class ModelControl {
 	}
 	public static int getClassID(String abr) {
 		for(int count=0;count<classes.size();count++) {
-			if(abr == classes.get(count).getAbbreviation()) {
+			if(abr.equals(classes.get(count).getAbbreviation())) {
 				return classes.get(count).getId();
 			}
 		}
@@ -692,13 +680,6 @@ public class ModelControl {
 		return day;
 	}
 	private static long getReferenceDateVal() {
-		/*//Date t = Calendar.getInstance().getTime();
-		//Date t = java.sql.Date.valueOf(dayOfReference);
-		Date date = Date.from(dayOfReference.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		long val = date.getTime();
-		return val;*/
 		return dayOfReference.getTimeInMillis();
 	}
 	private static long getTodaysDateVal() {

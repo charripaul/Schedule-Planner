@@ -87,7 +87,7 @@ public class ViewTaskController implements Initializable{
 		temp.setNoticePeriod(Integer.parseInt(noticePeriod.getText()));
 		
 		newClassAbr = temp.getClassAbr();
-		newTypeName = temp.getName();
+		newTypeName = temp.getType();
 		
 		ModelControl.updateTaskAndClassDependency(temp, oldClassAbr, newClassAbr);
 		ModelControl.updateTaskAndTypeDependency(temp, oldTypeName, newTypeName);
