@@ -19,9 +19,11 @@ public class DBConn {
     	}
     	try
         {
-        	Class.forName("org.sqlite.JDBC").newInstance();
-			//con = DriverManager.getConnection("jdbc:sqlite::resource:database.sqlite");		//for production
-			con = DriverManager.getConnection("jdbc:sqlite:./src/database.sqlite");			//for testing
+        	Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+			//con = DriverManager.getConnection("jdbc:sqlite::resource:database.sqlite");		//sqlite, for production
+			//con = DriverManager.getConnection("jdbc:sqlite:./src/database.sqlite");			//sqlite, for testing
+			//con = DriverManager.getConnection("jdbc:mysql://localhost:3306/scheduleplannerdb","root","trinity77");			//mysql, for testing
+			con = DriverManager.getConnection("jdbc:mysql://den1.mysql4.gear.host:3306/scheduleplannera","scheduleplannera","Trinity77!");
         }
         catch(Exception e)
         {

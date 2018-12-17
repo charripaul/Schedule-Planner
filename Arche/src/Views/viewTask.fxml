@@ -48,10 +48,10 @@
             <TextField fx:id="noticePeriod" layoutX="391.0" layoutY="200.0" promptText="days" />
             <TextField fx:id="hours" layoutX="389.0" layoutY="264.0" prefHeight="25.0" prefWidth="55.0" promptText="Hrs" />
             <TextField fx:id="minutes" layoutX="477.0" layoutY="264.0" prefHeight="25.0" prefWidth="59.0" promptText="mins" />
-            <DateTimePicker fx:id="scheduledStartTime" layoutX="205.0" layoutY="350.0" prefHeight="25.0" prefWidth="151.0" />
+            <DateTimePicker fx:id="scheduledStartTime" disable="true" layoutX="205.0" layoutY="350.0" prefHeight="25.0" prefWidth="151.0" />
             <Label layoutX="33.0" layoutY="354.0" text="Scheduled Start Time:" />
             <Label layoutX="33.0" layoutY="388.0" text="Scheduled End Time:" />
-            <DateTimePicker fx:id="scheduledEndTime" layoutX="205.0" layoutY="384.0" prefHeight="25.0" prefWidth="151.0" />
+            <DateTimePicker fx:id="scheduledEndTime" disable="true" layoutX="205.0" layoutY="384.0" prefHeight="25.0" prefWidth="151.0" />
             <JFXCheckBox fx:id="completed" layoutX="435.0" layoutY="354.0" text="Completed" />
          </children>
       </AnchorPane>

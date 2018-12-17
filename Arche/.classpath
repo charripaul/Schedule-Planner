@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="E:/OneDrive/Programming/Java/JDA/jfoenix-8.0.5.jar"/>
 	<classpathentry kind="lib" path="E:/OneDrive/Programming/Java/JDA/JFxtras/jfxtras-all-8.0-r6.jar"/>
 	<classpathentry kind="lib" path="E:/OneDrive/Programming/Java/JDA/JFxtras/jfxtras-labs-8.0-r6.jar"/>
+	<classpathentry kind="lib" path="E:/OneDrive/Programming/Java/JDA/mysql-connector-java-8.0.13.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
