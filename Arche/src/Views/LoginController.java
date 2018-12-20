@@ -16,6 +16,8 @@ import Models.User;
 import Runners.DBConn;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +34,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -59,6 +62,10 @@ public class LoginController implements Initializable{
 	@FXML private Button backButton;
 	@FXML private Label registerAlert;
 	
+	@FXML private AnchorPane loadingPane;
+	@FXML private JFXButton cancelLoadingButton;
+	@FXML private Label loadingText;
+	
 	private double xOffset = 0;
 	private double yOffset = 0;
 	private Stage loginWindow;
@@ -69,6 +76,7 @@ public class LoginController implements Initializable{
 		registerAlert.setVisible(false);
 		registerPane.setVisible(false);
 		loginPane.setVisible(true);
+		loadingPane.setVisible(false);
 		
 		selectNode(username);
 	}
@@ -78,57 +86,75 @@ public class LoginController implements Initializable{
 	}
 	@FXML
 	private void loginButtonClicked() throws InterruptedException, IOException {
-		String u = username.getText();
-		String p = password.getText();
+		loadingPane.setVisible(true);
 		
-		//TODO: revert to normal (enable authentication by using u, p)
-		if(ModelControl.isUser(u,p)) {
-			ModelControl.initialize();
-			loginWindow.hide();
-			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/mainNew.fxml"));
-			Parent root = loader.load();
-			mainWindow = new Stage();
-			mainWindow.setMinWidth(900);
-			mainWindow.setMinHeight(600);
-			mainWindow.setOnCloseRequest(e -> {
-				e.consume();
-				closeProgram(ConfirmExitView.display("Are you sure you want to exit?"));
-			});
-			//stage.initStyle(StageStyle.DECORATED);
-			mainWindow.setScene(new Scene(root));
-			mainWindow.show();
-			//closeWindow();
-		}
-		else if(ModelControl.isAdmin(u,p)) {
-			ModelControl.initialize();
-			loginWindow.hide();
-			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/mainNew.fxml"));
-			Parent root = loader.load();
-			mainWindow = new Stage();
-			mainWindow.setMinWidth(900);
-			mainWindow.setMinHeight(600);
-			mainWindow.setOnCloseRequest(e -> {
-				e.consume();
-				closeProgram(ConfirmExitView.display("Are you sure you want to exit?"));
-			});
-			//stage.initStyle(StageStyle.DECORATED);
-			mainWindow.setScene(new Scene(root));
-			mainWindow.show();
-			//closeWindow();
-		}
-		else {
-			loginAlert.setText("Incorrect username/password combination");
-			loginAlert.setVisible(true);
-			PauseTransition visiblePause = new PauseTransition(
-			        Duration.seconds(5)
-			);
-			visiblePause.setOnFinished(
-			        event -> loginAlert.setVisible(false)
-			);
-			visiblePause.play();
-		}
+		//perform database authentication check and connection in separate thread
+		final Task<Boolean> initializeConnection = new Task<Boolean>() {
+		    @Override
+		    public Boolean call(){
+		    	String u = username.getText();
+				String p = password.getText();
+		        boolean isUser = ModelControl.isUser(u,p);
+		    	boolean isAdmin = ModelControl.isAdmin(u,p);
+		    	
+		    	if(isUser || isAdmin) {
+		    		ModelControl.initialize();
+		    		
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		    		return true;
+		    	}
+		    	else {
+		    		try {
+		    			Thread.sleep(1000);
+		    		} catch (InterruptedException e) {
+		    			// TODO Auto-generated catch block
+		    			e.printStackTrace();
+		    		}
+		    		return false;
+		    	}
+		    }
+		};
+		//reverts to javafx thread
+		initializeConnection.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+		    @Override
+		    public void handle(WorkerStateEvent event) {
+		        boolean result = initializeConnection.getValue(); // result of computation
+		        
+		        if(result) {
+		        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/mainNew.fxml"));
+		        	Parent root = null;
+					try {
+						root = loader.load();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+		        	
+		        	mainWindow = new Stage();
+					mainWindow.setMinWidth(900);
+					mainWindow.setMinHeight(600);
+					
+					mainWindow.setOnCloseRequest(e -> {
+						e.consume();
+						closeProgram(ConfirmExitView.display("Are you sure you want to exit?"));
+					});
+					//stage.initStyle(StageStyle.DECORATED);
+					mainWindow.setScene(new Scene(root));
+					loginWindow.hide();
+					mainWindow.show();
+		        }
+		        else {
+		        	loadingPane.setVisible(false);
+		        	displayLoginAlert("Incorrect username/password combination");
+		        }
+		    }
+		});
+		
+		new Thread(initializeConnection).start();
 	}
 	@FXML
 	private void tabPressed(KeyEvent event) {
@@ -229,6 +255,18 @@ public class LoginController implements Initializable{
 		);
 		visiblePause.setOnFinished(
 		        event -> registerAlert.setVisible(false)
+		);
+		visiblePause.play();
+	}
+	private void displayLoginAlert(String msg) {
+		loginAlert.setText(msg);
+		loginAlert.setVisible(true);
+		
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(5)
+		);
+		visiblePause.setOnFinished(
+		        event -> loginAlert.setVisible(false)
 		);
 		visiblePause.play();
 	}

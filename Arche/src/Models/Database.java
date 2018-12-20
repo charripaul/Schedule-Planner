@@ -281,13 +281,24 @@ public class Database {
 	}
 	public static ResultSet getTasks(int id) {
 		PreparedStatement prep = null;
-		try {
-			prep = DBConn.getConnection().prepareStatement("SELECT * FROM Tasks WHERE uid = ?;");
-			prep.setInt(1,  id);
-			ResultSet rs = prep.executeQuery();
-			return rs;
-		}catch(SQLException e) {
-			System.out.println("\nError DB19:\n" + e.getMessage());
+		if(id == -1) {
+			try {
+				stmt = DBConn.getConnection().createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM Tasks;");
+				return rs;
+			}catch(SQLException e) {
+				System.out.println("\nError DB19a:\n" + e.getMessage());
+			}
+		}
+		else {
+			try {
+				prep = DBConn.getConnection().prepareStatement("SELECT * FROM Tasks WHERE uid = ?;");
+				prep.setInt(1,  id);
+				ResultSet rs = prep.executeQuery();
+				return rs;
+			}catch(SQLException e) {
+				System.out.println("\nError DB19:\n" + e.getMessage());
+			}
 		}
 		return null;
 	}
@@ -303,37 +314,71 @@ public class Database {
 	}
 	public static ResultSet getClasses(int id) {
 		PreparedStatement prep = null;
-		try {
-			prep = DBConn.getConnection().prepareStatement("SELECT * FROM Classes WHERE uid = ?;");
-			prep.setInt(1,  id);
-			ResultSet rs = prep.executeQuery();
-			return rs;
-		}catch(SQLException e) {
-			System.out.println("\nError DB21:\n" + e.getMessage());
+		if(id == -1) {
+			try {
+				stmt = DBConn.getConnection().createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM Classes;");
+				return rs;
+			}catch(SQLException e) {
+				System.out.println("\nError DB21a:\n" + e.getMessage());
+			}
 		}
+		else {
+			try {
+				prep = DBConn.getConnection().prepareStatement("SELECT * FROM Classes WHERE uid = ?;");
+				prep.setInt(1,  id);
+				ResultSet rs = prep.executeQuery();
+				return rs;
+			}catch(SQLException e) {
+				System.out.println("\nError DB21:\n" + e.getMessage());
+			}
+		}
+		
 		return null;
 	}
 	public static ResultSet getProjects(int id) {
 		PreparedStatement prep = null;
-		try {
-			prep = DBConn.getConnection().prepareStatement("SELECT * FROM Projects WHERE uid = ?;");
-			prep.setInt(1,  id);
-			ResultSet rs = prep.executeQuery();
-			return rs;
-		}catch(SQLException e) {
-			System.out.println("\nError DB22:\n" + e.getMessage());
+		if(id == -1) {
+			try {
+				stmt = DBConn.getConnection().createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM Projects;");
+				return rs;
+			}catch(SQLException e) {
+				System.out.println("\nError DB22a:\n" + e.getMessage());
+			}
+		}
+		else {
+			try {
+				prep = DBConn.getConnection().prepareStatement("SELECT * FROM Projects WHERE uid = ?;");
+				prep.setInt(1,  id);
+				ResultSet rs = prep.executeQuery();
+				return rs;
+			}catch(SQLException e) {
+				System.out.println("\nError DB22:\n" + e.getMessage());
+			}
 		}
 		return null;
 	}
 	public static ResultSet getTaskTypes(int id) {
 		PreparedStatement prep = null;
-		try {
-			prep = DBConn.getConnection().prepareStatement("SELECT * FROM TaskTypes WHERE uid = ?;");
-			prep.setInt(1,  id);
-			ResultSet rs = prep.executeQuery();
-			return rs;
-		}catch(SQLException e) {
-			System.out.println("\nError DB23:\n" + e.getMessage());
+		if(id == -1) {
+			try {
+				stmt = DBConn.getConnection().createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM TaskTypes;");
+				return rs;
+			}catch(SQLException e) {
+				System.out.println("\nError DB23a:\n" + e.getMessage());
+			}
+		}
+		else {
+			try {
+				prep = DBConn.getConnection().prepareStatement("SELECT * FROM TaskTypes WHERE uid = ?;");
+				prep.setInt(1,  id);
+				ResultSet rs = prep.executeQuery();
+				return rs;
+			}catch(SQLException e) {
+				System.out.println("\nError DB23:\n" + e.getMessage());
+			}
 		}
 		return null;
 	}
