@@ -1,4 +1,6 @@
 package Views;
+import com.jfoenix.controls.JFXButton;
+
 import Runners.DBConn;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -21,7 +23,7 @@ import javafx.stage.StageStyle;
 public class ConfirmExitView {
 	static Stage window;
 	static Label label;
-	static Button yesButton, noButton;
+	static JFXButton yesButton, noButton;
 	static boolean answer;
 	public static boolean display(String text) {
 		window = new Stage();
@@ -39,8 +41,11 @@ public class ConfirmExitView {
 		label.setWrapText(true);
 		label.setTextAlignment(TextAlignment.CENTER);
 		label.setText(text);
-		yesButton = new Button("Yes");
-		noButton = new Button("No");
+		yesButton = new JFXButton("Yes");
+		noButton = new JFXButton("No");
+		
+		yesButton.setStyle("-fx-background-color:  #f2782f;");
+		noButton.setStyle("-fx-background-color:  #f2782f;");
 		
 		yesButton.setOnAction(e -> {
 			answer = true;

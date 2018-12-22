@@ -18,7 +18,11 @@ import Runners.DBConn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.components.VEvent;
-
+/*For all methods that make changes to database, database change must come first
+ * before model change in case of connection disconnect.  Therefore,
+ * if a change can't be made to database due to bad connection, model will remain in the same state
+ * as db because the thread will be killed due to timeout
+ */
 public class ModelControl {
 	private static ArrayList<Task> tasks = new ArrayList<Task>();
 	private static ArrayList<Admin> admins = new ArrayList<Admin>();
@@ -34,7 +38,7 @@ public class ModelControl {
 		initializeAuthentication();
 		System.out.println("ModelControl layer initialized");
 	}
-	private static void initializeAuthentication() {
+	public static void initializeAuthentication() {
 		ResultSet rs;
 		try {
 			rs = Database.getAdmins();
@@ -112,8 +116,8 @@ public class ModelControl {
 			autoSchedule(t);
 		}
 		
-		tasks.add(t);
 		Database.addTask(t);
+		tasks.add(t);
 		for(int count = 0;count<classes.size();count++) {
 			if(classes.get(count).getAbbreviation().equals(classAbr)) {
 				classes.get(count).addOneToTA();
@@ -135,8 +139,8 @@ public class ModelControl {
 		else {
 			a.setId(admins.get(admins.size()-1).getId()+1);
 		}
-		admins.add(a);
 		Database.addAdmin(a);
+		admins.add(a);
 	}
 	public static void addClass(Class c) {
 		if(classes.size() == 0) {
@@ -145,8 +149,8 @@ public class ModelControl {
 		else {
 			c.setId(classes.get(classes.size()-1).getId()+1);
 		}
-		classes.add(c);
 		Database.addClass(c);
+		classes.add(c);
 	}
 	public static void addProject(Project p) {
 		if(projects.size() == 0) {
@@ -155,8 +159,8 @@ public class ModelControl {
 		else {
 			p.setId(projects.get(projects.size()-1).getId()+1);
 		}
-		projects.add(p);
 		Database.addProject(p);
+		projects.add(p);
 	}
 	public static void addTaskType(TaskType tt) {
 		if(taskTypes.size() == 0) {
@@ -165,8 +169,8 @@ public class ModelControl {
 		else {
 			tt.setId(taskTypes.get(taskTypes.size()-1).getId()+1);
 		}
-		taskTypes.add(tt);
 		Database.addTaskType(tt);
+		taskTypes.add(tt);
 	}
 	public static void addUser(User u) {
 		if(users.size() == 0) {
@@ -175,17 +179,17 @@ public class ModelControl {
 		else {
 			u.setId(users.get(users.size()-1).getId()+1);
 		}
-		users.add(u);
 		Database.addUser(u);
+		users.add(u);
 	}
 	public static void updateTask(Task t) {
+		Database.updateTask(t);
 		for(int count = 0;count<tasks.size();count++) {
 			if(tasks.get(count).getId() == t.getId()) {
 				tasks.set(count, t);
 				break;
 			}
 		}
-		Database.updateTask(t);
 	}
 	//update total assignments count
 	//if class for task changes
@@ -214,22 +218,22 @@ public class ModelControl {
 		}
 	}
 	public static void updateAdmin(Admin a) {
+		Database.updateAdmin(a);
 		for(int count = 0;count<admins.size();count++) {
 			if(admins.get(count).getId() == a.getId()) {
 				admins.set(count, a);
 				break;
 			}
 		}
-		Database.updateAdmin(a);
 	}
 	public static void updateClass(Class c) {
+		Database.updateClass(c);
 		for(int count = 0;count<classes.size();count++) {
 			if(classes.get(count).getId() == c.getId()) {
 				classes.set(count, c);
 				break;
 			}
 		}
-		Database.updateClass(c);
 	}
 	//update abbreviations for tasks
 	public static void updateClassAndTaskDependency(Models.Class c, String oldClassAbr, String newClassAbr) {
@@ -241,22 +245,22 @@ public class ModelControl {
 		}
 	}
 	public static void updateProject(Project p) {
+		Database.updateProject(p);
 		for(int count = 0;count<projects.size();count++) {
 			if(projects.get(count).getId() == p.getId()) {
 				projects.set(count, p);
 				break;
 			}
 		}
-		Database.updateProject(p);
 	}
 	public static void updateTaskType(TaskType tt) {
+		Database.updateTaskType(tt);
 		for(int count = 0;count<taskTypes.size();count++) {
 			if(taskTypes.get(count).getId() == tt.getId()) {
 				taskTypes.set(count, tt);
 				break;
 			}
 		}
-		Database.updateTaskType(tt);
 	}
 	//update task type name for tasks
 	public static void updateTaskTypeAndTaskDependency(TaskType tt, String oldTypeName, String newTypeName) {
@@ -268,25 +272,25 @@ public class ModelControl {
 		}
 	}
 	public static void updateUser(User u) {
+		Database.updateUser(u);
 		for(int count = 0;count<users.size();count++) {
 			if(users.get(count).getId() == u.getId()) {
 				users.set(count, u);
 				break;
 			}
 		}
-		Database.updateUser(u);
 	}
 	public static void deleteTask(Task t) {
-		String classAbr = t.getClassAbr();
-		String type = t.getType();
-		
+		Database.deleteTask(t);
 		for(int count = 0;count<tasks.size();count++) {
 			if(tasks.get(count).getId() == t.getId()) {
 				tasks.remove(count);
 				break;
 			}
 		}
-		Database.deleteTask(t);
+		
+		String classAbr = t.getClassAbr();
+		String type = t.getType();
 		//update total assignment count
 		for(int count = 0;count<classes.size();count++) {
 			if(classes.get(count).getAbbreviation().equals(classAbr)) {
@@ -302,50 +306,51 @@ public class ModelControl {
 		}
 	}
 	public static void deleteAdmin(Admin a) {
+		Database.deleteAdmin(a);
 		for(int count = 0;count<admins.size();count++) {
 			if(admins.get(count).getId() == a.getId()) {
 				admins.remove(count);
 				break;
 			}
 		}
-		Database.deleteAdmin(a);
 	}
 	public static void deleteClass(Class c) {
+		Database.deleteClass(c);
 		for(int count = 0;count<classes.size();count++) {
 			if(classes.get(count).getId() == c.getId()) {
 				classes.remove(count);
 				break;
 			}
 		}
-		Database.deleteClass(c);
 	}
 	public static void deleteProject(Project p) {
+		Database.deleteProject(p);
 		for(int count = 0;count<projects.size();count++) {
 			if(projects.get(count).getId() == p.getId()) {
 				projects.remove(count);
 				break;
 			}
 		}
-		Database.deleteProject(p);
 	}
 	public static void deleteTaskType(TaskType tt) {
+		Database.deleteTaskType(tt);
 		for(int count = 0;count<taskTypes.size();count++) {
 			if(taskTypes.get(count).getId() == tt.getId()) {
 				taskTypes.remove(count);
 				break;
 			}
 		}
-		Database.deleteTaskType(tt);
 	}
-	public static void deleteUser(User u) {
+	//not needed
+	/*public static void deleteUser(User u) {
+		Database.deleteUser(u);
 		for(int count = 0;count<users.size();count++) {
 			if(users.get(count).getId() == u.getId()) {
 				users.remove(count);
 				break;
 			}
 		}
-		Database.deleteUser(u);
-	}
+	}*/
 	public static boolean isAdmin(String username, String password) {
 		for(int count = 0;count<admins.size();count++) {
 			if(username.equals(admins.get(count).getUsername())) {

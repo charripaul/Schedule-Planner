@@ -14,7 +14,7 @@ public class Database {
 		
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO Tasks VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);");
-			//prep.setInt(1, t.getId());
+			prep.setInt(1, t.getId());
 			prep.setInt(2, t.getUid());
 			prep.setString(3, t.getName());
 			prep.setString(4, t.getDescription());
@@ -37,7 +37,7 @@ public class Database {
 		PreparedStatement prep = null;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO Admins VALUES (?,?,?);");
-			//prep.setInt(1, a.getId());
+			prep.setInt(1, a.getId());
 			prep.setString(2, a.getUsername());
 			prep.setString(3, a.getPassword());
 			prep.execute();
@@ -50,7 +50,7 @@ public class Database {
 		PreparedStatement prep = null;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO Classes VALUES (?,?,?,?,?,?,?,?,?);");
-			//prep.setInt(1, c.getId());
+			prep.setInt(1, c.getId());
 			prep.setInt(2, c.getUid());
 			prep.setString(3, c.getName());
 			prep.setString(4, c.getAbbreviation());
@@ -69,7 +69,7 @@ public class Database {
 		PreparedStatement prep = null;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO Projects VALUES (?,?,?,?,?,?);");
-			//prep.setInt(1, p.getId());
+			prep.setInt(1, p.getId());
 			prep.setInt(2, p.getUid());
 			prep.setString(3, p.getName());
 			prep.setString(4, p.getDescription());
@@ -85,7 +85,7 @@ public class Database {
 		PreparedStatement prep = null;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO TaskTypes VALUES (?,?,?,?,?,?,?);");
-			//prep.setInt(1, tt.getId());
+			prep.setInt(1, tt.getId());
 			prep.setInt(2, tt.getUid());
 			prep.setString(3, tt.getName());
 			prep.setString(4, tt.getDescription());
@@ -102,7 +102,7 @@ public class Database {
 		PreparedStatement prep = null;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO Users VALUES (?,?,?);");
-			//prep.setInt(1, a.getId());
+			prep.setInt(1, u.getId());
 			prep.setString(2, u.getUsername());
 			prep.setString(3, u.getPassword());
 			prep.execute();

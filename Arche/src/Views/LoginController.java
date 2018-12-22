@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
@@ -14,6 +15,7 @@ import Models.DataLock;
 import Models.ModelControl;
 import Models.User;
 import Runners.DBConn;
+import Runners.LocalDBConn;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -49,7 +51,7 @@ public class LoginController implements Initializable{
 	@FXML private Label title;
 	@FXML private Label description;
 	@FXML private Label loginAlert;
-	@FXML private CheckBox remember;
+	@FXML private JFXCheckBox remember;
 	@FXML private ImageView bg;
 	@FXML private AnchorPane entirePane;
 	@FXML private AnchorPane loginPane;
@@ -78,6 +80,12 @@ public class LoginController implements Initializable{
 		loginPane.setVisible(true);
 		loadingPane.setVisible(false);
 		
+		String usernameFill = LocalDBConn.getLoginUsername();
+		if(!usernameFill.equals("")) {
+			remember.setSelected(true);
+		}
+		username.setText(usernameFill);
+		
 		selectNode(username);
 	}
 	@FXML
@@ -85,13 +93,14 @@ public class LoginController implements Initializable{
 		closeWindow();
 	}
 	@FXML
-	private void loginButtonClicked() throws InterruptedException, IOException {
+	private void loginButtonClicked() {
+		loadingText.setText("Authenticating");
 		loadingPane.setVisible(true);
 		
 		//perform database authentication check and connection in separate thread
-		final Task<Boolean> initializeConnection = new Task<Boolean>() {
+		Task<Boolean> initializeConnection = new Task<Boolean>() {
 		    @Override
-		    public Boolean call(){
+		    public Boolean call() throws InterruptedException{
 		    	String u = username.getText();
 				String p = password.getText();
 		        boolean isUser = ModelControl.isUser(u,p);
@@ -100,26 +109,23 @@ public class LoginController implements Initializable{
 		    	if(isUser || isAdmin) {
 		    		ModelControl.initialize();
 		    		
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+		    		if(remember.isSelected()) {
+		    			LocalDBConn.updateLoginUsername(u);
+		    		}
+		    		else {
+		    			LocalDBConn.updateLoginUsername("");
+		    		}
+		    		
+					Thread.sleep(1000);
 		    		return true;
 		    	}
 		    	else {
-		    		try {
-		    			Thread.sleep(1000);
-		    		} catch (InterruptedException e) {
-		    			// TODO Auto-generated catch block
-		    			e.printStackTrace();
-		    		}
+		    		Thread.sleep(1000);
 		    		return false;
 		    	}
 		    }
 		};
-		//reverts to javafx thread
+		//reverts to javafx main app thread
 		initializeConnection.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 		    @Override
 		    public void handle(WorkerStateEvent event) {
@@ -154,7 +160,36 @@ public class LoginController implements Initializable{
 		    }
 		});
 		
-		new Thread(initializeConnection).start();
+		//new Thread(initializeConnection).start();
+		
+		//mid layer thread to handle the use of the initializeconnection thread
+		//needed because this thread waits on the connection thread for information to determine
+		//timeout information
+		Task<Boolean> midlayer = new Task<Boolean>() {
+			@Override
+			public Boolean call() {
+				long timeoutTime = 25000;		//25 secs
+				TimeOut t = new TimeOut(new Thread(initializeConnection), timeoutTime, true);
+				try {                       
+				  boolean success = t.execute(); // Will return false if this times out, this freezes thread
+				  return success;
+				} catch (InterruptedException e) {}
+				return false;
+			}
+		};
+		midlayer.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+		    @Override
+		    public void handle(WorkerStateEvent event) {
+		    	boolean result = midlayer.getValue();
+		    	if(!result) {
+		    		System.out.println("Connection timed out\nProcess killed\n Error Code: LC01");
+		    		loadingPane.setVisible(false);
+		        	displayLoginAlert("Connection timed out, Error Code: LC01");
+		    	}
+		    }
+		});
+		
+		new Thread(midlayer).start();
 	}
 	@FXML
 	private void tabPressed(KeyEvent event) {
@@ -185,26 +220,78 @@ public class LoginController implements Initializable{
 	}
 	@FXML
 	private void confirmRegisterButtonClicked() {
-		if(usernameRegister.getText().equals("")) {
-			displayRegisterAlert("Please enter a username");
-		}
-		else if(ModelControl.usernameExists(usernameRegister.getText()) == false) {
-			if(firstPassRegister.getText().equals(secondPassRegister.getText())) {
-				if(!firstPassRegister.getText().equals("")) {
-					ModelControl.addUser(new User(usernameRegister.getText(),DataLock.encrypt(firstPassRegister.getText())));
-					backButton.fire();
+		loadingText.setText("Registering");
+		loadingPane.setVisible(true);
+		
+		Task<String> initializeConnection = new Task<String>() {
+		    @Override
+		    public String call() throws InterruptedException{
+		    	if(usernameRegister.getText().equals("")) {
+					return "Please enter a username";
+				}
+				else if(ModelControl.usernameExists(usernameRegister.getText()) == false) {
+					if(firstPassRegister.getText().equals(secondPassRegister.getText())) {
+						if(!firstPassRegister.getText().equals("")) {
+							ModelControl.addUser(new User(usernameRegister.getText(),DataLock.encrypt(firstPassRegister.getText())));
+							Thread.sleep(2000);
+							return "";
+						}
+						else {
+							return "Please enter a password";
+						}
+					}
+					else {
+						return "Passwords do not match";
+					}
 				}
 				else {
-					displayRegisterAlert("Please enter a password");
+					return "Username already exists";
 				}
+		    }
+		};
+		
+		initializeConnection.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+		    @Override
+		    public void handle(WorkerStateEvent event) {
+		        String result = initializeConnection.getValue(); // result of computation
+		        
+		        if(result.equals("")) {
+		        	backButton.fire();
+		        	displayLoginAlert("Registration Complete");
+		        	loadingPane.setVisible(false);
+		        }
+		        else {
+		        	displayRegisterAlert(result);
+		        	loadingPane.setVisible(false);
+		        }
+		    }
+		});
+		
+		Task<Boolean> midlayer = new Task<Boolean>() {
+			@Override
+			public Boolean call() {
+				long timeoutTime = 25000;		//25 secs
+				TimeOut t = new TimeOut(new Thread(initializeConnection), timeoutTime, true);
+				try {                       
+				  boolean success = t.execute(); // Will return false if this times out, this freezes thread
+				  return success;
+				} catch (InterruptedException e) {}
+				return false;
 			}
-			else {
-				displayRegisterAlert("Passwords do not match");
-			}
-		}
-		else {
-			displayRegisterAlert("Username already exists");
-		}
+		};
+		midlayer.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+		    @Override
+		    public void handle(WorkerStateEvent event) {
+		    	boolean result = midlayer.getValue();
+		    	if(!result) {
+		    		System.out.println("Connection timed out\nProcess killed\nError Code: LC02");
+		    		loadingPane.setVisible(false);
+		        	displayRegisterAlert("Connection timed out, Error Code: LC02");
+		    	}
+		    }
+		});
+		
+		new Thread(midlayer).start();
 	}
 	public void setStage(Stage stage) {
 		loginWindow = stage;

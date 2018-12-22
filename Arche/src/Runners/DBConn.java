@@ -13,33 +13,44 @@ public class DBConn {
     	if(con != null) {
     		try {
     			con.close();
+    			con = null;
     		}catch(Exception e) {
     			System.out.println("Connection close test error: " + e.getMessage());
     		}
     	}
-    	try
-        {
-        	Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-			//con = DriverManager.getConnection("jdbc:sqlite::resource:database.sqlite");		//sqlite, for production
-			//con = DriverManager.getConnection("jdbc:sqlite:./src/database.sqlite");			//sqlite, for testing
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/scheduleplannerdb","root","trinity77");			//mysql, for testing
-			//con = DriverManager.getConnection("jdbc:mysql://den1.mysql4.gear.host:3306/scheduleplannera","scheduleplannera","Trinity77!");	//mysql, for production
-        }
-        catch(Exception e)
-        {
-        	System.out.println("DBConnect error: " + e.getMessage());
-        }
+    	while(con == null) {
+    		try
+            {
+            	Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+    			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/scheduleplannerdb","root","trinity77");			//mysql, for testing
+    			//con = DriverManager.getConnection("jdbc:mysql://den1.mysql4.gear.host:3306/scheduleplannera","scheduleplannera","Watermelon77!");	//mysql, for production
+            }
+            catch(Exception e)
+            {
+            	System.out.println("DBConnect error: " + e.getMessage());
+            	System.out.println("Attempting to reconnect");
+            	try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+            }
+    	}
         return con;
     }
     public static void closeConnection() {
+    	boolean fail = false;
     	if(con != null) {
     	    try {
     	      con.close();
     	      con = null;
-    	      System.out.println("Database connection terminated");
     	    } catch (SQLException e) {
     	        System.out.println("Static Close Destroy Command Error: " + e.getMessage());
+    	        fail = true;
     	    }
     	}
+    	if(fail == false) {
+    		System.out.println("Database connection terminated");
+    	}
     }
-} 
+}
