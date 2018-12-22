@@ -42,18 +42,4 @@ public class main extends Application{
 		window.setScene(new Scene(root));
 		window.show();
 	}
-	public void showLoginWindow() throws IOException {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/login.fxml"));
-		Parent root = loader.load();
-		Stage stage = new Stage();
-		
-		LoginController controller = loader.getController();
-		controller.setStage(stage);					//send stage to controller
-		
-		stage.getIcons().add(new Image("file:./src/resources/icons/icons8-idea-40.png"));
-		stage.initStyle(StageStyle.UNDECORATED);
-		stage.setResizable(false);
-		stage.setScene(new Scene(root));
-		stage.showAndWait();
-	}
 }
