@@ -23,15 +23,15 @@
          <children>
             <AnchorPane layoutX="468.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="301.0" style="-fx-background-color: #2fa9f2;">
                <children>
-                  <JFXPasswordField fx:id="password" layoutX="41.0" layoutY="190.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="219.0" promptText="password" style="-fx-background-color: #299adb;" />
+                  <JFXTextField fx:id="username" layoutX="41.0" layoutY="136.0" prefHeight="25.0" prefWidth="219.0" promptText="Username" style="-fx-background-color: #299adb;" />
+                  <JFXPasswordField fx:id="password" layoutX="41.0" layoutY="190.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="219.0" promptText="Password" style="-fx-background-color: #299adb;" />
                   <ImageView fitHeight="82.0" fitWidth="89.0" layoutX="110.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../resources/icons/user_icon.png" />
                      </image>
                   </ImageView>
-                  <JFXButton fx:id="loginButton" layoutX="172.0" layoutY="246.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#loginButtonClicked" prefHeight="25.0" prefWidth="89.0" ripplerFill="BLACK" style="-fx-background-color: #f2782f;" text="Login" />
                   <JFXCheckBox fx:id="remember" checkedColor="#f2782f" layoutX="48.0" layoutY="250.0" text="Remember Me" />
-                  <JFXTextField fx:id="username" layoutX="41.0" layoutY="136.0" onKeyPressed="#tabPressed" prefHeight="25.0" prefWidth="219.0" promptText="username" style="-fx-background-color: #299adb;" />
+                  <JFXButton fx:id="loginButton" layoutX="172.0" layoutY="246.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#loginButtonClicked" onKeyPressed="#loginKeyPressed" prefHeight="25.0" prefWidth="89.0" ripplerFill="BLACK" style="-fx-background-color: #f2782f;" text="Login" />
                   <Label fx:id="loginAlert" layoutX="38.0" layoutY="301.0" text="Incorrect username/password combination" visible="false" />
                </children>
             </AnchorPane>
@@ -75,10 +75,10 @@
                         <Font size="22.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="registerConfirmButton" layoutX="126.0" layoutY="276.0" onAction="#confirmRegisterButtonClicked" prefHeight="25.0" prefWidth="135.0" style="-fx-background-color: #f2782f;" text="Confirm Registration" />
                   <JFXTextField fx:id="usernameRegister" layoutX="109.0" layoutY="103.0" prefHeight="25.0" prefWidth="170.0" promptText="Username" />
                   <JFXPasswordField fx:id="firstPassRegister" layoutX="109.0" layoutY="159.0" prefHeight="25.0" prefWidth="170.0" promptText="Password" />
-                  <JFXPasswordField fx:id="secondPassRegister" layoutX="109.0" layoutY="217.0" onKeyPressed="#reenterTabPressed" prefHeight="25.0" prefWidth="170.0" promptText="Re-enter Password" />
+                  <JFXPasswordField fx:id="secondPassRegister" layoutX="109.0" layoutY="217.0" prefHeight="25.0" prefWidth="170.0" promptText="Re-enter Password" />
+                  <JFXButton fx:id="registerConfirmButton" layoutX="126.0" layoutY="276.0" onAction="#confirmRegisterButtonClicked" onKeyPressed="#registerKeyPressed" prefHeight="25.0" prefWidth="135.0" style="-fx-background-color: #f2782f;" text="Confirm Registration" />
                   <ImageView fitHeight="46.0" fitWidth="45.0" layoutX="171.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../resources/icons/user_icon.png" />

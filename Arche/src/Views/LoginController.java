@@ -192,15 +192,21 @@ public class LoginController implements Initializable{
 		new Thread(midlayer).start();
 	}
 	@FXML
-	private void tabPressed(KeyEvent event) {
+	private void loginKeyPressed(KeyEvent event) {
 		if(event.getCode() == KeyCode.TAB) {
-			selectNode(password);
+			selectNode(username);
+		}
+		else if(event.getCode() == KeyCode.ENTER) {
+			loginButton.fire();
 		}
 	}
 	@FXML
-	private void reenterTabPressed(KeyEvent event) {
+	private void registerKeyPressed(KeyEvent event) {
 		if(event.getCode() == KeyCode.TAB) {
-			selectNode(registerConfirmButton);
+			selectNode(usernameRegister);
+		}
+		else if(event.getCode() == KeyCode.ENTER) {
+			registerConfirmButton.fire();
 		}
 	}
 	@FXML
