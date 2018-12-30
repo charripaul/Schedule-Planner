@@ -106,17 +106,19 @@ public class ModelControl {
 	public static void addTask(Task t) {
 		String classAbr = t.getClassAbr();
 		String type = t.getType();
-		if(tasks.size() == 0) {
+/*		if(tasks.size() == 0) {
 			t.setId(1);
 		}
 		else {
 			t.setId(tasks.get(tasks.size()-1).getId()+1);
-		}
+		}*/
+		
 		if(!t.isScheduled()) {
 			autoSchedule(t);
 		}
 		
-		Database.addTask(t);
+		int id = Database.addTask(t);
+		t.setId(id);
 		tasks.add(t);
 		for(int count = 0;count<classes.size();count++) {
 			if(classes.get(count).getAbbreviation().equals(classAbr)) {
@@ -133,53 +135,59 @@ public class ModelControl {
 		}
 	}
 	public static void addAdmin(Admin a) {
-		if(admins.size() == 0) {
+		/*if(admins.size() == 0) {
 			a.setId(1);
 		}
 		else {
 			a.setId(admins.get(admins.size()-1).getId()+1);
-		}
-		Database.addAdmin(a);
+		}*/
+		int id = Database.addAdmin(a);
+		a.setId(id);
 		admins.add(a);
 	}
 	public static void addClass(Class c) {
-		if(classes.size() == 0) {
+		/*if(classes.size() == 0) {
 			c.setId(1);
 		}
 		else {
 			c.setId(classes.get(classes.size()-1).getId()+1);
-		}
-		Database.addClass(c);
+		}*/
+		int id = Database.addClass(c);
+		c.setId(id);
 		classes.add(c);
 	}
 	public static void addProject(Project p) {
-		if(projects.size() == 0) {
+		/*if(projects.size() == 0) {
 			p.setId(1);
 		}
 		else {
 			p.setId(projects.get(projects.size()-1).getId()+1);
-		}
-		Database.addProject(p);
+		}*/
+		int id = Database.addProject(p);
+		p.setId(id);
 		projects.add(p);
 	}
 	public static void addTaskType(TaskType tt) {
-		if(taskTypes.size() == 0) {
+		/*if(taskTypes.size() == 0) {
 			tt.setId(1);
 		}
 		else {
 			tt.setId(taskTypes.get(taskTypes.size()-1).getId()+1);
-		}
-		Database.addTaskType(tt);
+		}*/
+		int id = Database.addTaskType(tt);
+		tt.setId(id);
 		taskTypes.add(tt);
 	}
 	public static void addUser(User u) {
-		if(users.size() == 0) {
+		/*if(users.size() == 0) {
 			u.setId(1);
 		}
 		else {
 			u.setId(users.get(users.size()-1).getId()+1);
-		}
-		Database.addUser(u);
+		}*/
+		
+		int id = Database.addUser(u);
+		u.setId(id);
 		users.add(u);
 	}
 	public static void updateTask(Task t) {

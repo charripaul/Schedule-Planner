@@ -9,9 +9,10 @@ import Runners.DBConn;
 public class Database {
 	static Statement stmt = null;
 	
-	public static void addTask(Task t) {
+	public static int addTask(Task t){
 		PreparedStatement prep = null;
-		
+		ResultSet rs = null;
+		int id = -1;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO Tasks VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);");
 			prep.setInt(1, t.getId());
@@ -29,12 +30,28 @@ public class Database {
 			prep.setLong(13, t.getScheduledEndTime());
 			prep.execute();
 			prep.close();
+			prep = null;
 		}catch(SQLException e) {
 			System.out.println("\nError DB01:\n" + e.getMessage());
 		}
+		
+		try {
+			prep = DBConn.getConnection().prepareStatement("SELECT id FROM Tasks ORDER BY id DESC LIMIT 1;");
+			rs = prep.executeQuery();
+			
+			while(rs.next()) {
+				id = rs.getInt("id");
+			}
+		}catch(SQLException e) {
+			System.out.println("\nError DB01b:\n" + e.getMessage());
+		}
+		
+		return id;
 	}
-	public static void addAdmin(Admin a) {
+	public static int addAdmin(Admin a) {
 		PreparedStatement prep = null;
+		ResultSet rs = null;
+		int id = -1;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO Admins VALUES (?,?,?);");
 			prep.setInt(1, a.getId());
@@ -42,12 +59,27 @@ public class Database {
 			prep.setString(3, a.getPassword());
 			prep.execute();
 			prep.close();
+			prep = null;
 		}catch(SQLException e) {
 			System.out.println("\nError DB02:\n" + e.getMessage());
 		}
+		
+		try {
+			prep = DBConn.getConnection().prepareStatement("SELECT id FROM Admins ORDER BY id DESC LIMIT 1;");
+			rs = prep.executeQuery();
+			
+			while(rs.next()) {
+				id = rs.getInt("id");
+			}
+		}catch(SQLException e) {
+			System.out.println("\nError DB02b:\n" + e.getMessage());
+		}
+		return id;
 	}
-	public static void addClass(Class c) {
+	public static int addClass(Class c) {
 		PreparedStatement prep = null;
+		ResultSet rs = null;
+		int id = -1;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO Classes VALUES (?,?,?,?,?,?,?,?,?);");
 			prep.setInt(1, c.getId());
@@ -61,12 +93,28 @@ public class Database {
 			prep.setString(9, c.getEndTime(""));
 			prep.execute();
 			prep.close();
+			prep = null;
 		}catch(SQLException e) {
 			System.out.println("\nError DB03:\n" + e.getMessage());
 		}
+		
+		try {
+			prep = DBConn.getConnection().prepareStatement("SELECT id FROM Classes ORDER BY id DESC LIMIT 1;");
+			rs = prep.executeQuery();
+			
+			while(rs.next()) {
+				id = rs.getInt("id");
+			}
+		}catch(SQLException e) {
+			System.out.println("\nError DB03b:\n" + e.getMessage());
+		}
+		
+		return id;
 	}
-	public static void addProject(Project p) {
+	public static int addProject(Project p) {
 		PreparedStatement prep = null;
+		ResultSet rs = null;
+		int id = -1;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO Projects VALUES (?,?,?,?,?,?);");
 			prep.setInt(1, p.getId());
@@ -77,12 +125,28 @@ public class Database {
 			prep.setInt(6, p.getPriorityLevel());
 			prep.execute();
 			prep.close();
+			prep = null;
 		}catch(SQLException e) {
 			System.out.println("\nError DB04:\n" + e.getMessage());
 		}
+		
+		try {
+			prep = DBConn.getConnection().prepareStatement("SELECT id FROM Projects ORDER BY id DESC LIMIT 1;");
+			rs = prep.executeQuery();
+			
+			while(rs.next()) {
+				id = rs.getInt("id");
+			}
+		}catch(SQLException e) {
+			System.out.println("\nError DB04b:\n" + e.getMessage());
+		}
+		
+		return id;
 	}
-	public static void addTaskType(TaskType tt) {
+	public static int addTaskType(TaskType tt) {
 		PreparedStatement prep = null;
+		ResultSet rs = null;
+		int id = -1;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO TaskTypes VALUES (?,?,?,?,?,?,?);");
 			prep.setInt(1, tt.getId());
@@ -94,12 +158,28 @@ public class Database {
 			prep.setInt(7, tt.getTotalAssignments());
 			prep.execute();
 			prep.close();
+			prep = null;
 		}catch(SQLException e) {
 			System.out.println("\nError DB05:\n" + e.getMessage());
 		}
+		
+		try {
+			prep = DBConn.getConnection().prepareStatement("SELECT id FROM TaskTypes ORDER BY id DESC LIMIT 1;");
+			rs = prep.executeQuery();
+			
+			while(rs.next()) {
+				id = rs.getInt("id");
+			}
+		}catch(SQLException e) {
+			System.out.println("\nError DB05b:\n" + e.getMessage());
+		}
+
+		return id;
 	}
-	public static void addUser(User u) {
+	public static int addUser(User u) {
 		PreparedStatement prep = null;
+		ResultSet rs = null;
+		int id = -1;
 		try {
 			prep = DBConn.getConnection().prepareStatement("INSERT INTO Users VALUES (?,?,?);");
 			prep.setInt(1, u.getId());
@@ -107,9 +187,23 @@ public class Database {
 			prep.setString(3, u.getPassword());
 			prep.execute();
 			prep.close();
+			prep = null;
 		}catch(SQLException e) {
 			System.out.println("\nError DB06:\n" + e.getMessage());
 		}
+		
+		try {
+			prep = DBConn.getConnection().prepareStatement("SELECT id FROM Users ORDER BY id DESC LIMIT 1;");
+			rs = prep.executeQuery();
+			
+			while(rs.next()) {
+				id = rs.getInt("id");
+			}
+		}catch(SQLException e) {
+			System.out.println("\nError DB06b:\n" + e.getMessage());
+		}
+		
+		return id;
 	}
 	public static void updateTask(Task t) {
 		PreparedStatement prep = null;

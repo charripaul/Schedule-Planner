@@ -9,7 +9,7 @@ public class DBConn {
     static {
     	System.out.println("Database connection initalized");
     }
-    public static Connection getConnection() {
+    public static Connection getConnection(){
     	if(con != null) {
     		try {
     			con.close();
@@ -22,15 +22,15 @@ public class DBConn {
     		try
             {
             	Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-    			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/scheduleplannerdb","root","trinity77");			//mysql, for testing
-    			//con = DriverManager.getConnection("jdbc:mysql://den1.mysql4.gear.host:3306/scheduleplannera","scheduleplannera","Watermelon77!");	//mysql, for production
+    			//con = DriverManager.getConnection("jdbc:mysql://localhost:3306/scheduleplannerdb","root","trinity77"); printLocal();			//mysql, for testing
+    			con = DriverManager.getConnection("jdbc:mysql://den1.mysql4.gear.host:3306/scheduleplannera","scheduleplannera","Watermelon77!"); printProd();	//mysql, for production
             }
             catch(Exception e)
             {
             	System.out.println("DBConnect error: " + e.getMessage());
             	System.out.println("Attempting to reconnect");
             	try {
-					Thread.sleep(5000);
+					Thread.sleep(3000);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
@@ -52,5 +52,11 @@ public class DBConn {
     	if(fail == false) {
     		System.out.println("Database connection terminated");
     	}
+    }
+    private static void printLocal() {
+    	System.out.println("Connecting to local database");
+    }
+    private static void printProd() {
+    	System.out.println("Connecting to production database");
     }
 }
