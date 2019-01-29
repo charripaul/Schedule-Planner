@@ -21,7 +21,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import tornadofx.control.DateTimePicker;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
@@ -31,6 +33,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Button;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -53,6 +56,7 @@ public class NewTaskController implements Initializable{
 	@FXML private JFXButton confirmInfo, cancelInfo;
 	@FXML private TextField noticePeriod;
 	@FXML private TextField hours, minutes;		//timeToComplete
+	@FXML private Label warningLabel;
 	
 	//table tab
 	@FXML private JFXButton confirmAll, cancelAll;
@@ -61,6 +65,11 @@ public class NewTaskController implements Initializable{
 	@FXML private TableColumn<Task, String> nameColumn, descriptionColumn;
 	@FXML private TableColumn<Task, Boolean> scheduledColumn;
 	
+	//ui loading
+	@FXML public AnchorPane loadingPane;
+	@FXML private JFXButton cancelLoadingButton;
+	@FXML private Label loadingText;
+	
 	private ObservableList<Task> viewableTaskList;
 	private ArrayList<Task> taskList;
 	private Task taskTemp;
@@ -68,11 +77,16 @@ public class NewTaskController implements Initializable{
 	private boolean isOnAdd;			//test if got to confirmInfo from edit or add button
 	private int sIndex;
 	
-	public NewTaskController() {
+	private MainNewController mainWindow;
+	
+	public NewTaskController(MainNewController mw) {
 		taskList = new ArrayList<Task>();
+		mainWindow = mw;
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		warningLabel.setVisible(false);
+		
 		dueDate.setFormat("MM/dd/yyyy hh:mm a");
 		scheduledStartTime.setFormat("MM/dd/yyyy hh:mm a");
 		scheduledEndTime.setFormat("MM/dd/yyyy hh:mm a");
@@ -110,7 +124,9 @@ public class NewTaskController implements Initializable{
 		scheduledColumn.setSortable(false);
 		
 		viewableTaskList = FXCollections.observableArrayList();
+		loadingPane.setVisible(false);
 		initializeCloseEventProperty();
+		setValidators();
 		resetTabPane();
 	}
 	@FXML
@@ -277,6 +293,23 @@ public class NewTaskController implements Initializable{
 	        }
 	    }
 	}
+	private void setValidators() {
+		
+	}
+	private boolean checkValidation() {
+		return true;
+	}
+	private void displayWarningLabel(String s) {
+		warningLabel.setText(s);
+		warningLabel.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(3)
+		);
+		visiblePause.setOnFinished(
+		        event -> warningLabel.setVisible(false)
+		);
+		visiblePause.play();
+	}
 	@FXML
 	private void setCloseEvent() {
 		Stage window = (Stage) description.getScene().getWindow();
@@ -351,6 +384,9 @@ public class NewTaskController implements Initializable{
 	}
 	private void closeWindow(boolean answer) {
 		if(answer == true) {
+			if(loadingPane.isVisible()) {
+				mainWindow.displayConnectionTimeOut();
+			}
 			closeWindow();
 		}
 	}

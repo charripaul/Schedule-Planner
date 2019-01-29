@@ -24,7 +24,7 @@
             <AnchorPane layoutX="468.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="301.0" style="-fx-background-color: #2fa9f2;">
                <children>
                   <JFXTextField fx:id="username" layoutX="41.0" layoutY="136.0" prefHeight="25.0" prefWidth="219.0" promptText="Username" style="-fx-background-color: #299adb;" />
-                  <JFXPasswordField fx:id="password" layoutX="41.0" layoutY="190.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="219.0" promptText="Password" style="-fx-background-color: #299adb;" />
+                  <JFXPasswordField fx:id="password" layoutX="41.0" layoutY="190.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#enterPressedOnPW" prefHeight="25.0" prefWidth="219.0" promptText="Password" style="-fx-background-color: #299adb;" />
                   <ImageView fitHeight="82.0" fitWidth="89.0" layoutX="110.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../resources/icons/user_icon.png" />

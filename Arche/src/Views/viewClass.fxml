@@ -2,54 +2,75 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXSpinner?>
 <?import com.jfoenix.controls.JFXTimePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="637.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <Label text="View Class" BorderPane.alignment="CENTER">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-   </top>
-   <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label layoutX="47.0" layoutY="45.0" text="Name:" />
-            <Label layoutX="233.0" layoutY="45.0" text="Abbreviation:" />
-            <Label layoutX="47.0" layoutY="120.0" text="Details:" />
-            <Label layoutX="446.0" layoutY="45.0" text="Days of Week:" />
-            <Label layoutX="382.0" layoutY="246.0" text="Start Time:" />
-            <Label layoutX="446.0" layoutY="14.0" text="Total Assignments:" />
-            <TextField fx:id="name" layoutX="47.0" layoutY="71.0" />
-            <TextField fx:id="abbreviation" layoutX="233.0" layoutY="71.0" />
-            <TextArea fx:id="details" layoutX="47.0" layoutY="146.0" prefHeight="200.0" prefWidth="322.0" />
-            <Label fx:id="totalAssignments" layoutX="578.0" layoutY="14.0" text="0" />
-            <VBox layoutX="446.0" layoutY="68.0" spacing="5.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="637.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane layoutX="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="637.0">
+         <top>
+            <Label text="View Class" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </top>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <JFXCheckBox fx:id="sunday" text="Sunday" />
-                  <JFXCheckBox fx:id="monday" text="Monday" />
-                  <JFXCheckBox fx:id="tuesday" text="Tuesday" />
-                  <JFXCheckBox fx:id="wednesday" text="Wednesday" />
-                  <JFXCheckBox fx:id="thursday" text="Thursday" />
-                  <JFXCheckBox fx:id="friday" text="Friday" />
-                  <JFXCheckBox fx:id="saturday" text="Saturday" />
+                  <Label layoutX="47.0" layoutY="45.0" text="Name:" />
+                  <Label layoutX="233.0" layoutY="45.0" text="Abbreviation:" />
+                  <Label layoutX="47.0" layoutY="120.0" text="Details:" />
+                  <Label layoutX="446.0" layoutY="45.0" text="Days of Week:" />
+                  <Label layoutX="382.0" layoutY="246.0" text="Start Time:" />
+                  <Label layoutX="446.0" layoutY="14.0" text="Total Assignments:" />
+                  <TextField fx:id="name" layoutX="47.0" layoutY="71.0" />
+                  <TextField fx:id="abbreviation" layoutX="233.0" layoutY="71.0" />
+                  <TextArea fx:id="details" layoutX="47.0" layoutY="146.0" prefHeight="200.0" prefWidth="322.0" />
+                  <Label fx:id="totalAssignments" layoutX="578.0" layoutY="14.0" text="0" />
+                  <VBox layoutX="446.0" layoutY="68.0" spacing="5.0">
+                     <children>
+                        <JFXCheckBox fx:id="sunday" text="Sunday" />
+                        <JFXCheckBox fx:id="monday" text="Monday" />
+                        <JFXCheckBox fx:id="tuesday" text="Tuesday" />
+                        <JFXCheckBox fx:id="wednesday" text="Wednesday" />
+                        <JFXCheckBox fx:id="thursday" text="Thursday" />
+                        <JFXCheckBox fx:id="friday" text="Friday" />
+                        <JFXCheckBox fx:id="saturday" text="Saturday" />
+                     </children>
+                  </VBox>
+                  <JFXTimePicker fx:id="startTime" layoutX="410.0" layoutY="263.0" />
+                  <Label layoutX="382.0" layoutY="298.0" text="End Time:" />
+                  <JFXTimePicker fx:id="endTime" layoutX="410.0" layoutY="315.0" />
+                  <JFXButton fx:id="deleteButton" buttonType="RAISED" layoutX="14.0" layoutY="372.0" onAction="#deleteButtonClicked" style="-fx-background-color: #f2782f;" text="Delete" />
+                  <JFXButton fx:id="saveButton" buttonType="RAISED" layoutX="549.0" layoutY="372.0" onAction="#saveButtonClicked" style="-fx-background-color: #f2782f;" text="Save/Close" />
+                  <Label fx:id="warningLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="210.0" layoutY="376.0" text="Warning Label" textAlignment="CENTER" />
                </children>
-            </VBox>
-            <JFXTimePicker fx:id="startTime" layoutX="410.0" layoutY="263.0" />
-            <Label layoutX="382.0" layoutY="298.0" text="End Time:" />
-            <JFXTimePicker fx:id="endTime" layoutX="410.0" layoutY="315.0" />
-            <JFXButton fx:id="deleteButton" buttonType="RAISED" layoutX="14.0" layoutY="372.0" onAction="#deleteButtonClicked" style="-fx-background-color: #f2782f;" text="Delete" />
-            <JFXButton fx:id="saveButton" buttonType="RAISED" layoutX="549.0" layoutY="372.0" onAction="#saveButtonClicked" style="-fx-background-color: #f2782f;" text="Save/Close" />
-            <Label fx:id="warningLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="210.0" layoutY="376.0" text="Warning Label" textAlignment="CENTER" />
+            </AnchorPane>
+         </center>
+      </BorderPane>
+      <AnchorPane fx:id="loadingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="637.0" visible="false">
+         <children>
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.6" prefHeight="438.0" prefWidth="637.0" style="-fx-background-color: #d4d4d4;">
+               <children>
+                  <Label fx:id="loadingText" layoutX="282.0" layoutY="248.0" text="Updating">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <JFXSpinner layoutX="294.0" layoutY="183.0" />
+                  <JFXButton fx:id="cancelLoadingButton" blendMode="MULTIPLY" layoutX="274.0" layoutY="334.0" text="Cancel" visible="false" />
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
-   </center>
-</BorderPane>
+   </children>
+</AnchorPane>

@@ -2,6 +2,7 @@ package Views;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,9 +28,12 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTreeTableView;
 
+import javafx.concurrent.*;
+import javafx.concurrent.WorkerStateEvent;
 import Models.ModelControl;
 import Models.Task;
 import Models.TaskType;
+import Runners.DBConn;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -40,6 +44,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -64,6 +69,7 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.CheckBoxTreeTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -97,12 +103,12 @@ public class MainNewController implements Initializable{
 	
 	//notifications (subset of home)
 	@FXML private JFXTreeTableView homeTreeTable;
-	@FXML private TreeTableColumn<Task, String> nameTreeTableCol;
-	@FXML private TreeTableColumn<Task, String> descTreeTableCol;
-	@FXML private TreeTableColumn<Task, String> typeTreeTableCol;
-	@FXML private TreeTableColumn<Task, String> classTreeTableCol;
-	@FXML private TreeTableColumn<Task, String> dueDateTreeTableCol;
-	@FXML private TreeTableColumn<Task, Boolean> completedTreeTableCol;
+	@FXML private TreeTableColumn<Models.Task, String> nameTreeTableCol;
+	@FXML private TreeTableColumn<Models.Task, String> descTreeTableCol;
+	@FXML private TreeTableColumn<Models.Task, String> typeTreeTableCol;
+	@FXML private TreeTableColumn<Models.Task, String> classTreeTableCol;
+	@FXML private TreeTableColumn<Models.Task, String> dueDateTreeTableCol;
+	@FXML private TreeTableColumn<Models.Task, Boolean> completedTreeTableCol;
 	//schedule (subset of home)
 	@FXML private JFXButton homeScheduleViewButton;
 	@FXML private JFXButton homeScheduleAddButton;
@@ -156,13 +162,13 @@ public class MainNewController implements Initializable{
 	
 	//task tab
 	@FXML private BorderPane taskView;
-	@FXML private TableView<Task> taskTable;
-	@FXML private TableColumn<Task, String> taskNameColumn;
-	@FXML private TableColumn<Task, String> taskDescriptionColumn;
-	@FXML private TableColumn<Task, String> taskTypeColumn;
-	@FXML private TableColumn<Task, String> taskClassColumn;
-	@FXML private TableColumn<Task, LocalDateTime> taskDueDateColumn;
-	@FXML private TableColumn<Task, Boolean> taskCompletedColumn;
+	@FXML private TableView<Models.Task> taskTable;
+	@FXML private TableColumn<Models.Task, String> taskNameColumn;
+	@FXML private TableColumn<Models.Task, String> taskDescriptionColumn;
+	@FXML private TableColumn<Models.Task, String> taskTypeColumn;
+	@FXML private TableColumn<Models.Task, String> taskClassColumn;
+	@FXML private TableColumn<Models.Task, LocalDateTime> taskDueDateColumn;
+	@FXML private TableColumn<Models.Task, Boolean> taskCompletedColumn;
 	@FXML private JFXButton taskAddButton;
 	@FXML private JFXButton taskViewButton;
 	
@@ -188,9 +194,14 @@ public class MainNewController implements Initializable{
 	@FXML private TableColumn<TaskType, String> typeTTCColumn;
 	@FXML private TableColumn<TaskType, Integer> typeTAColumn;
 	
+	//reconnecting panes
+	@FXML private BorderPane loadingPane;
+	@FXML private JFXButton cancelLoadingButton;
+	@FXML private Label loadingText;
+	
 	//for measuring time between clicks for double click feature
-	Task homeTemp;
-	Task taskTemp;
+	Models.Task homeTemp;
+	Models.Task taskTemp;
 	Models.Class classTemp;
 	TaskType typeTemp;
 	Pane paneTemp;
@@ -208,14 +219,15 @@ public class MainNewController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		calendarToday.setTimeZone(TimeZone.getDefault());
+		loadingPane.setVisible(false);
 		initializeLabels();
 		homeButton.fire();
 		createLists();
 	}
 	private void initializeLabels() {
-		ArrayList<Task> tableTasks = ModelControl.getUrgentTasks("get for todays labels");
-		ArrayList<Task> overDueTasks = ModelControl.getOverdueTasks("get for todays labels");
-		ArrayList<Task> dueSoonTasks = ModelControl.getApproachingTasks("get for todays labels");
+		ArrayList<Models.Task> tableTasks = ModelControl.getUrgentTasks("get for todays labels");
+		ArrayList<Models.Task> overDueTasks = ModelControl.getOverdueTasks("get for todays labels");
+		ArrayList<Models.Task> dueSoonTasks = ModelControl.getApproachingTasks("get for todays labels");
 		
 		urgentLabel.setText(tableTasks.size() + "");
 		overdueLabel.setText(overDueTasks.size() + "");
@@ -233,23 +245,23 @@ public class MainNewController implements Initializable{
 		dailyTaskDateLabel.setText(sdf.format(date));
 		
 		nameTreeTableCol.setCellValueFactory(
-	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
+	            (TreeTableColumn.CellDataFeatures<Models.Task, String> param) -> 
 	            new ReadOnlyStringWrapper(param.getValue().getValue().getName())
 				);
 		descTreeTableCol.setCellValueFactory(
-	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
+	            (TreeTableColumn.CellDataFeatures<Models.Task, String> param) -> 
 	            new ReadOnlyStringWrapper(param.getValue().getValue().getDescription())
 	        );
 		typeTreeTableCol.setCellValueFactory(
-	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
+	            (TreeTableColumn.CellDataFeatures<Models.Task, String> param) -> 
 	            new ReadOnlyStringWrapper(param.getValue().getValue().getType())
 	        );
 		classTreeTableCol.setCellValueFactory(
-	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
+	            (TreeTableColumn.CellDataFeatures<Models.Task, String> param) -> 
 	            new ReadOnlyStringWrapper(param.getValue().getValue().getClassAbr())
 	        );
 		dueDateTreeTableCol.setCellValueFactory(
-	            (TreeTableColumn.CellDataFeatures<Task, String> param) -> 
+	            (TreeTableColumn.CellDataFeatures<Models.Task, String> param) -> 
 	            new ReadOnlyStringWrapper(param.getValue().getValue().getDueDate(0))
 	        );
 		/*final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
@@ -326,14 +338,14 @@ public class MainNewController implements Initializable{
 		initializeCalendarData();
 	}
 	private void initializeTasks() {
-		taskNameColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("name"));
-		taskDescriptionColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
-		taskTypeColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("type"));
-		taskClassColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("classAbr"));
+		taskNameColumn.setCellValueFactory(new PropertyValueFactory<Models.Task, String>("name"));
+		taskDescriptionColumn.setCellValueFactory(new PropertyValueFactory<Models.Task, String>("description"));
+		taskTypeColumn.setCellValueFactory(new PropertyValueFactory<Models.Task, String>("type"));
+		taskClassColumn.setCellValueFactory(new PropertyValueFactory<Models.Task, String>("classAbr"));
 		
 		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
 		taskDueDateColumn.setCellValueFactory(Task -> Task.getValue().getDueDate(""));
-		taskDueDateColumn.setCellFactory(taskDueDateColumn -> new TableCell<Task, LocalDateTime>() {
+		taskDueDateColumn.setCellFactory(taskDueDateColumn -> new TableCell<Models.Task, LocalDateTime>() {
 		    @Override
 		    protected void updateItem(LocalDateTime item, boolean empty) {
 		        super.updateItem(item, empty);
@@ -425,32 +437,32 @@ public class MainNewController implements Initializable{
 	@SuppressWarnings("unchecked")
 	private void initializeHomeData() {
 		//dailyTreeTableView.getRoot().getChildren().clear();
-		ArrayList<Task> tableTasks = ModelControl.getUrgentTasks();
-		ArrayList<Task> overDueTasks = ModelControl.getOverdueTasks();
-		ArrayList<Task> dueSoonTasks = ModelControl.getApproachingTasks();
+		ArrayList<Models.Task> tableTasks = ModelControl.getUrgentTasks();
+		ArrayList<Models.Task> overDueTasks = ModelControl.getOverdueTasks();
+		ArrayList<Models.Task> dueSoonTasks = ModelControl.getApproachingTasks();
 		
 		homeTreeTable.setShowRoot(false);
 		
-		TreeItem<Task> root = new TreeItem<>();
+		TreeItem<Models.Task> root = new TreeItem<>();
 		
 		boolean dueComplete = generateCompleteBoolean(tableTasks);
 		boolean overdueComplete = generateCompleteBoolean(overDueTasks);
 		boolean soonComplete = generateCompleteBoolean(dueSoonTasks);
 			
-		TreeItem<Task> due = new TreeItem<>(new Task("Urgent",dueComplete));	
-		TreeItem<Task> overdue = new TreeItem<>(new Task("Overdue",overdueComplete));
-		TreeItem<Task> soon = new TreeItem<>(new Task("Approaching",soonComplete));
+		TreeItem<Models.Task> due = new TreeItem<>(new Models.Task("Urgent",dueComplete));	
+		TreeItem<Models.Task> overdue = new TreeItem<>(new Models.Task("Overdue",overdueComplete));
+		TreeItem<Models.Task> soon = new TreeItem<>(new Models.Task("Approaching",soonComplete));
 		
 		for(int count = 0;count<tableTasks.size();count++) {
-			TreeItem<Task> val = new TreeItem<>(tableTasks.get(count));
+			TreeItem<Models.Task> val = new TreeItem<>(tableTasks.get(count));
 			due.getChildren().add(val);
 		}
 		for(int count = 0;count<overDueTasks.size();count++) {
-			TreeItem<Task> val = new TreeItem<>(overDueTasks.get(count));
+			TreeItem<Models.Task> val = new TreeItem<>(overDueTasks.get(count));
 			overdue.getChildren().add(val);
 		}
 		for(int count = 0;count<dueSoonTasks.size();count++) {
-			TreeItem<Task> val = new TreeItem<>(dueSoonTasks.get(count));
+			TreeItem<Models.Task> val = new TreeItem<>(dueSoonTasks.get(count));
 			soon.getChildren().add(val);
 		}
 		
@@ -524,7 +536,7 @@ public class MainNewController implements Initializable{
 				int dateNum = Integer.parseInt(labelList.get(count).getText());
 				Calendar cal = (Calendar) guicalendar.clone();
 				cal.set(Calendar.DATE, dateNum);
-				ArrayList<Task> tasks = ModelControl.getDayTasks(cal);
+				ArrayList<Models.Task> tasks = ModelControl.getDayTasks(cal);
 				String text = "";
 				if(tasks.size() == 0) {
 					//do nothing
@@ -564,10 +576,16 @@ public class MainNewController implements Initializable{
 		int sIndex = taskTable.getSelectionModel().getSelectedIndex();
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("newTask.fxml"));
+			
+			NewTaskController controller = new NewTaskController(this);
+			loader.setController(controller);
+			
 			Scene addWindow = new Scene(loader.load());
 			Stage stage = new Stage();
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initStyle(StageStyle.UTILITY);
+			stage.setResizable(false);
+			
 			stage.setScene(addWindow);
 			stage.showAndWait();
 			initializeTasks();
@@ -576,7 +594,7 @@ public class MainNewController implements Initializable{
 				taskTable.getSelectionModel().select(sIndex);
 			}
 			else {
-				ArrayList<Task> tasks = ModelControl.getTasks();
+				ArrayList<Models.Task> tasks = ModelControl.getTasks();
 				for(int count = 0;count<taskTable.getItems().size();count++) {
 					if(tasks.get(tasks.size()-1).getId() == taskTable.getItems().get(count).getId()) {
 						taskTable.getSelectionModel().select(count);
@@ -593,21 +611,22 @@ public class MainNewController implements Initializable{
 	@FXML
 	private void taskViewButtonClicked() {
 		//highlighted row in table
-		Task selected = taskTable.getSelectionModel().selectedItemProperty().get();
+		Models.Task selected = taskTable.getSelectionModel().selectedItemProperty().get();
 		int sIndex = taskTable.getSelectionModel().getSelectedIndex();
 		if(selected != null) {
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("viewTask.fxml"));
 				
 				//pass in values from selected row
-				ViewTaskController controller = new ViewTaskController(selected);
-				
+				ViewTaskController controller = new ViewTaskController(selected, this);
 				loader.setController(controller);
-				Scene viewWindow = new Scene(loader.load());
 				
+				Scene viewWindow = new Scene(loader.load());
 				Stage stage = new Stage();
 				stage.initModality(Modality.APPLICATION_MODAL);
 				stage.initStyle(StageStyle.UTILITY);
+				stage.setResizable(false);
+				
 				stage.setScene(viewWindow);
 				stage.showAndWait();
 				initializeTasks();
@@ -633,17 +652,21 @@ public class MainNewController implements Initializable{
 	    }
 	    Calendar cal = (Calendar) guicalendar.clone();
 		cal.set(Calendar.DATE, dateNum);
-		ArrayList<Task> tasks = ModelControl.getDayTasks(cal);
+		ArrayList<Models.Task> tasks = ModelControl.getDayTasks(cal);
 		
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("viewCellTasks.fxml"));
+			
 			//pass in values from selected row
-			ViewCellTasksController controller = new ViewCellTasksController(tasks);
+			ViewCellTasksController controller = new ViewCellTasksController(tasks, this);
 			loader.setController(controller);
+			
 			Scene viewWindow = new Scene(loader.load());
 			Stage stage = new Stage();
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initStyle(StageStyle.UTILITY);
+			stage.setResizable(false);
+			
 			stage.setScene(viewWindow);
 			stage.showAndWait();
 			initializeCalendar();
@@ -661,13 +684,20 @@ public class MainNewController implements Initializable{
 		int sIndex = classTable.getSelectionModel().getSelectedIndex();
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("newClass.fxml"));
+			
+			NewClassController controller = new NewClassController(this);
+			loader.setController(controller);
+			
 			Scene addWindow = new Scene(loader.load());
 			Stage stage = new Stage();
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initStyle(StageStyle.UTILITY);
+			stage.setResizable(false);
+			
 			stage.setScene(addWindow);
 			stage.showAndWait();
 			initializeClass();
+			
 			//select correct row after closing add window
 			if(size == classTable.getItems().size()) {
 				classTable.getSelectionModel().select(sIndex);
@@ -695,14 +725,15 @@ public class MainNewController implements Initializable{
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("viewClass.fxml"));
 				
 				//pass in values from selected row
-				ViewClassController controller = new ViewClassController(selected);
-				
+				ViewClassController controller = new ViewClassController(selected, this);
 				loader.setController(controller);
-				Scene viewWindow = new Scene(loader.load());
 				
+				Scene viewWindow = new Scene(loader.load());
 				Stage stage = new Stage();
 				stage.initModality(Modality.APPLICATION_MODAL);
 				stage.initStyle(StageStyle.UTILITY);
+				stage.setResizable(false);
+				
 				stage.setScene(viewWindow);
 				stage.showAndWait();
 				initializeClass();
@@ -722,10 +753,16 @@ public class MainNewController implements Initializable{
 		int sIndex = typeTable.getSelectionModel().getSelectedIndex();
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("newType.fxml"));
+			
+			NewTypeController controller = new NewTypeController(this);	
+			loader.setController(controller);
+			
 			Scene addWindow = new Scene(loader.load());
 			Stage stage = new Stage();
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initStyle(StageStyle.UTILITY);
+			stage.setResizable(false);
+			
 			stage.setScene(addWindow);
 			stage.showAndWait();
 			initializeClass();
@@ -742,7 +779,7 @@ public class MainNewController implements Initializable{
 				}
 			}
 		}catch(IOException e) {
-			System.out.println("\nError code: Pouch\n" + e.getMessage());
+			System.out.println("\nError code: Fume\n" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -756,14 +793,15 @@ public class MainNewController implements Initializable{
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("viewType.fxml"));
 				
 				//pass in values from selected row
-				ViewTypeController controller = new ViewTypeController(selected);
-				
+				ViewTypeController controller = new ViewTypeController(selected, this);
 				loader.setController(controller);
-				Scene viewWindow = new Scene(loader.load());
 				
+				Scene viewWindow = new Scene(loader.load());
 				Stage stage = new Stage();
 				stage.initModality(Modality.APPLICATION_MODAL);
 				stage.initStyle(StageStyle.UTILITY);
+				stage.setResizable(false);
+				
 				stage.setScene(viewWindow);
 				stage.showAndWait();
 				initializeClass();
@@ -780,8 +818,8 @@ public class MainNewController implements Initializable{
 	//open view window on double click
 	@FXML
 	private void handleHomeClick() {
-		TreeItem<Task> item = (TreeItem<Task>) homeTreeTable.getSelectionModel().getSelectedItem();
-		Task row = null;
+		TreeItem<Models.Task> item = (TreeItem<Models.Task>) homeTreeTable.getSelectionModel().getSelectedItem();
+		Models.Task row = null;
 		Object test = null;
 		try {
 			test = item.getValue();
@@ -790,7 +828,7 @@ public class MainNewController implements Initializable{
 		}
 		
 		if(test != null) {
-			row = (Task) item.getValue();
+			row = (Models.Task) item.getValue();
 		}
 	    if(row == null) return;
 	    if(row != homeTemp){
@@ -808,14 +846,15 @@ public class MainNewController implements Initializable{
 	    				FXMLLoader loader = new FXMLLoader(getClass().getResource("viewTask.fxml"));
 	    				
 	    				//pass in values from selected row
-	    				ViewTaskController controller = new ViewTaskController(row);
-	    				
+	    				ViewTaskController controller = new ViewTaskController(row, this);
 	    				loader.setController(controller);
-	    				Scene viewWindow = new Scene(loader.load());
 	    				
+	    				Scene viewWindow = new Scene(loader.load());
 	    				Stage stage = new Stage();
 	    				stage.initModality(Modality.APPLICATION_MODAL);
 	    				stage.initStyle(StageStyle.UTILITY);
+	    				stage.setResizable(false);
+	    				
 	    				stage.setScene(viewWindow);
 	    				stage.showAndWait();
 	    				initializeHome();
@@ -834,7 +873,7 @@ public class MainNewController implements Initializable{
 	}
 	@FXML
 	private void handleTaskClick() {
-	    Task row = taskTable.getSelectionModel().getSelectedItem();
+		Models.Task row = taskTable.getSelectionModel().getSelectedItem();
 	    if(row == null) return;
 	    if(row != taskTemp){
 	        taskTemp = row;
@@ -1036,7 +1075,7 @@ public class MainNewController implements Initializable{
 			return false;
 		}
 	}
-	private boolean generateCompleteBoolean(ArrayList<Task> vals) {
+	private boolean generateCompleteBoolean(ArrayList<Models.Task> vals) {
 		if(vals.size()==0) {
 			return true;
 		}
@@ -1074,6 +1113,73 @@ public class MainNewController implements Initializable{
 	}
 	private int getYear() {
 		return guicalendar.get(Calendar.YEAR);
+	}
+	public void displayConnectionTimeOut() {
+		loadingPane.setVisible(true);
+		
+		javafx.concurrent.Task<Boolean> connectThread = new javafx.concurrent.Task<Boolean>() {
+			@Override
+			public Boolean call() throws InterruptedException{
+				Connection con = DBConn.getConnection();
+				if(con != null) {
+					try {
+						Thread.sleep(1500);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					return true;
+				}
+				return false;
+			}
+		};
+		connectThread.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
+			@Override
+			public void handle(WorkerStateEvent event) {
+				boolean result = connectThread.getValue();
+				if(result) {
+					ModelControl.initialize();
+					
+					if(homeView.isVisible()) {
+						homeButton.fire();
+					}
+					else if(calendarView.isVisible()){
+						calendarButton.fire();
+					}
+					else if(taskView.isVisible()) {
+						taskButton.fire();
+					}
+					else if(classView.isVisible()) {
+						classButton.fire();
+					}
+					
+					loadingPane.setVisible(false);
+				}
+			}
+		});
+		
+		javafx.concurrent.Task<Boolean> midlayer = new javafx.concurrent.Task<Boolean>() {
+			@Override
+			public Boolean call() {
+				long timeoutTime = 30000;		//30 secs
+				boolean success = false;
+				
+				while(success == false) {
+					TimeOut t = new TimeOut(new Thread(connectThread), timeoutTime, true);
+					try {                       
+					  success = t.execute(); 	// Will return false if this times out, this freezes thread
+					} catch (InterruptedException e) {}
+					try {
+						Thread.sleep(60000);	//try connect again in 60 secs
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				return true;
+			}
+		};
+		
+		new Thread(midlayer).start();
 	}
 	private void resetViews() {
 		homeView.setVisible(false);

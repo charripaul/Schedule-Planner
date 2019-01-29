@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXSpinner?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
@@ -11,7 +12,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.effect.Bloom?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -26,743 +26,776 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.ImageViewButton?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.MainNewController">
-   <left>
-      <VBox depthTest="DISABLE" prefHeight="720.0" prefWidth="244.0" style="-fx-background-color: #373838;">
-         <children>
-            <Pane prefHeight="127.0" prefWidth="244.0" style="-fx-background-color: #2a2a2b;">
+<StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.MainNewController">
+   <children>
+      <BorderPane prefHeight="720.0" prefWidth="1280.0">
+         <left>
+            <VBox depthTest="DISABLE" prefHeight="720.0" prefWidth="244.0" style="-fx-background-color: #373838;">
                <children>
-                  <Label layoutX="33.0" layoutY="46.0" text="Schedule Planner" textFill="WHITE">
-                     <font>
-                        <Font name="System Italic" size="24.0" />
-                     </font>
-                     <effect>
-                        <Bloom />
-                     </effect>
-                  </Label>
-               </children>
-            </Pane>
-            <JFXButton fx:id="homeButton" alignment="BASELINE_LEFT" onAction="#homeButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Home" textFill="WHITE">
-               <graphic>
-                  <ImageViewButton fitHeight="29.0" fitWidth="32.0">
-                     <image>
-                        <Image url="@../resources/icons/white/home.png" />
-                     </image>
-                  </ImageViewButton>
-               </graphic>
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <padding>
-                  <Insets left="40.0" />
-               </padding>
-            </JFXButton>
-            <JFXButton fx:id="calendarButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#calendarButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Calendar" textFill="WHITE">
-               <graphic>
-                  <ImageViewButton fitHeight="29.0" fitWidth="32.0">
-                     <image>
-                        <Image url="@../resources/icons/white/calendar.png" />
-                     </image>
-                  </ImageViewButton>
-               </graphic>
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <padding>
-                  <Insets left="40.0" />
-               </padding>
-            </JFXButton>
-            <JFXButton fx:id="taskButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#taskButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Tasks" textFill="WHITE">
-               <graphic>
-                  <ImageViewButton fitHeight="29.0" fitWidth="32.0">
-                     <image>
-                        <Image url="@../resources/icons/white/list.png" />
-                     </image>
-                  </ImageViewButton>
-               </graphic>
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <padding>
-                  <Insets left="40.0" />
-               </padding>
-            </JFXButton>
-            <JFXButton fx:id="classButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#classButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Classes" textFill="WHITE">
-               <graphic>
-                  <ImageViewButton fitHeight="29.0" fitWidth="32.0">
-                     <image>
-                        <Image url="@../resources/icons/white/briefcase.png" />
-                     </image>
-                  </ImageViewButton>
-               </graphic>
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <padding>
-                  <Insets left="40.0" />
-               </padding>
-            </JFXButton>
-            <Pane prefHeight="114.0" prefWidth="244.0" VBox.vgrow="ALWAYS" />
-            <VBox>
-               <children>
-                  <HBox>
+                  <Pane prefHeight="127.0" prefWidth="244.0" style="-fx-background-color: #2a2a2b;">
                      <children>
-                        <Label text="Urgent Tasks: " textFill="WHITE" />
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <Label fx:id="urgentLabel" text="0" textFill="WHITE" />
+                        <Label layoutX="33.0" layoutY="46.0" text="Schedule Planner" textFill="WHITE">
+                           <font>
+                              <Font name="System Italic" size="24.0" />
+                           </font>
+                           <effect>
+                              <Bloom />
+                           </effect>
+                        </Label>
                      </children>
-                  </HBox>
-                  <HBox>
-                     <children>
-                        <Label text="Approaching Tasks: " textFill="WHITE" />
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <Label fx:id="approachingLabel" text="0" textFill="WHITE" />
-                     </children>
-                  </HBox>
-                  <HBox>
-                     <children>
-                        <Label text="Overdue Tasks: " textFill="WHITE" />
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <Label fx:id="overdueLabel" text="0" textFill="WHITE" />
-                     </children>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets left="15.0" right="15.0" />
-               </padding>
-            </VBox>
-            <HBox prefHeight="51.0" prefWidth="244.0" visible="false">
-               <children>
-                  <Pane prefHeight="81.0" prefWidth="83.0" />
-                  <JFXButton prefHeight="81.0" prefWidth="85.0" text=" " textFill="WHITE">
+                  </Pane>
+                  <JFXButton fx:id="homeButton" alignment="BASELINE_LEFT" onAction="#homeButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Home" textFill="WHITE">
                      <graphic>
-                        <ImageViewButton fitHeight="34.0" fitWidth="39.0">
+                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
                            <image>
-                              <Image url="@../resources/icons/white/settings.png" />
+                              <Image url="@../resources/icons/white/home.png" />
                            </image>
                         </ImageViewButton>
                      </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets left="40.0" />
+                     </padding>
                   </JFXButton>
-                  <Pane prefHeight="81.0" prefWidth="82.0" />
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-   </left>
-   <center>
-      <StackPane BorderPane.alignment="CENTER">
-         <children>
-            <BorderPane fx:id="homeView" prefHeight="200.0" prefWidth="200.0">
-               <center>
-                  <JFXTabPane stylesheets="@ColorScheme.css" BorderPane.alignment="CENTER">
-                     <tabs>
-                        <Tab closable="false" text="Notifications">
-                           <content>
-                              <JFXTreeTableView fx:id="homeTreeTable" onMouseClicked="#handleHomeClick">
-                                 <columns>
-                                    <TreeTableColumn fx:id="nameTreeTableCol" prefWidth="125.0" text="Name" />
-                                    <TreeTableColumn fx:id="descTreeTableCol" prefWidth="336.0" text="Description" />
-                                    <TreeTableColumn fx:id="typeTreeTableCol" minWidth="0.0" prefWidth="120.0" text="Type" />
-                                    <TreeTableColumn fx:id="classTreeTableCol" prefWidth="114.0" text="Class" />
-                                    <TreeTableColumn fx:id="dueDateTreeTableCol" prefWidth="226.0" text="Due Date" />
-                                    <TreeTableColumn fx:id="completedTreeTableCol" prefWidth="114.0" text="Completed" />
-                                 </columns>
-                              </JFXTreeTableView>
-                           </content>
-                        </Tab>
-                        <Tab fx:id="scheduleTab" closable="false" text="Schedule">
-                           <content>
-                              <BorderPane prefHeight="200.0" prefWidth="200.0">
-                                 <bottom>
-                                    <HBox>
-                                       <children>
-                                          <JFXButton fx:id="homeScheduleViewButton" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
-                                          <Pane HBox.hgrow="ALWAYS" />
-                                          <JFXButton fx:id="homeScheduleAddButton" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
-                                       </children>
-                                    </HBox>
-                                 </bottom>
-                                 <center>
-                                    <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                       <children>
-                                          <VBox prefHeight="200.0" prefWidth="100.0" />
-                                          <VBox prefHeight="200.0" prefWidth="100.0" />
-                                          <VBox prefHeight="200.0" prefWidth="100.0" />
-                                          <VBox prefHeight="200.0" prefWidth="100.0" />
-                                          <VBox prefHeight="200.0" prefWidth="100.0" />
-                                          <VBox prefHeight="200.0" prefWidth="100.0" />
-                                          <VBox prefHeight="200.0" prefWidth="100.0" />
-                                          <VBox prefHeight="200.0" prefWidth="100.0" />
-                                       </children>
-                                    </HBox>
-                                 </center>
-                              </BorderPane>
-                           </content></Tab>
-                     </tabs>
-                  </JFXTabPane>
-               </center>
-               <top>
-                  <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="title" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="376.0" text="Daily Tasks" textFill="WHITE">
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                        </Label>
-                        <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="SOMETIMES" />
-                        <JFXButton fx:id="leftHomeButton" onAction="#leftHomeClicked" HBox.hgrow="NEVER">
-                           <graphic>
-                              <ImageViewButton fitHeight="25.0" fitWidth="25.0">
-                                 <image>
-                                    <Image url="@../resources/icons/white/left-arrow.png" />
-                                 </image>
-                              </ImageViewButton>
-                           </graphic>
-                        </JFXButton>
-                        <Label fx:id="dailyTaskDateLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="311.0" text="Date" textFill="WHITE" HBox.hgrow="ALWAYS" />
-                        <JFXButton fx:id="rightHomeButton" layoutX="979.0" layoutY="47.0" nodeOrientation="RIGHT_TO_LEFT" onAction="#rightHomeClicked" HBox.hgrow="NEVER">
-                           <graphic>
-                              <ImageViewButton fitHeight="25.0" fitWidth="25.0">
-                                 <image>
-                                    <Image url="@../resources/icons/white/right-arrow.png" />
-                                 </image>
-                              </ImageViewButton>
-                           </graphic>
-                        </JFXButton>
-                     </children>
+                  <JFXButton fx:id="calendarButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#calendarButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Calendar" textFill="WHITE">
+                     <graphic>
+                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                           <image>
+                              <Image url="@../resources/icons/white/calendar.png" />
+                           </image>
+                        </ImageViewButton>
+                     </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                      <padding>
-                        <Insets left="90.0" right="15.0" />
+                        <Insets left="40.0" />
                      </padding>
-                  </HBox>
-               </top>
-            </BorderPane>
-            <BorderPane fx:id="calendarView" prefHeight="200.0" prefWidth="200.0" visible="false">
-               <top>
-                  <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="title211" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="302.0" text="Calendar" textFill="WHITE">
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                        </Label>
-                        <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="ALWAYS" />
-                     </children>
+                  </JFXButton>
+                  <JFXButton fx:id="taskButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#taskButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Tasks" textFill="WHITE">
+                     <graphic>
+                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                           <image>
+                              <Image url="@../resources/icons/white/list.png" />
+                           </image>
+                        </ImageViewButton>
+                     </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                      <padding>
-                        <Insets left="90.0" right="15.0" />
+                        <Insets left="40.0" />
                      </padding>
-                  </HBox>
-               </top>
-               <center>
-                  <VBox BorderPane.alignment="CENTER">
-                     <children>
-                        <GridPane alignment="CENTER" gridLinesVisible="true" prefHeight="57.0" prefWidth="852.0" style="-fx-background-color: #f2782f;" VBox.vgrow="NEVER">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Label fx:id="sunday" alignment="CENTER" contentDisplay="CENTER" text="Sunday" />
-                              <Label fx:id="monday" text="Monday" GridPane.columnIndex="1" />
-                              <Label fx:id="tuesday" text="Tuesday" GridPane.columnIndex="2" />
-                              <Label fx:id="wednesday" text="Wednesday" GridPane.columnIndex="3" />
-                              <Label fx:id="thursday" text="Thursday" GridPane.columnIndex="4" />
-                              <Label fx:id="friday" text="Friday" GridPane.columnIndex="5" />
-                              <Label fx:id="saturday" text="Saturday" GridPane.columnIndex="6" />
-                           </children>
-                        </GridPane>
-                        <GridPane fx:id="calendarGrid" gridLinesVisible="true" stylesheets="@ColorScheme.css" VBox.vgrow="ALWAYS">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <JFXTextArea fx:id="text00" disable="true" editable="false">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text10" disable="true" editable="false" GridPane.columnIndex="1">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text20" disable="true" editable="false" GridPane.columnIndex="2">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text30" disable="true" editable="false" GridPane.columnIndex="3">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text40" disable="true" editable="false" GridPane.columnIndex="4">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text50" disable="true" editable="false" GridPane.columnIndex="5">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text60" disable="true" editable="false" GridPane.columnIndex="6">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text01" disable="true" editable="false" GridPane.rowIndex="1">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text11" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text21" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text31" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text41" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="1">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text51" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="1">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text61" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="1">
-                                 <GridPane.margin>
-                                    <Insets />
-                                 </GridPane.margin>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text02" disable="true" editable="false" GridPane.rowIndex="2">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text12" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text22" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text32" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text42" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="2">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text52" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="2">
-                                 <GridPane.margin>
-                                    <Insets />
-                                 </GridPane.margin>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text62" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="2">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text03" disable="true" editable="false" GridPane.rowIndex="3">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text13" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text23" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="3">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text33" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="3">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text43" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="3">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text53" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="3">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text63" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="3">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text04" disable="true" editable="false" GridPane.rowIndex="4">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text14" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text24" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text34" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="4">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text44" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="4">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text54" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="4">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text64" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="4">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text05" disable="true" editable="false" GridPane.rowIndex="5">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text15" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text25" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="5">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text35" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="5">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text45" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="5">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text55" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="5">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <JFXTextArea fx:id="text65" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="5">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
-                                 </padding>
-                              </JFXTextArea>
-                              <Label fx:id="label00" text="Label" />
-                              <Label fx:id="label10" text="Label" GridPane.columnIndex="1" />
-                              <Label fx:id="label20" text="Label" GridPane.columnIndex="2" />
-                              <Label fx:id="label30" text="Label" GridPane.columnIndex="3" />
-                              <Label fx:id="label40" text="Label" GridPane.columnIndex="4" />
-                              <Label fx:id="label50" text="Label" GridPane.columnIndex="5" />
-                              <Label fx:id="label60" text="Label" GridPane.columnIndex="6" />
-                              <Label fx:id="label01" text="Label" GridPane.rowIndex="1" />
-                              <Label fx:id="label11" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label fx:id="label21" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Label fx:id="label31" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                              <Label fx:id="label41" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                              <Label fx:id="label51" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-                              <Label fx:id="label61" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                              <Label fx:id="label02" text="Label" GridPane.rowIndex="2" />
-                              <Label fx:id="label12" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label fx:id="label22" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                              <Label fx:id="label32" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                              <Label fx:id="label42" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                              <Label fx:id="label52" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="2" />
-                              <Label fx:id="label62" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="2" />
-                              <Label fx:id="label03" text="Label" GridPane.rowIndex="3" />
-                              <Label fx:id="label13" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label fx:id="label23" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <Label fx:id="label33" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                              <Label fx:id="label43" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-                              <Label fx:id="label53" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="3" />
-                              <Label fx:id="label63" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="3" />
-                              <Label fx:id="label04" text="Label" GridPane.rowIndex="4" />
-                              <Label fx:id="label14" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Label fx:id="label24" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                              <Label fx:id="label34" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                              <Label fx:id="label44" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-                              <Label fx:id="label54" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-                              <Label fx:id="label64" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="4" />
-                              <Label fx:id="label05" text="Label" GridPane.rowIndex="5" />
-                              <Label fx:id="label15" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <Label fx:id="label25" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                              <Label fx:id="label35" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                              <Label fx:id="label45" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-                              <Label fx:id="label55" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="5" />
-                              <Label fx:id="label65" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane00" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" />
-                              <Pane fx:id="pane10" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" />
-                              <Pane fx:id="pane20" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" />
-                              <Pane fx:id="pane30" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" />
-                              <Pane fx:id="pane40" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" />
-                              <Pane fx:id="pane50" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" />
-                              <Pane fx:id="pane60" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" />
-                              <Pane fx:id="pane01" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane11" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane21" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane31" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane41" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane51" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane61" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                              <Pane fx:id="pane02" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane12" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane22" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane32" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane42" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane52" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane62" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="2" />
-                              <Pane fx:id="pane03" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane13" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane23" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane33" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane43" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane53" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane63" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="3" />
-                              <Pane fx:id="pane04" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane14" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane24" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane34" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane44" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane54" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane64" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="4" />
-                              <Pane fx:id="pane05" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane15" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane25" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane35" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane45" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane55" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="5" />
-                              <Pane fx:id="pane65" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="5" />
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </GridPane>
-                     </children>
-                  </VBox>
-               </center>
-               <right>
-                  <AnchorPane style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="yearLabel" layoutX="79.0" layoutY="34.0" text="2018" textFill="WHITE" />
-                        <JFXButton fx:id="leftCalendarButton" contentDisplay="GRAPHIC_ONLY" layoutX="14.0" layoutY="30.0" onAction="#leftCalendarClicked" text=" ">
-                           <graphic>
-                              <ImageView fitHeight="18.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/icons/white/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton fx:id="rightCalendarButton" contentDisplay="GRAPHIC_ONLY" layoutX="136.0" layoutY="30.0" onAction="#rightCalendarClicked" text=" ">
-                           <graphic>
-                              <ImageView fitHeight="18.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/icons/white/right-arrow.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton fx:id="january" layoutY="68.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="January" textFill="WHITE" />
-                        <JFXButton fx:id="february" layoutY="111.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="February" textFill="WHITE" />
-                        <JFXButton fx:id="march" layoutY="154.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="March" textFill="WHITE" />
-                        <JFXButton fx:id="april" layoutY="197.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="April" textFill="WHITE" />
-                        <JFXButton fx:id="may" layoutY="240.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="May" textFill="WHITE" />
-                        <JFXButton fx:id="june" layoutY="283.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="June" textFill="WHITE" />
-                        <JFXButton fx:id="july" layoutY="326.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="July" textFill="WHITE" />
-                        <JFXButton fx:id="august" layoutY="369.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="August" textFill="WHITE" />
-                        <JFXButton fx:id="september" layoutY="412.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="September" textFill="WHITE" />
-                        <JFXButton fx:id="october" layoutY="455.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="October" textFill="WHITE" />
-                        <JFXButton fx:id="november" layoutY="498.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="November" textFill="WHITE" />
-                        <JFXButton fx:id="december" layoutY="541.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="December" textFill="WHITE" />
-                     </children>
-                  </AnchorPane>
-               </right></BorderPane>
-            <BorderPane fx:id="taskView" prefHeight="200.0" prefWidth="200.0" visible="false">
-               <top>
-                  <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="title2" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="214.0" text="Task List" textFill="WHITE">
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                        </Label>
-                        <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="ALWAYS" />
-                     </children>
+                  </JFXButton>
+                  <JFXButton fx:id="classButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="10.0" onAction="#classButtonClicked" prefHeight="69.0" prefWidth="244.0" text="Classes" textFill="WHITE">
+                     <graphic>
+                        <ImageViewButton fitHeight="29.0" fitWidth="32.0">
+                           <image>
+                              <Image url="@../resources/icons/white/briefcase.png" />
+                           </image>
+                        </ImageViewButton>
+                     </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                      <padding>
-                        <Insets left="90.0" right="15.0" />
+                        <Insets left="40.0" />
                      </padding>
-                  </HBox>
-               </top>
-               <center>
-                  <TableView fx:id="taskTable" minHeight="10.0" minWidth="10.0" onMouseClicked="#handleTaskClick" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
-                     <columns>
-                        <TableColumn fx:id="taskNameColumn" minWidth="30.0" text="Name" />
-                        <TableColumn fx:id="taskDescriptionColumn" minWidth="100.0" prefWidth="300.0" text="Description" />
-                        <TableColumn fx:id="taskTypeColumn" minWidth="40.0" prefWidth="81.199951171875" text="Type" />
-                        <TableColumn fx:id="taskClassColumn" minWidth="40.0" prefWidth="81.800048828125" text="Class" />
-                        <TableColumn fx:id="taskDueDateColumn" minWidth="40.0" prefWidth="80.20001220703125" text="Due Date" />
-                        <TableColumn fx:id="taskCompletedColumn" minWidth="40.0" prefWidth="87.79998779296875" text="Completed" />
-                     </columns>
-                  </TableView>
-               </center>
-               <bottom>
-                  <VBox BorderPane.alignment="CENTER">
+                  </JFXButton>
+                  <Pane prefHeight="114.0" prefWidth="244.0" VBox.vgrow="ALWAYS" />
+                  <VBox>
                      <children>
                         <HBox>
                            <children>
-                              <JFXButton fx:id="taskViewButton" onAction="#taskViewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                              <Label text="Urgent Tasks: " textFill="WHITE" />
                               <Pane HBox.hgrow="ALWAYS" />
-                              <JFXButton fx:id="taskAddButton" onAction="#taskAddButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                              <Label fx:id="urgentLabel" text="0" textFill="WHITE" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label text="Approaching Tasks: " textFill="WHITE" />
+                              <Pane HBox.hgrow="ALWAYS" />
+                              <Label fx:id="approachingLabel" text="0" textFill="WHITE" />
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label text="Overdue Tasks: " textFill="WHITE" />
+                              <Pane HBox.hgrow="ALWAYS" />
+                              <Label fx:id="overdueLabel" text="0" textFill="WHITE" />
                            </children>
                         </HBox>
                      </children>
-                  </VBox>
-               </bottom>
-            </BorderPane>
-            <BorderPane fx:id="classView" prefHeight="200.0" prefWidth="200.0" visible="false">
-               <top>
-                  <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="title21" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="302.0" text="Classes and Types" textFill="WHITE">
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                        </Label>
-                        <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="ALWAYS" />
-                     </children>
                      <padding>
-                        <Insets left="90.0" right="15.0" />
+                        <Insets left="15.0" right="15.0" />
                      </padding>
+                  </VBox>
+                  <HBox prefHeight="51.0" prefWidth="244.0" visible="false">
+                     <children>
+                        <Pane prefHeight="81.0" prefWidth="83.0" />
+                        <JFXButton prefHeight="81.0" prefWidth="85.0" text=" " textFill="WHITE">
+                           <graphic>
+                              <ImageViewButton fitHeight="34.0" fitWidth="39.0">
+                                 <image>
+                                    <Image url="@../resources/icons/white/settings.png" />
+                                 </image>
+                              </ImageViewButton>
+                           </graphic>
+                        </JFXButton>
+                        <Pane prefHeight="81.0" prefWidth="82.0" />
+                     </children>
                   </HBox>
-               </top>
-               <center>
-                  <JFXTabPane stylesheets="@ColorScheme.css" BorderPane.alignment="CENTER">
-                     <tabs>
-                        <Tab text="Classes">
-                           <content>
-                              <BorderPane prefHeight="200.0" prefWidth="200.0">
-                                 <center>
-                                    <TableView fx:id="classTable" onMouseClicked="#handleClassClick" prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
-                                      <columns>
-                                        <TableColumn fx:id="classNameColumn" prefWidth="169.0" text="Name" />
-                                        <TableColumn fx:id="classAbrColumn" prefWidth="100.0" text="Abbreviation" />
-                                          <TableColumn fx:id="classDetailsColumn" prefWidth="375.0" text="Details" />
-                                          <TableColumn fx:id="classDOWColumn" prefWidth="122.0" text="Days of Week" />
-                                          <TableColumn fx:id="classTimeColumn" prefWidth="127.0" text="Time" />
-                                          <TableColumn fx:id="classTAColumn" prefWidth="142.0" text="Total Assignments" />
-                                      </columns>
-                                    </TableView>
-                                 </center>
-                                 <bottom>
-                                    <HBox>
-                                       <children>
-                                          <JFXButton fx:id="classViewButton" onAction="#classViewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
-                                          <Pane HBox.hgrow="ALWAYS" />
-                                          <JFXButton fx:id="classAddButton" onAction="#classAddButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
-                                       </children>
-                                    </HBox>
-                                 </bottom>
-                              </BorderPane>
-                           </content>
-                        </Tab>
-                        <Tab text="Task Types">
-                           <content>
-                              <BorderPane>
-                                 <center>
-                                    <TableView fx:id="typeTable" onMouseClicked="#handleTypeClick" prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css">
-                                      <columns>
-                                          <TableColumn fx:id="typeNameColumn" prefWidth="154.0" text="Name" />
-                                        <TableColumn fx:id="typeDescColumn" minWidth="0.0" prefWidth="425.0" text="Description" />
-                                        <TableColumn fx:id="typeWarnColumn" minWidth="0.0" prefWidth="124.0" text="Notice Period (days)" />
-                                          <TableColumn fx:id="typeTTCColumn" minWidth="0.0" prefWidth="208.0" text="Estimated Time to Complete (mins)" />
-                                          <TableColumn fx:id="typeTAColumn" minWidth="0.0" prefWidth="121.0" text="Total Assignments" />
-                                      </columns>
-                                    </TableView>
-                                 </center>
-                                 <bottom>
-                                    <HBox>
-                                       <children>
-                                          <JFXButton fx:id="typeViewButton" onAction="#typeViewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
-                                          <Pane HBox.hgrow="ALWAYS" />
-                                          <JFXButton fx:id="typeAddButton" onAction="#typeAddButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
-                                       </children>
-                                    </HBox>
-                                 </bottom>
-                              </BorderPane>
-                           </content>
-                        </Tab>
-                     </tabs>
-                  </JFXTabPane>
-               </center></BorderPane>
-         </children>
-      </StackPane>
-   </center>
-   <effect>
-      <DropShadow />
-   </effect>
-</BorderPane>
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <StackPane BorderPane.alignment="CENTER">
+               <children>
+                  <BorderPane fx:id="homeView" prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <JFXTabPane stylesheets="@ColorScheme.css" BorderPane.alignment="CENTER">
+                           <tabs>
+                              <Tab closable="false" text="Notifications">
+                                 <content>
+                                    <JFXTreeTableView fx:id="homeTreeTable" onMouseClicked="#handleHomeClick">
+                                       <columns>
+                                          <TreeTableColumn fx:id="nameTreeTableCol" prefWidth="125.0" text="Name" />
+                                          <TreeTableColumn fx:id="descTreeTableCol" prefWidth="336.0" text="Description" />
+                                          <TreeTableColumn fx:id="typeTreeTableCol" minWidth="0.0" prefWidth="120.0" text="Type" />
+                                          <TreeTableColumn fx:id="classTreeTableCol" prefWidth="114.0" text="Class" />
+                                          <TreeTableColumn fx:id="dueDateTreeTableCol" prefWidth="226.0" text="Due Date" />
+                                          <TreeTableColumn fx:id="completedTreeTableCol" prefWidth="114.0" text="Completed" />
+                                       </columns>
+                                    </JFXTreeTableView>
+                                 </content>
+                              </Tab>
+                              <Tab fx:id="scheduleTab" closable="false" text="Schedule">
+                                 <content>
+                                    <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                       <bottom>
+                                          <HBox>
+                                             <children>
+                                                <JFXButton fx:id="homeScheduleViewButton" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                                                <Pane HBox.hgrow="ALWAYS" />
+                                                <JFXButton fx:id="homeScheduleAddButton" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                                             </children>
+                                          </HBox>
+                                       </bottom>
+                                       <center>
+                                          <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <VBox prefHeight="200.0" prefWidth="100.0" />
+                                                <VBox prefHeight="200.0" prefWidth="100.0" />
+                                                <VBox prefHeight="200.0" prefWidth="100.0" />
+                                                <VBox prefHeight="200.0" prefWidth="100.0" />
+                                                <VBox prefHeight="200.0" prefWidth="100.0" />
+                                                <VBox prefHeight="200.0" prefWidth="100.0" />
+                                                <VBox prefHeight="200.0" prefWidth="100.0" />
+                                                <VBox prefHeight="200.0" prefWidth="100.0" />
+                                             </children>
+                                          </HBox>
+                                       </center>
+                                    </BorderPane>
+                                 </content>
+                              </Tab>
+                           </tabs>
+                        </JFXTabPane>
+                     </center>
+                     <top>
+                        <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label fx:id="title" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="376.0" text="Daily Tasks" textFill="WHITE">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="SOMETIMES" />
+                              <JFXButton fx:id="leftHomeButton" onAction="#leftHomeClicked" HBox.hgrow="NEVER">
+                                 <graphic>
+                                    <ImageViewButton fitHeight="25.0" fitWidth="25.0">
+                                       <image>
+                                          <Image url="@../resources/icons/white/left-arrow.png" />
+                                       </image>
+                                    </ImageViewButton>
+                                 </graphic>
+                              </JFXButton>
+                              <Label fx:id="dailyTaskDateLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="311.0" text="Date" textFill="WHITE" HBox.hgrow="ALWAYS" />
+                              <JFXButton fx:id="rightHomeButton" layoutX="979.0" layoutY="47.0" nodeOrientation="RIGHT_TO_LEFT" onAction="#rightHomeClicked" HBox.hgrow="NEVER">
+                                 <graphic>
+                                    <ImageViewButton fitHeight="25.0" fitWidth="25.0">
+                                       <image>
+                                          <Image url="@../resources/icons/white/right-arrow.png" />
+                                       </image>
+                                    </ImageViewButton>
+                                 </graphic>
+                              </JFXButton>
+                           </children>
+                           <padding>
+                              <Insets left="90.0" right="15.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                  </BorderPane>
+                  <BorderPane fx:id="calendarView" prefHeight="200.0" prefWidth="200.0" visible="false">
+                     <top>
+                        <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label fx:id="title211" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="302.0" text="Calendar" textFill="WHITE">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets left="90.0" right="15.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <center>
+                        <VBox BorderPane.alignment="CENTER">
+                           <children>
+                              <GridPane alignment="CENTER" gridLinesVisible="true" prefHeight="57.0" prefWidth="852.0" style="-fx-background-color: #f2782f;" VBox.vgrow="NEVER">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Label fx:id="sunday" alignment="CENTER" contentDisplay="CENTER" text="Sunday" />
+                                    <Label fx:id="monday" text="Monday" GridPane.columnIndex="1" />
+                                    <Label fx:id="tuesday" text="Tuesday" GridPane.columnIndex="2" />
+                                    <Label fx:id="wednesday" text="Wednesday" GridPane.columnIndex="3" />
+                                    <Label fx:id="thursday" text="Thursday" GridPane.columnIndex="4" />
+                                    <Label fx:id="friday" text="Friday" GridPane.columnIndex="5" />
+                                    <Label fx:id="saturday" text="Saturday" GridPane.columnIndex="6" />
+                                 </children>
+                              </GridPane>
+                              <GridPane fx:id="calendarGrid" gridLinesVisible="true" stylesheets="@ColorScheme.css" VBox.vgrow="ALWAYS">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <JFXTextArea fx:id="text00" disable="true" editable="false">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text10" disable="true" editable="false" GridPane.columnIndex="1">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text20" disable="true" editable="false" GridPane.columnIndex="2">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text30" disable="true" editable="false" GridPane.columnIndex="3">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text40" disable="true" editable="false" GridPane.columnIndex="4">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text50" disable="true" editable="false" GridPane.columnIndex="5">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text60" disable="true" editable="false" GridPane.columnIndex="6">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text01" disable="true" editable="false" GridPane.rowIndex="1">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text11" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text21" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text31" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text41" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text51" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text61" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets />
+                                       </GridPane.margin>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text02" disable="true" editable="false" GridPane.rowIndex="2">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text12" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text22" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text32" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text42" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text52" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets />
+                                       </GridPane.margin>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text62" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="2">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text03" disable="true" editable="false" GridPane.rowIndex="3">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text13" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text23" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text33" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text43" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text53" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="3">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text63" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="3">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text04" disable="true" editable="false" GridPane.rowIndex="4">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text14" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text24" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text34" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text44" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="4">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text54" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="4">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text64" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="4">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text05" disable="true" editable="false" GridPane.rowIndex="5">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text15" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text25" disable="true" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text35" disable="true" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text45" disable="true" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="5">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text55" disable="true" editable="false" GridPane.columnIndex="5" GridPane.rowIndex="5">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <JFXTextArea fx:id="text65" disable="true" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="5">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="25.0" />
+                                       </padding>
+                                    </JFXTextArea>
+                                    <Label fx:id="label00" text="Label" />
+                                    <Label fx:id="label10" text="Label" GridPane.columnIndex="1" />
+                                    <Label fx:id="label20" text="Label" GridPane.columnIndex="2" />
+                                    <Label fx:id="label30" text="Label" GridPane.columnIndex="3" />
+                                    <Label fx:id="label40" text="Label" GridPane.columnIndex="4" />
+                                    <Label fx:id="label50" text="Label" GridPane.columnIndex="5" />
+                                    <Label fx:id="label60" text="Label" GridPane.columnIndex="6" />
+                                    <Label fx:id="label01" text="Label" GridPane.rowIndex="1" />
+                                    <Label fx:id="label11" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label fx:id="label21" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <Label fx:id="label31" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                    <Label fx:id="label41" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                    <Label fx:id="label51" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                                    <Label fx:id="label61" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                                    <Label fx:id="label02" text="Label" GridPane.rowIndex="2" />
+                                    <Label fx:id="label12" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Label fx:id="label22" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                    <Label fx:id="label32" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                    <Label fx:id="label42" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                                    <Label fx:id="label52" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                                    <Label fx:id="label62" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+                                    <Label fx:id="label03" text="Label" GridPane.rowIndex="3" />
+                                    <Label fx:id="label13" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <Label fx:id="label23" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                    <Label fx:id="label33" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                    <Label fx:id="label43" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                                    <Label fx:id="label53" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                                    <Label fx:id="label63" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+                                    <Label fx:id="label04" text="Label" GridPane.rowIndex="4" />
+                                    <Label fx:id="label14" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <Label fx:id="label24" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                    <Label fx:id="label34" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                                    <Label fx:id="label44" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                                    <Label fx:id="label54" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                                    <Label fx:id="label64" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+                                    <Label fx:id="label05" text="Label" GridPane.rowIndex="5" />
+                                    <Label fx:id="label15" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                    <Label fx:id="label25" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                    <Label fx:id="label35" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                                    <Label fx:id="label45" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                                    <Label fx:id="label55" text="Label" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                                    <Label fx:id="label65" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="5" />
+                                    <Pane fx:id="pane00" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" />
+                                    <Pane fx:id="pane10" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" />
+                                    <Pane fx:id="pane20" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" />
+                                    <Pane fx:id="pane30" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" />
+                                    <Pane fx:id="pane40" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" />
+                                    <Pane fx:id="pane50" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" />
+                                    <Pane fx:id="pane60" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" />
+                                    <Pane fx:id="pane01" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="1" />
+                                    <Pane fx:id="pane11" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Pane fx:id="pane21" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <Pane fx:id="pane31" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                    <Pane fx:id="pane41" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                    <Pane fx:id="pane51" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                                    <Pane fx:id="pane61" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                                    <Pane fx:id="pane02" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="2" />
+                                    <Pane fx:id="pane12" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Pane fx:id="pane22" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                    <Pane fx:id="pane32" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                    <Pane fx:id="pane42" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                                    <Pane fx:id="pane52" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                                    <Pane fx:id="pane62" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+                                    <Pane fx:id="pane03" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="3" />
+                                    <Pane fx:id="pane13" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <Pane fx:id="pane23" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                    <Pane fx:id="pane33" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                    <Pane fx:id="pane43" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                                    <Pane fx:id="pane53" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                                    <Pane fx:id="pane63" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+                                    <Pane fx:id="pane04" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="4" />
+                                    <Pane fx:id="pane14" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <Pane fx:id="pane24" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                                    <Pane fx:id="pane34" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                                    <Pane fx:id="pane44" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                                    <Pane fx:id="pane54" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                                    <Pane fx:id="pane64" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+                                    <Pane fx:id="pane05" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.rowIndex="5" />
+                                    <Pane fx:id="pane15" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                    <Pane fx:id="pane25" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                                    <Pane fx:id="pane35" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                                    <Pane fx:id="pane45" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                                    <Pane fx:id="pane55" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                                    <Pane fx:id="pane65" onMouseClicked="#handleCellClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d4d4d4;" GridPane.columnIndex="6" GridPane.rowIndex="5" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </GridPane>
+                           </children>
+                        </VBox>
+                     </center>
+                     <right>
+                        <AnchorPane style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label fx:id="yearLabel" layoutX="79.0" layoutY="34.0" text="2018" textFill="WHITE" />
+                              <JFXButton fx:id="leftCalendarButton" contentDisplay="GRAPHIC_ONLY" layoutX="14.0" layoutY="30.0" onAction="#leftCalendarClicked" text=" ">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/icons/white/left-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </JFXButton>
+                              <JFXButton fx:id="rightCalendarButton" contentDisplay="GRAPHIC_ONLY" layoutX="136.0" layoutY="30.0" onAction="#rightCalendarClicked" text=" ">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/icons/white/right-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </JFXButton>
+                              <JFXButton fx:id="january" layoutY="68.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="January" textFill="WHITE" />
+                              <JFXButton fx:id="february" layoutY="111.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="February" textFill="WHITE" />
+                              <JFXButton fx:id="march" layoutY="154.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="March" textFill="WHITE" />
+                              <JFXButton fx:id="april" layoutY="197.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="April" textFill="WHITE" />
+                              <JFXButton fx:id="may" layoutY="240.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="May" textFill="WHITE" />
+                              <JFXButton fx:id="june" layoutY="283.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="June" textFill="WHITE" />
+                              <JFXButton fx:id="july" layoutY="326.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="July" textFill="WHITE" />
+                              <JFXButton fx:id="august" layoutY="369.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="August" textFill="WHITE" />
+                              <JFXButton fx:id="september" layoutY="412.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="September" textFill="WHITE" />
+                              <JFXButton fx:id="october" layoutY="455.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="October" textFill="WHITE" />
+                              <JFXButton fx:id="november" layoutY="498.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="November" textFill="WHITE" />
+                              <JFXButton fx:id="december" layoutY="541.0" onAction="#monthButtonClicked" prefHeight="43.0" prefWidth="183.0" style="-fx-background-color: #373838;" text="December" textFill="WHITE" />
+                           </children>
+                        </AnchorPane>
+                     </right>
+                  </BorderPane>
+                  <BorderPane fx:id="taskView" prefHeight="200.0" prefWidth="200.0" visible="false">
+                     <top>
+                        <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label fx:id="title2" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="214.0" text="Task List" textFill="WHITE">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets left="90.0" right="15.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <center>
+                        <TableView fx:id="taskTable" minHeight="10.0" minWidth="10.0" onMouseClicked="#handleTaskClick" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
+                           <columns>
+                              <TableColumn fx:id="taskNameColumn" minWidth="30.0" text="Name" />
+                              <TableColumn fx:id="taskDescriptionColumn" minWidth="100.0" prefWidth="300.0" text="Description" />
+                              <TableColumn fx:id="taskTypeColumn" minWidth="40.0" prefWidth="81.199951171875" text="Type" />
+                              <TableColumn fx:id="taskClassColumn" minWidth="40.0" prefWidth="81.800048828125" text="Class" />
+                              <TableColumn fx:id="taskDueDateColumn" minWidth="40.0" prefWidth="80.20001220703125" text="Due Date" />
+                              <TableColumn fx:id="taskCompletedColumn" minWidth="40.0" prefWidth="87.79998779296875" text="Completed" />
+                           </columns>
+                        </TableView>
+                     </center>
+                     <bottom>
+                        <VBox BorderPane.alignment="CENTER">
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <JFXButton fx:id="taskViewButton" onAction="#taskViewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                                    <Pane HBox.hgrow="ALWAYS" />
+                                    <JFXButton fx:id="taskAddButton" onAction="#taskAddButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </bottom>
+                  </BorderPane>
+                  <BorderPane fx:id="classView" prefHeight="200.0" prefWidth="200.0" visible="false">
+                     <top>
+                        <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="1036.0" style="-fx-background-color: #373838;" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label fx:id="title21" alignment="BASELINE_CENTER" prefHeight="53.0" prefWidth="302.0" text="Classes and Types" textFill="WHITE">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Pane prefHeight="64.0" prefWidth="623.0" HBox.hgrow="ALWAYS" />
+                           </children>
+                           <padding>
+                              <Insets left="90.0" right="15.0" />
+                           </padding>
+                        </HBox>
+                     </top>
+                     <center>
+                        <JFXTabPane stylesheets="@ColorScheme.css" BorderPane.alignment="CENTER">
+                           <tabs>
+                              <Tab text="Classes">
+                                 <content>
+                                    <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                       <center>
+                                          <TableView fx:id="classTable" onMouseClicked="#handleClassClick" prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css" BorderPane.alignment="CENTER">
+                                             <columns>
+                                                <TableColumn fx:id="classNameColumn" prefWidth="169.0" text="Name" />
+                                                <TableColumn fx:id="classAbrColumn" prefWidth="100.0" text="Abbreviation" />
+                                                <TableColumn fx:id="classDetailsColumn" prefWidth="375.0" text="Details" />
+                                                <TableColumn fx:id="classDOWColumn" prefWidth="122.0" text="Days of Week" />
+                                                <TableColumn fx:id="classTimeColumn" prefWidth="127.0" text="Time" />
+                                                <TableColumn fx:id="classTAColumn" prefWidth="142.0" text="Total Assignments" />
+                                             </columns>
+                                          </TableView>
+                                       </center>
+                                       <bottom>
+                                          <HBox>
+                                             <children>
+                                                <JFXButton fx:id="classViewButton" onAction="#classViewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                                                <Pane HBox.hgrow="ALWAYS" />
+                                                <JFXButton fx:id="classAddButton" onAction="#classAddButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                                             </children>
+                                          </HBox>
+                                       </bottom>
+                                    </BorderPane>
+                                 </content>
+                              </Tab>
+                              <Tab text="Task Types">
+                                 <content>
+                                    <BorderPane>
+                                       <center>
+                                          <TableView fx:id="typeTable" onMouseClicked="#handleTypeClick" prefHeight="200.0" prefWidth="200.0" stylesheets="@jfx-table-view.css">
+                                             <columns>
+                                                <TableColumn fx:id="typeNameColumn" prefWidth="154.0" text="Name" />
+                                                <TableColumn fx:id="typeDescColumn" minWidth="0.0" prefWidth="425.0" text="Description" />
+                                                <TableColumn fx:id="typeWarnColumn" minWidth="0.0" prefWidth="124.0" text="Notice Period (days)" />
+                                                <TableColumn fx:id="typeTTCColumn" minWidth="0.0" prefWidth="208.0" text="Estimated Time to Complete (mins)" />
+                                                <TableColumn fx:id="typeTAColumn" minWidth="0.0" prefWidth="121.0" text="Total Assignments" />
+                                             </columns>
+                                          </TableView>
+                                       </center>
+                                       <bottom>
+                                          <HBox>
+                                             <children>
+                                                <JFXButton fx:id="typeViewButton" onAction="#typeViewButtonClicked" style="-fx-background-color: #f2782f;" text="View/Edit/Delete" />
+                                                <Pane HBox.hgrow="ALWAYS" />
+                                                <JFXButton fx:id="typeAddButton" onAction="#typeAddButtonClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #f2782f;" text="Add" />
+                                             </children>
+                                          </HBox>
+                                       </bottom>
+                                    </BorderPane>
+                                 </content>
+                              </Tab>
+                           </tabs>
+                        </JFXTabPane>
+                     </center>
+                  </BorderPane>
+               </children>
+            </StackPane>
+         </center>
+      </BorderPane>
+      <BorderPane fx:id="loadingPane">
+         <center>
+            <StackPane BorderPane.alignment="CENTER">
+               <children>
+                  <Pane opacity="0.6" style="-fx-background-color: #d4d4d4;" />
+                  <BorderPane>
+                     <center>
+                        <VBox alignment="CENTER" opacity="0.6" spacing="20.0">
+                           <children>
+                              <JFXSpinner />
+                              <Label fx:id="loadingText" alignment="CENTER" contentDisplay="CENTER" text="Attempting to Reconnect">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                        </VBox>
+                     </center>
+                     <bottom>
+                        <JFXButton fx:id="cancelLoadingButton" blendMode="MULTIPLY" text="Cancel" visible="false" BorderPane.alignment="CENTER" />
+                     </bottom>
+                  </BorderPane>
+               </children>
+            </StackPane>
+         </center>
+      </BorderPane>
+   </children>
+</StackPane>

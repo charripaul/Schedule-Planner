@@ -27,9 +27,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import tornadofx.control.DateTimePicker;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.CheckBox;
 
 
@@ -45,19 +47,29 @@ public class ViewTaskController implements Initializable{
 	@FXML private TextField noticePeriod;
 	@FXML private TextField hours, minutes;
 	
+	//ui loading
+	@FXML public AnchorPane loadingPane;
+	@FXML private JFXButton cancelLoadingButton;
+	@FXML private Label loadingText;
+	
 	private final Task temp;
 	private String oldClassAbr, newClassAbr;
 	private String oldTypeName, newTypeName;
 	
-	public ViewTaskController(Task t) {
+	private MainNewController mainWindow;
+	
+	public ViewTaskController(Task t, MainNewController mw) {
 		temp = t;
 		oldClassAbr = t.getClassAbr();
 		oldTypeName = t.getType();
+		mainWindow = mw;
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initializeData(temp);
+		loadingPane.setVisible(false);
 		initializeCloseEventProperty();
+		setValidators();
 	}
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
@@ -233,6 +245,12 @@ public class ViewTaskController implements Initializable{
 		    }
 		});
 	}
+	private void setValidators() {
+		
+	}
+	private boolean checkValidation() {
+		return true;
+	}
 	private void setCloseEvent() {
 		Stage window = (Stage) description.getScene().getWindow();
 		window.setOnCloseRequest(e -> {
@@ -242,6 +260,9 @@ public class ViewTaskController implements Initializable{
 	}
 	private void closeWindow(boolean answer) {
 		if(answer == true) {
+			if(loadingPane.isVisible()) {
+				mainWindow.displayConnectionTimeOut();
+			}
 			closeWindow();
 		}
 	}

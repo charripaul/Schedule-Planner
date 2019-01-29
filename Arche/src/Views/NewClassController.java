@@ -1,5 +1,6 @@
 package Views;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -11,13 +12,19 @@ import Models.ModelControl;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -30,10 +37,22 @@ public class NewClassController implements Initializable{
 	@FXML private JFXButton cancelButton, confirmButton;
 	@FXML private Label warningLabel;
 	
+	//ui loading
+	@FXML public AnchorPane loadingPane;
+	@FXML private JFXButton cancelLoadingButton;
+	@FXML private Label loadingText;
+	
+	private MainNewController mainWindow;
+	
+	public NewClassController(MainNewController mw) {
+		mainWindow = mw;
+	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		warningLabel.setVisible(false);
+		loadingPane.setVisible(false);
 		initializeCloseEventProperty();
+		setValidators();
 	}
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
@@ -43,15 +62,68 @@ public class NewClassController implements Initializable{
 	}
 	@FXML
 	private void confirmButtonClicked() {
-		String dow = getBinary(sunday.isSelected()) + getBinary(monday.isSelected())+
-				getBinary(tuesday.isSelected())+getBinary(wednesday.isSelected())+
-				getBinary(thursday.isSelected())+getBinary(friday.isSelected())+
-				getBinary(saturday.isSelected());
-		Models.Class c = new Models.Class(ModelControl.mainUID, name.getText(), abbreviation.getText(), details.getText(),
-				0, dow, startTime.getValue(), endTime.getValue());
+		loadingPane.setVisible(true);
 		
-		ModelControl.addClass(c);
-		closeWindow();
+		Task<Boolean> changeThread = new Task<Boolean>() {
+			@Override
+			public Boolean call() throws InterruptedException{
+				//validate input data
+				if(checkValidation()) {
+					String dow = getBinary(sunday.isSelected()) + getBinary(monday.isSelected())+
+							getBinary(tuesday.isSelected())+getBinary(wednesday.isSelected())+
+							getBinary(thursday.isSelected())+getBinary(friday.isSelected())+
+							getBinary(saturday.isSelected());
+					Models.Class c = new Models.Class(ModelControl.mainUID, name.getText(), abbreviation.getText(), details.getText(),
+							0, dow, startTime.getValue(), endTime.getValue());
+					Thread.sleep(10000);
+					ModelControl.addClass(c);
+					
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		};
+		changeThread.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
+			@Override
+			public void handle(WorkerStateEvent event) {
+				boolean result = changeThread.getValue();
+				if(result) {
+					closeWindow();
+				}
+				else {
+					loadingPane.setVisible(false);
+					displayWarningLabel("Please fix input errors");
+				}
+			}
+		});
+		
+		Task<Boolean> midlayer = new Task<Boolean>() {
+			@Override
+			public Boolean call() {
+				long timeoutTime = 15000;		//15 secs
+				TimeOut t = new TimeOut(new Thread(changeThread), timeoutTime, true);
+				try {                       
+				  boolean success = t.execute(); // Will return false if this times out, this freezes thread
+				  return success;
+				} catch (InterruptedException e) {}
+				return false;
+			}
+		};
+		midlayer.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				boolean result = midlayer.getValue();
+				if(!result) {
+					//display loading pane on main window
+					mainWindow.displayConnectionTimeOut();
+					closeWindow();
+				}
+			}
+		});
+		
+		new Thread(midlayer).start();
 	}
 	@FXML
 	private void cancelButtonClicked() {
@@ -147,6 +219,12 @@ public class NewClassController implements Initializable{
 			return "0";
 		}
 	}
+	private void setValidators() {
+		
+	}
+	private boolean checkValidation() {
+		return true;
+	}
 	@FXML
 	private void setCloseEvent() {
 		Stage window = (Stage) details.getScene().getWindow();
@@ -157,6 +235,9 @@ public class NewClassController implements Initializable{
 	}
 	private void closeWindow(boolean answer) {
 		if(answer == true) {
+			if(loadingPane.isVisible()) {
+				mainWindow.displayConnectionTimeOut();
+			}
 			closeWindow();
 		}
 	}

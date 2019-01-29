@@ -192,6 +192,12 @@ public class LoginController implements Initializable{
 		new Thread(midlayer).start();
 	}
 	@FXML
+	private void enterPressedOnPW(KeyEvent event) {
+		if(event.getCode() == KeyCode.ENTER) {
+			loginButton.fire();
+		}
+	}
+	@FXML
 	private void loginKeyPressed(KeyEvent event) {
 		if(event.getCode() == KeyCode.TAB) {
 			selectNode(username);

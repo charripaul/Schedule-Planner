@@ -16,12 +16,15 @@ import com.jfoenix.controls.JFXCheckBox;
 import Models.ModelControl;
 import Models.Task;
 import Models.TaskType;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -35,7 +38,9 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import tornadofx.control.DateTimePicker;
 
 public class ViewCellTasksController implements Initializable{
@@ -53,6 +58,7 @@ public class ViewCellTasksController implements Initializable{
 	@FXML private TextField noticePeriod;
 	@FXML private TextField hours, minutes;		//timeToComplete
 	@FXML private JFXCheckBox completed;
+	@FXML private Label warningLabel;
 	
 	//table tab
 	@FXML private JFXButton confirmAll, cancelAll;
@@ -68,18 +74,28 @@ public class ViewCellTasksController implements Initializable{
 	private boolean isOnAdd;			//test if got to confirmInfo from edit or add button
 	private int sIndex;
 	
+	//ui loading
+	@FXML public AnchorPane loadingPane;
+	@FXML private JFXButton cancelLoadingButton;
+	@FXML private Label loadingText;
+	
 	//for registering changes made to tasks and confirm them once confirm button clicked
 	private ArrayList<Task> addQueue = new ArrayList<Task>();
 	private ArrayList<Task> updateQueue = new ArrayList<Task>();
 	private ArrayList<Task> deleteQueue = new ArrayList<Task>();
 	
-	public ViewCellTasksController(ArrayList<Task> tasks) {
+	private MainNewController mainWindow;
+	
+	public ViewCellTasksController(ArrayList<Task> tasks, MainNewController mw) {
 		taskList = tasks;
 		viewableTaskList = FXCollections.observableArrayList();
 		updateTaskList();
+		mainWindow = mw;
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		warningLabel.setVisible(false);
+		
 		dueDate.setFormat("MM/dd/yyyy hh:mm a");
 		scheduledStartTime.setFormat("MM/dd/yyyy hh:mm a");
 		scheduledEndTime.setFormat("MM/dd/yyyy hh:mm a");
@@ -116,7 +132,9 @@ public class ViewCellTasksController implements Initializable{
 		descriptionColumn.setSortable(false);
 		scheduledColumn.setSortable(false);
 		
+		loadingPane.setVisible(false);
 		initializeCloseEventProperty();
+		setValidators();
 		newTasksTable.setItems(viewableTaskList);
 		resetTabPane();
 	}
@@ -209,17 +227,61 @@ public class ViewCellTasksController implements Initializable{
 	}
 	@FXML
 	private void confirmAllButtonClicked() {
-		//execute queues
-		for(int count=0;count<addQueue.size();count++) {
-			ModelControl.addTask(addQueue.get(count));
-		}
-		for(int count=0;count<updateQueue.size();count++) {
-			ModelControl.updateTask(updateQueue.get(count));
-		}
-		for(int count=0;count<deleteQueue.size();count++) {
-			ModelControl.deleteTask(deleteQueue.get(count));
-		}
-		closeWindow();
+		loadingText.setText("Updating");
+		loadingPane.setVisible(true);
+		
+		javafx.concurrent.Task<Boolean> changeThread = new javafx.concurrent.Task<Boolean>() {
+			@Override
+			public Boolean call() throws InterruptedException{
+				
+				for(int count=0;count<addQueue.size();count++) {
+					ModelControl.addTask(addQueue.get(count));
+				}
+				for(int count=0;count<updateQueue.size();count++) {
+					ModelControl.updateTask(updateQueue.get(count));
+				}
+				for(int count=0;count<deleteQueue.size();count++) {
+					ModelControl.deleteTask(deleteQueue.get(count));
+				}
+				
+				return true;
+			}
+		};
+		changeThread.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
+			@Override
+			public void handle(WorkerStateEvent event) {
+				boolean result = changeThread.getValue();
+				if(result) {
+					closeWindow();
+				}
+			}
+		});
+		
+		javafx.concurrent.Task<Boolean> midlayer = new javafx.concurrent.Task<Boolean>() {
+			@Override
+			public Boolean call() {
+				long timeoutTime = 15000;		//15 secs
+				TimeOut t = new TimeOut(new Thread(changeThread), timeoutTime, true);
+				try {                       
+				  boolean success = t.execute(); // Will return false if this times out, this freezes thread
+				  return success;
+				} catch (InterruptedException e) {}
+				return false;
+			}
+		};
+		midlayer.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				boolean result = midlayer.getValue();
+				if(!result) {
+					//display loading pane on main window
+					mainWindow.displayConnectionTimeOut();
+					closeWindow();
+				}
+			}
+		});
+		
+		new Thread(midlayer).start();
 	}
 	@FXML
 	private void cancelAllButtonClicked() {
@@ -227,51 +289,82 @@ public class ViewCellTasksController implements Initializable{
 	}
 	@FXML
 	private void confirmInfoButtonClicked() {
-		Task t;
-		if(isOnAdd) {				//got here from addButton
-			int ttc = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
-			t = new Task(ModelControl.mainUID, name.getText(), description.getText(),
-					dueDate.getDateTimeValue().atZone(ZoneId.
-					systemDefault()).toInstant().toEpochMilli(),
-					false, taskType.getSelectionModel().getSelectedItem(),
-					className.getSelectionModel().getSelectedItem(),
-					Integer.parseInt(noticePeriod.getText()), ttc);
-			if(scheduledStartTime.getDateTimeValue() != null && scheduledStartTime.getDateTimeValue() != null) {
-				t.setScheduledStartTime(scheduledStartTime.getDateTimeValue().atZone(ZoneId.
-						systemDefault()).toInstant().toEpochMilli());
-				t.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.
-						systemDefault()).toInstant().toEpochMilli());
+		loadingText.setText("Validating");
+		loadingPane.setVisible(true);
+		
+		javafx.concurrent.Task<Boolean> changeThread = new javafx.concurrent.Task<Boolean>() {
+			@Override
+			public Boolean call() throws InterruptedException{
+				//validate input data
+				if(checkValidation()) {
+					Task t;
+					
+					if(isOnAdd) {				//got here from addButton
+						int ttc = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
+						t = new Task(ModelControl.mainUID, name.getText(), description.getText(),
+								dueDate.getDateTimeValue().atZone(ZoneId.
+								systemDefault()).toInstant().toEpochMilli(),
+								false, taskType.getSelectionModel().getSelectedItem(),
+								className.getSelectionModel().getSelectedItem(),
+								Integer.parseInt(noticePeriod.getText()), ttc);
+						if(scheduledStartTime.getDateTimeValue() != null && scheduledStartTime.getDateTimeValue() != null) {
+							t.setScheduledStartTime(scheduledStartTime.getDateTimeValue().atZone(ZoneId.
+									systemDefault()).toInstant().toEpochMilli());
+							t.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.
+									systemDefault()).toInstant().toEpochMilli());
+						}
+						taskList.add(t);
+						updateTaskList();
+						newTasksTable.setItems(viewableTaskList);
+						newTasksTable.getSelectionModel().select(newTasksTable.getItems().size());
+						addQueue.add(t);
+					}
+					else {						//got here from editButton
+						t = viewableTaskList.get(newTasksTable.getSelectionModel().getSelectedIndex());		//TODO: check
+						
+						t.setName(name.getText());
+						t.setType(taskType.getSelectionModel().getSelectedItem());
+						t.setClassAbr(className.getSelectionModel().getSelectedItem());
+						t.setDueDate(dueDate.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+						t.setDescription(description.getText());
+						t.setFinishFlag(completed.isSelected());
+						int amountOfTime = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
+						t.setTimeToComplete(amountOfTime);
+						t.setNoticePeriod(Integer.parseInt(noticePeriod.getText()));
+						if(scheduledStartTime.getDateTimeValue() != null || scheduledStartTime.getDateTimeValue() != null) {
+							t.setScheduledStartTime(scheduledStartTime.getDateTimeValue().atZone(ZoneId.
+									systemDefault()).toInstant().toEpochMilli());
+							t.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.
+									systemDefault()).toInstant().toEpochMilli());
+						}
+						updateTaskList();
+						newTasksTable.setItems(viewableTaskList);
+						newTasksTable.getSelectionModel().select(sIndex);
+						updateQueue.add(t);
+					}
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
-			taskList.add(t);
-			updateTaskList();
-			newTasksTable.setItems(viewableTaskList);
-			newTasksTable.getSelectionModel().select(newTasksTable.getItems().size());
-			addQueue.add(t);
-		}
-		else {						//got here from editButton
-			t = viewableTaskList.get(newTasksTable.getSelectionModel().getSelectedIndex());		//TODO: check
-			
-			t.setName(name.getText());
-			t.setType(taskType.getSelectionModel().getSelectedItem());
-			t.setClassAbr(className.getSelectionModel().getSelectedItem());
-			t.setDueDate(dueDate.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-			t.setDescription(description.getText());
-			t.setFinishFlag(completed.isSelected());
-			int amountOfTime = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
-			t.setTimeToComplete(amountOfTime);
-			t.setNoticePeriod(Integer.parseInt(noticePeriod.getText()));
-			if(scheduledStartTime.getDateTimeValue() != null || scheduledStartTime.getDateTimeValue() != null) {
-				t.setScheduledStartTime(scheduledStartTime.getDateTimeValue().atZone(ZoneId.
-						systemDefault()).toInstant().toEpochMilli());
-				t.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.
-						systemDefault()).toInstant().toEpochMilli());
+		};
+		changeThread.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
+			@Override
+			public void handle(WorkerStateEvent event) {
+				boolean result = changeThread.getValue();
+				if(result) {
+					resetTabPane();
+					loadingPane.setVisible(false);
+				}
+				else {
+					loadingPane.setVisible(false);
+					displayWarningLabel("Please fix input errors");
+				}
 			}
-			updateTaskList();
-			newTasksTable.setItems(viewableTaskList);
-			newTasksTable.getSelectionModel().select(sIndex);
-			updateQueue.add(t);
-		}
-		resetTabPane();
+		});
+		
+		new Thread(changeThread).start();
 	}
 	@FXML
 	private void cancelInfoButtonClicked() {
@@ -295,17 +388,29 @@ public class ViewCellTasksController implements Initializable{
 	        }
 	    }
 	}
+	private void setValidators() {
+		
+	}
+	private boolean checkValidation() {
+		return true;
+	}
+	private void displayWarningLabel(String s) {
+		warningLabel.setText(s);
+		warningLabel.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(3)
+		);
+		visiblePause.setOnFinished(
+		        event -> warningLabel.setVisible(false)
+		);
+		visiblePause.play();
+	}
 	@FXML
 	private void setCloseEvent() {
-		Stage window = (Stage) description.getScene().getWindow();
+		Stage window = (Stage) name.getScene().getWindow();
 		window.setOnCloseRequest(e -> {
 			e.consume();
-			if(newTasksTable.getItems().size() > 0) {
-				closeWindow(ConfirmExitView.display("Are you sure you want to exit without updating your tasks?"));
-			}
-			else {
-				closeWindow();
-			}
+			closeWindow(ConfirmExitView.display("Are you sure you want to exit without updating your tasks?"));
 		});
 	}
 	private void initializeCloseEventProperty() {
@@ -370,6 +475,9 @@ public class ViewCellTasksController implements Initializable{
 	}
 	private void closeWindow(boolean answer) {
 		if(answer == true) {
+			if(loadingPane.isVisible()) {
+				mainWindow.displayConnectionTimeOut();
+			}
 			closeWindow();
 		}
 	}

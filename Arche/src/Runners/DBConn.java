@@ -6,8 +6,16 @@ import java.sql.SQLException;
 
 public class DBConn {        
     static Connection con=null;
+    static boolean production = false;			//use production database or not
+    
     static {
     	System.out.println("Database connection initalized");
+    	if(production) {
+    		printProd();
+    	}
+    	else {
+    		printLocal();
+    	}
     }
     public static Connection getConnection(){
     	if(con != null) {
@@ -22,8 +30,13 @@ public class DBConn {
     		try
             {
             	Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-    			//con = DriverManager.getConnection("jdbc:mysql://localhost:3306/scheduleplannerdb","root","trinity77"); printLocal();			//mysql, for testing
-    			con = DriverManager.getConnection("jdbc:mysql://den1.mysql4.gear.host:3306/scheduleplannera","scheduleplannera","Watermelon77!"); printProd();	//mysql, for production
+            	if(production) {
+            		//mysql, for production
+            		con = DriverManager.getConnection("jdbc:mysql://den1.mysql4.gear.host:3306/scheduleplannera","scheduleplannera","Watermelon77!");
+            	}else {
+            		//mysql, for testing
+            		con = DriverManager.getConnection("jdbc:mysql://localhost:3306/scheduleplannerdb","root","trinity77");
+            	}
             }
             catch(Exception e)
             {
@@ -54,7 +67,7 @@ public class DBConn {
     	}
     }
     private static void printLocal() {
-    	System.out.println("Connecting to local database");
+    	System.out.println("Connecting to non-production database");
     }
     private static void printProd() {
     	System.out.println("Connecting to production database");

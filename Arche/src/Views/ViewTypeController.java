@@ -21,6 +21,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -32,17 +33,27 @@ public class ViewTypeController implements Initializable{
 	@FXML private JFXButton deleteButton, saveButton;
 	@FXML private Label warningLabel, totalAssignments;
 	
+	//ui loading
+	@FXML public AnchorPane loadingPane;
+	@FXML private JFXButton cancelLoadingButton;
+	@FXML private Label loadingText;
+	
 	private final TaskType temp;
 	private String oldTypeName, newTypeName;
 	
-	public ViewTypeController(TaskType tt) {
+	private MainNewController mainWindow;
+	
+	public ViewTypeController(TaskType tt, MainNewController mw) {
 		temp = tt;
 		oldTypeName = temp.getName();
+		mainWindow = mw;
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initializeData(temp);
+		loadingPane.setVisible(false);
 		initializeCloseEventProperty();
+		setValidators();
 	}
 	private void initializeData(TaskType tt) {
 		name.setText(temp.getName());
@@ -133,6 +144,12 @@ public class ViewTypeController implements Initializable{
 		);
 		visiblePause.play();
 	}
+	private void setValidators() {
+		
+	}
+	private boolean checkValidation() {
+		return true;
+	}
 	private void setCloseEvent() {
 		Stage window = (Stage) name.getScene().getWindow();
 		window.setOnCloseRequest(e -> {
@@ -142,6 +159,9 @@ public class ViewTypeController implements Initializable{
 	}
 	private void closeWindow(boolean answer) {
 		if(answer == true) {
+			if(loadingPane.isVisible()) {
+				mainWindow.displayConnectionTimeOut();
+			}
 			closeWindow();
 		}
 	}

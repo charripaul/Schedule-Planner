@@ -19,6 +19,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -32,20 +33,31 @@ public class ViewClassController implements Initializable{
 	@FXML private JFXButton deleteButton, saveButton;
 	@FXML private Label totalAssignments, warningLabel;
 	
+	//ui loading
+	@FXML public AnchorPane loadingPane;
+	@FXML private JFXButton cancelLoadingButton;
+	@FXML private Label loadingText;
+	
 	private final Models.Class temp;
 	private String oldClassAbr, newClassAbr;
+	
+	private MainNewController mainWindow;
+	
 	//TODO: fix all methods for dependency on these structures
 	//if these are deleted,t ask have to be changed or deleted as well
 	//probably should be done in modelcontrol for class and task type since
 	//other structures are dependent on it
-	public ViewClassController(Models.Class c) {
+	public ViewClassController(Models.Class c, MainNewController mw) {
 		temp = c;
 		oldClassAbr = temp.getAbbreviation();
+		mainWindow = mw;
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initializeData(temp);
+		loadingPane.setVisible(false);
 		initializeCloseEventProperty();
+		setValidators();
 	}
 	private void initializeData(Models.Class c) {
 		name.setText(c.getName());
@@ -183,6 +195,12 @@ public class ViewClassController implements Initializable{
 		);
 		visiblePause.play();
 	}
+	private void setValidators() {
+		
+	}
+	private boolean checkValidation() {
+		return true;
+	}
 	private void setCloseEvent() {
 		Stage window = (Stage) name.getScene().getWindow();
 		window.setOnCloseRequest(e -> {
@@ -208,6 +226,9 @@ public class ViewClassController implements Initializable{
 	}
 	private void closeWindow(boolean answer) {
 		if(answer == true) {
+			if(loadingPane.isVisible()) {
+				mainWindow.displayConnectionTimeOut();
+			}
 			closeWindow();
 		}
 	}
