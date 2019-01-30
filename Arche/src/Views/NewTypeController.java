@@ -162,9 +162,160 @@ public class NewTypeController implements Initializable{
 		visiblePause.play();
 	}
 	private void setValidators() {
-		
+		name.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Name text invalid");
+	            }
+	            else if(name.getText().length() > 45) {
+	            	displayWarningLabel("Name too long: Keep under 45 characters");
+	            }
+	            else if(name.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter a name");
+	            }
+	        }
+	    });
+		noticePeriod.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!noticePeriod.getText().matches("^[0-9]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Notice Period characters invalid");
+	            }
+	            else if(noticePeriod.getText().length() > 9) {
+	            	displayWarningLabel("Notice Period value too large: Keep under 1,000,000,000");
+	            }
+	            else if(Integer.parseInt(noticePeriod.getText()) <= 0) {
+	            	displayWarningLabel("Notice Period value must be positive");
+	            }
+	            else if(noticePeriod.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter a Notice Period");
+	            }
+	        }
+	    });
+		hour.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!hour.getText().matches("^[0-9]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Hour characters invalid");
+	            }
+	            else if(hour.getText().length() > 9) {
+	            	displayWarningLabel("Hour value too large: Keep under 1,000,000,000");
+	            }
+	            else if(Integer.parseInt(hour.getText()) < 0) {
+	            	displayWarningLabel("Hour value must be positive");
+	            }
+	            else if(hour.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter an hour value");
+	            }
+	        }
+	    });
+		minute.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!minute.getText().matches("^[0-9]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Minute characters invalid");
+	            }
+	            else if(minute.getText().length() > 9) {
+	            	displayWarningLabel("Minute value too large: Keep under 60");
+	            }
+	            else if(Integer.parseInt(minute.getText()) > 59) {
+	            	displayWarningLabel("Minute value too large: Keep under 60");
+	            }
+	            else if(Integer.parseInt(minute.getText()) <= 0) {
+	            	displayWarningLabel("Minute value must be positive");
+	            }
+	            else if(minute.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter a minute value");
+	            }
+	        }
+	    });
+		description.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!description.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Description text invalid");
+	            }
+	            else if(description.getText().length() > 255) {
+	            	displayWarningLabel("Description text too long: Keep under 255 characters");
+	            }
+	        }
+	    });
 	}
 	private boolean checkValidation() {
+		if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+            return false;
+        }
+        else if(name.getText().length() > 45) {
+        	return false;
+        }
+        else if(name.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!noticePeriod.getText().matches("^[0-9]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+			return false;
+        }
+        else if(noticePeriod.getText().length() > 9) {
+        	return false;
+        }
+        else if(Integer.parseInt(noticePeriod.getText()) <= 0) {
+        	return false;
+        }
+        else if(noticePeriod.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!hour.getText().matches("^[0-9]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+			return false;
+        }
+        else if(hour.getText().length() > 9) {
+        	return false;
+        }
+        else if(Integer.parseInt(hour.getText()) < 0) {
+        	return false;
+        }
+        else if(hour.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!minute.getText().matches("^[0-9]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+			return false;
+        }
+        else if(minute.getText().length() > 9) {
+        	return false;
+        }
+        else if(Integer.parseInt(minute.getText()) > 59) {
+        	return false;
+        }
+        else if(Integer.parseInt(minute.getText()) <= 0) {
+        	return false;
+        }
+        else if(minute.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!description.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+			return false;
+        }
+        else if(description.getText().length() > 255) {
+        	return false;
+        }
 		return true;
 	}
 	@FXML

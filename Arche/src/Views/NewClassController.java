@@ -57,7 +57,7 @@ public class NewClassController implements Initializable{
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
 		if(event.getCode() == KeyCode.ENTER) {
-			confirmButtonClicked();
+			confirmButton.fire();
 		}
 	}
 	@FXML
@@ -220,9 +220,82 @@ public class NewClassController implements Initializable{
 		}
 	}
 	private void setValidators() {
-		
+		name.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Name text invalid");
+	            }
+	            else if(name.getText().length() > 45) {
+	            	displayWarningLabel("Name too long: Keep under 45 characters");
+	            }
+	            else if(name.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter a name");
+	            }
+	        }
+	    });
+		abbreviation.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!abbreviation.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Abbreviation text invalid");
+	            }
+	            else if(abbreviation.getText().length() > 15) {
+	            	displayWarningLabel("Abbreviation too long: Keep under 15 characters");
+	            }
+	            else if(abbreviation.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter an abbreviation");
+	            }
+	        }
+	    });
+		details.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!details.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Details text invalid");
+	            }
+	            else if(details.getText().length() > 255) {
+	            	displayWarningLabel("Details text too long: Keep under 255 characters");
+	            }
+	        }
+	    });
 	}
 	private boolean checkValidation() {
+		if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+            return false;
+        }
+        else if(name.getText().length() > 45) {
+        	return false;
+        }
+        else if(name.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!abbreviation.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+            return false;
+        }
+        else if(abbreviation.getText().length() > 15) {
+        	return false;
+        }
+        else if(abbreviation.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!details.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+            return false;
+        }
+        else if(details.getText().length() > 255) {
+        	return false;
+        }
 		return true;
 	}
 	@FXML

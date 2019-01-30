@@ -14,6 +14,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import Models.DataLock.CannotPerformOperationException;
+import Models.DataLock.InvalidHashException;
 import Runners.DBConn;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -362,7 +364,15 @@ public class ModelControl {
 	public static boolean isAdmin(String username, String password) {
 		for(int count = 0;count<admins.size();count++) {
 			if(username.equals(admins.get(count).getUsername())) {
-				if(password.equals(DataLock.decrypt(admins.get(count).getPassword()))) {
+				boolean is = false;
+				try {
+					is = DataLock.verifyPassword(password,admins.get(count).getPassword());
+				} catch (CannotPerformOperationException e) {
+					e.printStackTrace();
+				} catch (InvalidHashException e) {
+					e.printStackTrace();
+				}
+				if(is) {
 					mainUID = -1;		//superusers sign uid as -1
 					return true;
 				}
@@ -373,8 +383,16 @@ public class ModelControl {
 	public static boolean isUser(String username, String password) {
 		for(int count = 0;count<users.size();count++) {
 			if(username.equals(users.get(count).getUsername())) {
-				if(password.equals(DataLock.decrypt(users.get(count).getPassword()))) {
-					mainUID = users.get(count).getId();
+				boolean is = false;
+				try {
+					is = DataLock.verifyPassword(password,users.get(count).getPassword());
+				} catch (CannotPerformOperationException e) {
+					e.printStackTrace();
+				} catch (InvalidHashException e) {
+					e.printStackTrace();
+				}
+				if(is) {
+					mainUID = -1;		//superusers sign uid as -1
 					return true;
 				}
 			}

@@ -12,6 +12,9 @@ import Models.ModelControl;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -81,24 +84,76 @@ public class ViewClassController implements Initializable{
 	}
 	@FXML
 	private void saveButtonClicked() {
-		temp.setName(name.getText());
-		temp.setAbbreviation(abbreviation.getText());
-		temp.setDetails(details.getText());
-		temp.setStartTime(startTime.getValue());
-		temp.setEndTime(endTime.getValue());
-		temp.setDaysOfWeek(getBinary(sunday.isSelected())+getBinary(monday.isSelected())+
-				getBinary(tuesday.isSelected())+getBinary(wednesday.isSelected())+
-				getBinary(thursday.isSelected())+getBinary(friday.isSelected())+
-				getBinary(saturday.isSelected()));
+		loadingPane.setVisible(true);
+		Task<Boolean> changeThread = new Task<Boolean>() {
+			@Override
+			public Boolean call() throws InterruptedException{
+				//validate input data
+				if(checkValidation()) {
+					temp.setName(name.getText());
+					temp.setAbbreviation(abbreviation.getText());
+					temp.setDetails(details.getText());
+					temp.setStartTime(startTime.getValue());
+					temp.setEndTime(endTime.getValue());
+					temp.setDaysOfWeek(getBinary(sunday.isSelected())+getBinary(monday.isSelected())+
+							getBinary(tuesday.isSelected())+getBinary(wednesday.isSelected())+
+							getBinary(thursday.isSelected())+getBinary(friday.isSelected())+
+							getBinary(saturday.isSelected()));
+					
+					newClassAbr = temp.getAbbreviation();
+					ModelControl.updateClassAndTaskDependency(temp, oldClassAbr, newClassAbr);
+					
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		};
+		changeThread.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
+			@Override
+			public void handle(WorkerStateEvent event) {
+				boolean result = changeThread.getValue();
+				if(result) {
+					closeWindow();
+				}
+				else {
+					loadingPane.setVisible(false);
+					displayWarningLabel("Please fix input errors");
+				}
+			}
+		});
 		
-		newClassAbr = temp.getAbbreviation();
-		ModelControl.updateClassAndTaskDependency(temp, oldClassAbr, newClassAbr);
-		closeWindow();
+		Task<Boolean> midlayer = new Task<Boolean>() {
+			@Override
+			public Boolean call() {
+				long timeoutTime = 15000;		//15 secs
+				TimeOut t = new TimeOut(new Thread(changeThread), timeoutTime, true);
+				try {                       
+				  boolean success = t.execute(); // Will return false if this times out, this freezes thread
+				  return success;
+				} catch (InterruptedException e) {}
+				return false;
+			}
+		};
+		midlayer.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				boolean result = midlayer.getValue();
+				if(!result) {
+					//display loading pane on main window
+					mainWindow.displayConnectionTimeOut();
+					closeWindow();
+				}
+			}
+		});
+		
+		new Thread(midlayer).start();
 	}
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
 		if(event.getCode() == KeyCode.ENTER) {
-			saveButtonClicked();
+			saveButton.fire();
 		}
 	}
 	@FXML
@@ -196,9 +251,82 @@ public class ViewClassController implements Initializable{
 		visiblePause.play();
 	}
 	private void setValidators() {
-		
+		name.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Name text invalid");
+	            }
+	            else if(name.getText().length() > 45) {
+	            	displayWarningLabel("Name too long: Keep under 45 characters");
+	            }
+	            else if(name.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter a name");
+	            }
+	        }
+	    });
+		abbreviation.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!abbreviation.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Abbreviation text invalid");
+	            }
+	            else if(abbreviation.getText().length() > 15) {
+	            	displayWarningLabel("Abbreviation too long: Keep under 15 characters");
+	            }
+	            else if(abbreviation.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter an abbreviation");
+	            }
+	        }
+	    });
+		details.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!details.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Details text invalid");
+	            }
+	            else if(details.getText().length() > 255) {
+	            	displayWarningLabel("Details text too long: Keep under 255 characters");
+	            }
+	        }
+	    });
 	}
 	private boolean checkValidation() {
+		if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+            return false;
+        }
+        else if(name.getText().length() > 45) {
+        	return false;
+        }
+        else if(name.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!abbreviation.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+            return false;
+        }
+        else if(abbreviation.getText().length() > 15) {
+        	return false;
+        }
+        else if(abbreviation.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!details.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+            return false;
+        }
+        else if(details.getText().length() > 255) {
+        	return false;
+        }
 		return true;
 	}
 	private void setCloseEvent() {

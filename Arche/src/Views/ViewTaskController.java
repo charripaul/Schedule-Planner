@@ -16,10 +16,13 @@ import com.jfoenix.controls.JFXCheckBox;
 import Models.ModelControl;
 import Models.Task;
 import Models.TaskType;
+import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -29,6 +32,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import tornadofx.control.DateTimePicker;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -46,6 +50,7 @@ public class ViewTaskController implements Initializable{
 	@FXML private JFXCheckBox completed;
 	@FXML private TextField noticePeriod;
 	@FXML private TextField hours, minutes;
+	@FXML private Label warningLabel;
 	
 	//ui loading
 	@FXML public AnchorPane loadingPane;
@@ -67,6 +72,7 @@ public class ViewTaskController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initializeData(temp);
+		warningLabel.setVisible(false);
 		loadingPane.setVisible(false);
 		initializeCloseEventProperty();
 		setValidators();
@@ -74,7 +80,7 @@ public class ViewTaskController implements Initializable{
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
 		if(event.getCode() == KeyCode.ENTER) {
-			closeButtonClicked();
+			saveCloseButton.fire();
 		}
 	}
 	@FXML
@@ -86,24 +92,77 @@ public class ViewTaskController implements Initializable{
 	}
 	@FXML
 	private void closeButtonClicked() {
-		temp.setName(name.getText());
-		temp.setType(taskTypes.getSelectionModel().getSelectedItem());
-		temp.setClassAbr(classAbrs.getSelectionModel().getSelectedItem());
-		temp.setDueDate(dueDate.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-		temp.setScheduledStartTime((scheduledStartTime.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
-		temp.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-		temp.setDescription(description.getText());
-		temp.setFinishFlag(completed.isSelected());
-		int amountOfTime = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
-		temp.setTimeToComplete(amountOfTime);
-		temp.setNoticePeriod(Integer.parseInt(noticePeriod.getText()));
+		loadingPane.setVisible(true);
 		
-		newClassAbr = temp.getClassAbr();
-		newTypeName = temp.getType();
+		javafx.concurrent.Task<Boolean> changeThread = new javafx.concurrent.Task<Boolean>() {
+			@Override
+			public Boolean call() throws InterruptedException{
+				//validate input data
+				if(checkValidation()) {
+					temp.setName(name.getText());
+					temp.setType(taskTypes.getSelectionModel().getSelectedItem());
+					temp.setClassAbr(classAbrs.getSelectionModel().getSelectedItem());
+					temp.setDueDate(dueDate.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+					temp.setScheduledStartTime((scheduledStartTime.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
+					temp.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+					temp.setDescription(description.getText());
+					temp.setFinishFlag(completed.isSelected());
+					int amountOfTime = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
+					temp.setTimeToComplete(amountOfTime);
+					temp.setNoticePeriod(Integer.parseInt(noticePeriod.getText()));
+					
+					newClassAbr = temp.getClassAbr();
+					newTypeName = temp.getType();
+					
+					ModelControl.updateTaskAndClassDependency(temp, oldClassAbr, newClassAbr);
+					ModelControl.updateTaskAndTypeDependency(temp, oldTypeName, newTypeName);
+					
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		};
+		changeThread.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
+			@Override
+			public void handle(WorkerStateEvent event) {
+				boolean result = changeThread.getValue();
+				if(result) {
+					closeWindow();
+				}
+				else {
+					loadingPane.setVisible(false);
+					displayWarningLabel("Please fix input errors");
+				}
+			}
+		});
 		
-		ModelControl.updateTaskAndClassDependency(temp, oldClassAbr, newClassAbr);
-		ModelControl.updateTaskAndTypeDependency(temp, oldTypeName, newTypeName);
-		closeWindow();
+		javafx.concurrent.Task<Boolean> midlayer = new javafx.concurrent.Task<Boolean>() {
+			@Override
+			public Boolean call() {
+				long timeoutTime = 15000;		//15 secs
+				TimeOut t = new TimeOut(new Thread(changeThread), timeoutTime, true);
+				try {                       
+				  boolean success = t.execute(); // Will return false if this times out, this freezes thread
+				  return success;
+				} catch (InterruptedException e) {}
+				return false;
+			}
+		};
+		midlayer.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				boolean result = midlayer.getValue();
+				if(!result) {
+					//display loading pane on main window
+					mainWindow.displayConnectionTimeOut();
+					closeWindow();
+				}
+			}
+		});
+		
+		new Thread(midlayer).start();
 	}
 	private void initializeData(Task t) {
 		//temp = t;
@@ -245,10 +304,172 @@ public class ViewTaskController implements Initializable{
 		    }
 		});
 	}
+	private void displayWarningLabel(String s) {
+		warningLabel.setText(s);
+		warningLabel.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(3)
+		);
+		visiblePause.setOnFinished(
+		        event -> warningLabel.setVisible(false)
+		);
+		visiblePause.play();
+	}
 	private void setValidators() {
-		
+		name.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Name text invalid");
+	            }
+	            else if(name.getText().length() > 45) {
+	            	displayWarningLabel("Name too long: Keep under 45 characters");
+	            }
+	            else if(name.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter a name");
+	            }
+	        }
+	    });
+		description.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!description.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Description text invalid");
+	            }
+	            else if(description.getText().length() > 255) {
+	            	displayWarningLabel("Description text too long: Keep under 255 characters");
+	            }
+	        }
+	    });
+		noticePeriod.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!noticePeriod.getText().matches("^[0-9]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Notice Period characters invalid");
+	            }
+	            else if(noticePeriod.getText().length() > 9) {
+	            	displayWarningLabel("Notice Period value too large: Keep under 1,000,000,000");
+	            }
+	            else if(Integer.parseInt(noticePeriod.getText()) <= 0) {
+	            	displayWarningLabel("Notice Period value must be positive");
+	            }
+	            else if(noticePeriod.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter a Notice Period");
+	            }
+	        }
+	    });
+		hours.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!hours.getText().matches("^[0-9]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Hour characters invalid");
+	            }
+	            else if(hours.getText().length() > 9) {
+	            	displayWarningLabel("Hour value too large: Keep under 1,000,000,000");
+	            }
+	            else if(Integer.parseInt(hours.getText()) < 0) {
+	            	displayWarningLabel("Hour value must be positive");
+	            }
+	            else if(hours.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter an hour value");
+	            }
+	        }
+	    });
+		minutes.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!minutes.getText().matches("^[0-9]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayWarningLabel("Minute characters invalid");
+	            }
+	            else if(minutes.getText().length() > 9) {
+	            	displayWarningLabel("Minute value too large: Keep under 60");
+	            }
+	            else if(Integer.parseInt(minutes.getText()) > 59) {
+	            	displayWarningLabel("Minute value too large: Keep under 60");
+	            }
+	            else if(Integer.parseInt(minutes.getText()) <= 0) {
+	            	displayWarningLabel("Minute value must be positive");
+	            }
+	            else if(minutes.getText().isEmpty()) {
+	            	displayWarningLabel("Please enter a minute value");
+	            }
+	        }
+	    });
 	}
 	private boolean checkValidation() {
+		if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+            return false;
+        }
+        else if(name.getText().length() > 45) {
+        	return false;
+        }
+        else if(name.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!description.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+			return false;
+        }
+        else if(description.getText().length() > 255) {
+        	return false;
+        }
+		
+		if(!noticePeriod.getText().matches("^[0-9]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+			return false;
+        }
+        else if(noticePeriod.getText().length() > 9) {
+        	return false;
+        }
+        else if(Integer.parseInt(noticePeriod.getText()) <= 0) {
+        	return false;
+        }
+        else if(noticePeriod.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!hours.getText().matches("^[0-9]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+			return false;
+        }
+        else if(hours.getText().length() > 9) {
+        	return false;
+        }
+        else if(Integer.parseInt(hours.getText()) < 0) {
+        	return false;
+        }
+        else if(hours.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!minutes.getText().matches("^[0-9]*$")){
+            //when it doesn't match the pattern
+            //set the textField empty
+			return false;
+        }
+        else if(minutes.getText().length() > 9) {
+        	return false;
+        }
+        else if(Integer.parseInt(minutes.getText()) > 59) {
+        	return false;
+        }
+        else if(Integer.parseInt(minutes.getText()) <= 0) {
+        	return false;
+        }
+        else if(minutes.getText().isEmpty()) {
+        	return false;
+        }
 		return true;
 	}
 	private void setCloseEvent() {

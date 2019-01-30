@@ -12,6 +12,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
 import Models.DataLock;
+import Models.DataLock.CannotPerformOperationException;
 import Models.ModelControl;
 import Models.User;
 import Runners.DBConn;
@@ -80,6 +81,8 @@ public class LoginController implements Initializable{
 		loginPane.setVisible(true);
 		loadingPane.setVisible(false);
 		
+		initializeValidation();
+		
 		String usernameFill = LocalDBConn.getLoginUsername();
 		if(!usernameFill.equals("")) {
 			remember.setSelected(true);
@@ -103,6 +106,9 @@ public class LoginController implements Initializable{
 		    public Boolean call() throws InterruptedException{
 		    	String u = username.getText();
 				String p = password.getText();
+				
+				LocalDBConn.initialize();
+				
 		        boolean isUser = ModelControl.isUser(u,p);
 		    	boolean isAdmin = ModelControl.isAdmin(u,p);
 		    	
@@ -244,9 +250,27 @@ public class LoginController implements Initializable{
 				else if(ModelControl.usernameExists(usernameRegister.getText()) == false) {
 					if(firstPassRegister.getText().equals(secondPassRegister.getText())) {
 						if(!firstPassRegister.getText().equals("")) {
-							ModelControl.addUser(new User(usernameRegister.getText(),DataLock.encrypt(firstPassRegister.getText())));
-							Thread.sleep(2000);
-							return "";
+							if(validate()) {
+								String hash = "";
+								try {
+									hash = DataLock.createHash(firstPassRegister.getText());
+								} catch (CannotPerformOperationException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+								if(hash.isEmpty()) {
+									return "Error LC: hash";
+								}
+								else {
+									ModelControl.addUser(new User(usernameRegister.getText(),hash));
+									Thread.sleep(2000);
+									return "";
+								}
+							}
+							else {
+								return "Please fix input";
+							}
 						}
 						else {
 							return "Please enter a password";
@@ -304,6 +328,72 @@ public class LoginController implements Initializable{
 		});
 		
 		new Thread(midlayer).start();
+	}
+	private boolean validate() {
+		if(!usernameRegister.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+            return false;
+        }
+        else if(usernameRegister.getText().length() > 45) {
+        	return false;
+        }
+        else if(usernameRegister.getText().isEmpty()) {
+        	return false;
+        }
+		
+		if(!firstPassRegister.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
+            return false;
+        }
+        else if(firstPassRegister.getText().length() > 40) {
+        	return false;
+        }
+        else if(firstPassRegister.getText().length() < 6) {
+        	return false;
+        }
+        else if(firstPassRegister.getText().isEmpty()) {
+        	return false;
+        }
+		return true;
+	}
+	private void initializeValidation() {
+		usernameRegister.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!usernameRegister.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+	                //when it doesn't match the pattern
+	                //set the textField empty
+	                displayRegisterAlert("Username text invalid");
+	            }
+	            else if(usernameRegister.getText().length() > 45) {
+	            	displayRegisterAlert("Username too long: Keep under 45 characters");
+	            }
+	            else if(usernameRegister.getText().isEmpty()) {
+	            	displayRegisterAlert("Please enter a username");
+	            }
+	            else {
+	            	registerAlert.setVisible(false);
+	            }
+	        }
+	    });
+		firstPassRegister.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { //when focus lost
+	            if(!firstPassRegister.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
+	                //when it doesn't match- the pattern
+	                //set the textField empty
+	                displayRegisterAlert("Password text invalid");
+	            }
+	            else if(firstPassRegister.getText().length() > 40) {
+	            	displayRegisterAlert("Password too long: Keep under 40 characters");
+	            }
+	            else if(firstPassRegister.getText().isEmpty()) {
+	            	displayRegisterAlert("Please enter a password");
+	            }
+	            else if(firstPassRegister.getText().length() < 6) {
+	            	displayRegisterAlert("Password must be at least 6 characters long");
+	            }
+	            else {
+	            	registerAlert.setVisible(false);
+	            }
+	        }
+	    });
 	}
 	public void setStage(Stage stage) {
 		loginWindow = stage;

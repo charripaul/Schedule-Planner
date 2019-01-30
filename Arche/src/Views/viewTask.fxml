@@ -21,7 +21,10 @@
             <HBox BorderPane.alignment="CENTER">
                <children>
                   <JFXButton fx:id="deleteButton" onAction="#deleteButtonClicked" onKeyPressed="#handleKeyPressed" style="-fx-background-color: #f2782f;" text="Delete" />
-                  <Pane prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Pane prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="warningLabel" layoutX="199.0" layoutY="4.0" text="Warning Label" />
+                     </children></Pane>
                   <JFXButton fx:id="saveCloseButton" onAction="#closeButtonClicked" style="-fx-background-color: #f2782f;" text="Save/Close" />
                </children>
             </HBox>
