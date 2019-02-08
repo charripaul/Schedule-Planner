@@ -31,12 +31,8 @@ public class DBConn {
             {
             	Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             	if(production) {
-            		//mysql, for production
-            		//con = DriverManager.getConnection("jdbc:mysql://den1.mysql4.gear.host:3306/scheduleplannera","scheduleplannera","Watermelon77!");
             		con = DriverManager.getConnection(LocalDBConn.getProdDBAddress(),LocalDBConn.getProdDBUsername(),LocalDBConn.getProdDBPassword());
             	}else {
-            		//mysql, for testing
-            		//con = DriverManager.getConnection("jdbc:mysql://localhost:3306/scheduleplannerdb","root","trinity77");
             		con = DriverManager.getConnection(LocalDBConn.getLocalDBAddress(),LocalDBConn.getLocalDBUsername(),LocalDBConn.getLocalDBPassword());
             	}
             }

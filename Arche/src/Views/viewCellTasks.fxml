@@ -45,7 +45,7 @@
                                  </HBox.margin>
                               </JFXButton>
                               <Pane prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                              <JFXButton fx:id="confirmAll" onAction="#confirmAllButtonClicked" style="-fx-background-color: #f2782f;" text="Confirm">
+                              <JFXButton fx:id="saveButton" onAction="#confirmAllButtonClicked" style="-fx-background-color: #f2782f;" text="Save">
                                  <HBox.margin>
                                     <Insets bottom="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
@@ -87,10 +87,11 @@
                         <HBox BorderPane.alignment="CENTER">
                            <children>
                               <JFXButton fx:id="cancelInfo" onAction="#cancelInfoButtonClicked" style="-fx-background-color: #f2782f;" text="Cancel" />
-                              <Pane prefWidth="200.0" HBox.hgrow="ALWAYS">
+                              <AnchorPane HBox.hgrow="ALWAYS">
                                  <children>
-                                    <Label fx:id="warningLabel" layoutX="206.0" layoutY="4.0" text="Warning Label" />
-                                 </children></Pane>
+                                    <Label fx:id="alertLabel" layoutX="216.0" layoutY="4.0" text="Alert Label" />
+                                 </children>
+                              </AnchorPane>
                               <JFXButton fx:id="confirmInfo" onAction="#confirmInfoButtonClicked" style="-fx-background-color: #f2782f;" text="Confirm" />
                            </children>
                         </HBox>
@@ -111,8 +112,8 @@
                               <Label layoutX="390.0" layoutY="6.0" text="Task type:" />
                               <Label layoutX="390.0" layoutY="67.0" text="Due Date:" />
                               <TextField fx:id="name" layoutX="33.0" layoutY="26.0" />
-                              <ChoiceBox fx:id="className" layoutX="209.0" layoutY="26.0" prefWidth="150.0" />
-                              <ChoiceBox fx:id="taskType" layoutX="392.0" layoutY="26.0" prefWidth="150.0" />
+                              <ChoiceBox fx:id="classAbrs" layoutX="209.0" layoutY="26.0" prefWidth="150.0" />
+                              <ChoiceBox fx:id="taskTypes" layoutX="392.0" layoutY="26.0" prefWidth="150.0" />
                               <TextArea fx:id="description" layoutX="33.0" layoutY="93.0" prefHeight="200.0" prefWidth="322.0" />
                               <DateTimePicker fx:id="dueDate" layoutX="390.0" layoutY="93.0" />
                               <Label layoutX="391.0" layoutY="130.0" text="Notice Period:" />
@@ -133,19 +134,23 @@
             </Tab>
          </tabs>
       </JFXTabPane>
-      <AnchorPane fx:id="loadingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="600.0" visible="false">
+      <AnchorPane fx:id="loadingOverlay" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="600.0" visible="false">
          <children>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.6" prefHeight="476.0" prefWidth="600.0" style="-fx-background-color: #d4d4d4;">
+            <AnchorPane opacity="0.6" prefHeight="476.0" prefWidth="600.0" style="-fx-background-color: #d4d4d4;">
                <children>
-                  <Label fx:id="loadingText" layoutX="263.0" layoutY="253.0" text="Updating">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <JFXSpinner layoutX="275.0" layoutY="188.0" />
-                  <JFXButton fx:id="cancelLoadingButton" blendMode="MULTIPLY" layoutX="274.0" layoutY="334.0" text="Cancel" visible="false" />
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.6" prefHeight="476.0" prefWidth="600.0" style="-fx-background-color: #d4d4d4;">
+                     <children>
+                        <Label fx:id="loadingText" layoutX="263.0" layoutY="253.0" text="Updating">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <JFXSpinner layoutX="275.0" layoutY="188.0" />
+                        <JFXButton fx:id="cancelLoadingButton" blendMode="MULTIPLY" layoutX="274.0" layoutY="334.0" text="Cancel" visible="false" />
+                     </children>
+                  </Pane>
                </children>
-            </Pane>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import tornadofx.control.DateTimePicker?>
 
@@ -21,11 +20,12 @@
             <HBox BorderPane.alignment="CENTER">
                <children>
                   <JFXButton fx:id="deleteButton" onAction="#deleteButtonClicked" onKeyPressed="#handleKeyPressed" style="-fx-background-color: #f2782f;" text="Delete" />
-                  <Pane prefWidth="200.0" HBox.hgrow="ALWAYS">
+                  <AnchorPane HBox.hgrow="ALWAYS">
                      <children>
-                        <Label fx:id="warningLabel" layoutX="199.0" layoutY="4.0" text="Warning Label" />
-                     </children></Pane>
-                  <JFXButton fx:id="saveCloseButton" onAction="#closeButtonClicked" style="-fx-background-color: #f2782f;" text="Save/Close" />
+                        <Label fx:id="alertLabel" layoutX="224.0" layoutY="4.0" text="Alert Label" />
+                     </children>
+                  </AnchorPane>
+                  <JFXButton fx:id="saveCloseButton" onAction="#closeButtonClicked" style="-fx-background-color: #f2782f;" text="Close" />
                </children>
             </HBox>
          </bottom>
@@ -63,9 +63,9 @@
             </AnchorPane>
          </center>
       </BorderPane>
-      <AnchorPane fx:id="loadingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="600.0" visible="false">
+      <AnchorPane fx:id="loadingOverlay" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="600.0" visible="false">
          <children>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.6" prefHeight="476.0" prefWidth="600.0" style="-fx-background-color: #d4d4d4;">
+            <AnchorPane opacity="0.6" prefHeight="476.0" prefWidth="600.0" style="-fx-background-color: #d4d4d4;">
                <children>
                   <Label fx:id="loadingText" layoutX="263.0" layoutY="274.0" text="Updating">
                      <font>
@@ -75,7 +75,7 @@
                   <JFXSpinner layoutX="275.0" layoutY="213.0" />
                   <JFXButton fx:id="cancelLoadingButton" blendMode="MULTIPLY" layoutX="274.0" layoutY="334.0" text="Cancel" visible="false" />
                </children>
-            </Pane>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

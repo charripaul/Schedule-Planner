@@ -28,31 +28,24 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class NewClassController implements Initializable{
+public class NewClassController extends ParentController{
 	@FXML private TextField name, abbreviation;
 	@FXML private TextArea details;
 	@FXML private JFXCheckBox monday, tuesday, wednesday, thursday,
 								friday, saturday, sunday;
 	@FXML private JFXTimePicker startTime, endTime;
 	@FXML private JFXButton cancelButton, confirmButton;
-	@FXML private Label warningLabel;
-	
-	//ui loading
-	@FXML public AnchorPane loadingPane;
-	@FXML private JFXButton cancelLoadingButton;
-	@FXML private Label loadingText;
-	
-	private MainNewController mainWindow;
+	@FXML private Label alertLabel;
 	
 	public NewClassController(MainNewController mw) {
-		mainWindow = mw;
+		super(mw);
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		warningLabel.setVisible(false);
-		loadingPane.setVisible(false);
-		initializeCloseEventProperty();
-		setValidators();
+		alertLabel.setVisible(false);
+		disableLoadingOverlay();
+		enableCloseEventProperty();
+		enableVisualValidation();
 	}
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
@@ -62,260 +55,178 @@ public class NewClassController implements Initializable{
 	}
 	@FXML
 	private void confirmButtonClicked() {
-		loadingPane.setVisible(true);
+		enableLoadingOverlay("Updating");
+		computeUpdateOperations();
+	}
+	private void computeUpdateOperations() {
+		Task<Boolean> updateThread = createUpdateThread();
+		Task<Boolean> timingThread = createTimedThread(updateThread);
 		
-		Task<Boolean> changeThread = new Task<Boolean>() {
-			@Override
-			public Boolean call() throws InterruptedException{
-				//validate input data
-				if(checkValidation()) {
-					String dow = getBinary(sunday.isSelected()) + getBinary(monday.isSelected())+
-							getBinary(tuesday.isSelected())+getBinary(wednesday.isSelected())+
-							getBinary(thursday.isSelected())+getBinary(friday.isSelected())+
-							getBinary(saturday.isSelected());
-					Models.Class c = new Models.Class(ModelControl.mainUID, name.getText(), abbreviation.getText(), details.getText(),
-							0, dow, startTime.getValue(), endTime.getValue());
-					Thread.sleep(10000);
-					ModelControl.addClass(c);
-					
-					return true;
-				}
-				else {
-					return false;
-				}
-			}
+		new Thread(timingThread).start();
+	}
+	private Task<Boolean> createUpdateThread(){
+		Task<Boolean> updateThread = new Task<Boolean>() {
+		    @Override
+		    public Boolean call() throws InterruptedException{
+		    	return addClass();
+		    }
 		};
-		changeThread.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
-			@Override
-			public void handle(WorkerStateEvent event) {
-				boolean result = changeThread.getValue();
-				if(result) {
-					closeWindow();
-				}
-				else {
-					loadingPane.setVisible(false);
-					displayWarningLabel("Please fix input errors");
-				}
-			}
+		//reverts to javafx main app thread
+		updateThread.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+		    @Override
+		    public void handle(WorkerStateEvent event) {
+		        boolean result = updateThread.getValue(); 						//result of computation
+		        computeUpdateResult(result);
+		    }
 		});
-		
-		Task<Boolean> midlayer = new Task<Boolean>() {
-			@Override
-			public Boolean call() {
-				long timeoutTime = 15000;		//15 secs
-				TimeOut t = new TimeOut(new Thread(changeThread), timeoutTime, true);
-				try {                       
-				  boolean success = t.execute(); // Will return false if this times out, this freezes thread
-				  return success;
-				} catch (InterruptedException e) {}
-				return false;
-			}
-		};
-		midlayer.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-			@Override
-			public void handle(WorkerStateEvent event) {
-				boolean result = midlayer.getValue();
-				if(!result) {
-					//display loading pane on main window
-					mainWindow.displayConnectionTimeOut();
-					closeWindow();
-				}
-			}
-		});
-		
-		new Thread(midlayer).start();
+		return updateThread;
+	}
+	private boolean addClass() throws InterruptedException {
+		if(validate()) {
+			String daysOfWeek = 
+					getBinary(sunday.isSelected())+
+					getBinary(monday.isSelected())+
+					getBinary(tuesday.isSelected())+
+					getBinary(wednesday.isSelected())+
+					getBinary(thursday.isSelected())+
+					getBinary(friday.isSelected())+
+					getBinary(saturday.isSelected()
+			);
+			Models.Class c = new Models.Class(
+					ModelControl.mainUID,
+					name.getText(),
+					abbreviation.getText(),
+					details.getText(),
+					0,
+					daysOfWeek,
+					startTime.getValue(),
+					endTime.getValue()
+			);
+			
+			Thread.sleep(1000);
+			ModelControl.addClass(c);
+			
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	private void computeUpdateResult(boolean result) {
+		if(result) {
+			closeWindow();
+		}
+		else {
+			disableLoadingOverlay();
+			displayAlertLabel("Please fix input errors");
+		}
 	}
 	@FXML
 	private void cancelButtonClicked() {
 		closeWindow();
 	}
-	private void initializeCloseEventProperty() {
-		name.textProperty().addListener(new ChangeListener<String>() {
-		    @Override
-		    public void changed(ObservableValue<? extends String> observable,
-		            String oldValue, String newValue) {
-		    	setCloseEvent();
-		    }
-		});
-		abbreviation.textProperty().addListener(new ChangeListener<String>() {
-		    @Override
-		    public void changed(ObservableValue<? extends String> observable,
-		            String oldValue, String newValue) {
-		    	setCloseEvent();
-		    }
-		});
-		details.textProperty().addListener(new ChangeListener<String>() {
-		    @Override
-		    public void changed(ObservableValue<? extends String> observable,
-		            String oldValue, String newValue) {
-		    	setCloseEvent();
-		    }
-		});
-		monday.selectedProperty().addListener(new ChangeListener<Boolean>() {
-	        @Override
-	        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-	            setCloseEvent();
-	        }
-	    });
-		tuesday.selectedProperty().addListener(new ChangeListener<Boolean>() {
-	        @Override
-	        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-	            setCloseEvent();
-	        }
-	    });
-		wednesday.selectedProperty().addListener(new ChangeListener<Boolean>() {
-	        @Override
-	        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-	            setCloseEvent();
-	        }
-	    });
-		thursday.selectedProperty().addListener(new ChangeListener<Boolean>() {
-	        @Override
-	        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-	            setCloseEvent();
-	        }
-	    });
-		friday.selectedProperty().addListener(new ChangeListener<Boolean>() {
-	        @Override
-	        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-	            setCloseEvent();
-	        }
-	    });
-		saturday.selectedProperty().addListener(new ChangeListener<Boolean>() {
-	        @Override
-	        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-	            setCloseEvent();
-	        }
-	    });
-		sunday.selectedProperty().addListener(new ChangeListener<Boolean>() {
-	        @Override
-	        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-	            setCloseEvent();
-	        }
-	    });
-		startTime.valueProperty().addListener((ov, oldValue, newValue) -> {
-            setCloseEvent();
-        });
-		endTime.valueProperty().addListener((ov, oldValue, newValue) -> {
-            setCloseEvent();
-        });
+	protected void enableCloseEventProperty() {
+		enableTextCloseProperty(name);
+		enableTextCloseProperty(abbreviation);
+		enableTextCloseProperty(details);
+		
+		enableCheckboxCloseProperty(monday);
+		enableCheckboxCloseProperty(tuesday);
+		enableCheckboxCloseProperty(wednesday);
+		enableCheckboxCloseProperty(thursday);
+		enableCheckboxCloseProperty(friday);
+		enableCheckboxCloseProperty(saturday);
+		enableCheckboxCloseProperty(sunday);
+		
+		enableTimepickerCloseProperty(startTime);
+		enableTimepickerCloseProperty(endTime);
 	}
-	private void displayWarningLabel(String s) {
-		warningLabel.setText(s);
-		warningLabel.setVisible(true);
-		PauseTransition visiblePause = new PauseTransition(
-		        Duration.seconds(3)
-		);
-		visiblePause.setOnFinished(
-		        event -> warningLabel.setVisible(false)
-		);
-		visiblePause.play();
-	}
-	private String getBinary(boolean b) {
-		if(b) {
-			return "1";
-		}
-		else {
-			return "0";
-		}
-	}
-	private void setValidators() {
+	protected void enableVisualValidation() {
 		name.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-	        if (!newValue) { //when focus lost
-	            if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
-	                //when it doesn't match the pattern
-	                //set the textField empty
-	                displayWarningLabel("Name text invalid");
+	        if (!newValue) {
+	            if(!name.getText().matches(NORMAL_TEXT_REGEX)){
+	                displayAlertLabel("Name text invalid");
 	            }
-	            else if(name.getText().length() > 45) {
-	            	displayWarningLabel("Name too long: Keep under 45 characters");
+	            else if(name.getText().length() > NAME_MAX_LENGTH) {
+	            	displayAlertLabel("Name too long: Keep under 45 characters");
 	            }
 	            else if(name.getText().isEmpty()) {
-	            	displayWarningLabel("Please enter a name");
+	            	displayAlertLabel("Please enter a name");
 	            }
 	        }
 	    });
 		abbreviation.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-	        if (!newValue) { //when focus lost
-	            if(!abbreviation.getText().matches("^[a-zA-Z0-9\\-_]*$")){
-	                //when it doesn't match the pattern
-	                //set the textField empty
-	                displayWarningLabel("Abbreviation text invalid");
+	        if (!newValue) {
+	            if(!abbreviation.getText().matches(NORMAL_TEXT_REGEX)){
+	                displayAlertLabel("Abbreviation text invalid");
 	            }
-	            else if(abbreviation.getText().length() > 15) {
-	            	displayWarningLabel("Abbreviation too long: Keep under 15 characters");
+	            else if(abbreviation.getText().length() > ABRV_MAX_LENGTH) {
+	            	displayAlertLabel("Abbreviation too long: Keep under 15 characters");
 	            }
 	            else if(abbreviation.getText().isEmpty()) {
-	            	displayWarningLabel("Please enter an abbreviation");
+	            	displayAlertLabel("Please enter an abbreviation");
 	            }
 	        }
 	    });
 		details.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-	        if (!newValue) { //when focus lost
-	            if(!details.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
-	                //when it doesn't match the pattern
-	                //set the textField empty
-	                displayWarningLabel("Details text invalid");
+	        if (!newValue) {
+	            if(!details.getText().matches(SPECIAL_TEXT_REGEX)){
+	                displayAlertLabel("Details text invalid");
 	            }
-	            else if(details.getText().length() > 255) {
-	            	displayWarningLabel("Details text too long: Keep under 255 characters");
+	            else if(details.getText().length() > TEXTAREA_MAX_LENGTH) {
+	            	displayAlertLabel("Details text too long: Keep under 255 characters");
+	            }
+	        }
+	    });
+		startTime.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) {
+	            if(startTime.getValue() == null) {
+	            	displayAlertLabel("Please set a start time");
+	            }
+	        }
+	    });
+		endTime.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) {
+	        	if(startTime.getValue() == null) {
+	            	displayAlertLabel("Please set an end time");
 	            }
 	        }
 	    });
 	}
-	private boolean checkValidation() {
-		if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
-            //when it doesn't match the pattern
-            //set the textField empty
+	protected boolean validate() {
+		if(!name.getText().matches(NORMAL_TEXT_REGEX)){
             return false;
         }
-        else if(name.getText().length() > 45) {
+        else if(name.getText().length() > NAME_MAX_LENGTH) {
         	return false;
         }
         else if(name.getText().isEmpty()) {
         	return false;
         }
 		
-		if(!abbreviation.getText().matches("^[a-zA-Z0-9\\-_]*$")){
-            //when it doesn't match the pattern
-            //set the textField empty
+		if(!abbreviation.getText().matches(NORMAL_TEXT_REGEX)){
             return false;
         }
-        else if(abbreviation.getText().length() > 15) {
+        else if(abbreviation.getText().length() > ABRV_MAX_LENGTH) {
         	return false;
         }
         else if(abbreviation.getText().isEmpty()) {
         	return false;
         }
 		
-		if(!details.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
-            //when it doesn't match the pattern
-            //set the textField empty
+		if(!details.getText().matches(SPECIAL_TEXT_REGEX)){
             return false;
         }
-        else if(details.getText().length() > 255) {
+        else if(details.getText().length() > TEXTAREA_MAX_LENGTH) {
+        	return false;
+        }
+		
+		if(startTime.getValue() == null) {
+        	return false;
+        }
+		if(endTime.getValue() == null) {
         	return false;
         }
 		return true;
-	}
-	@FXML
-	private void setCloseEvent() {
-		Stage window = (Stage) details.getScene().getWindow();
-		window.setOnCloseRequest(e -> {
-			e.consume();
-			closeWindow(ConfirmExitView.display("Are you sure you want to exit without adding this class?"));
-		});
-	}
-	private void closeWindow(boolean answer) {
-		if(answer == true) {
-			if(loadingPane.isVisible()) {
-				mainWindow.displayConnectionTimeOut();
-			}
-			closeWindow();
-		}
-	}
-	private void closeWindow() {
-		Stage stage = (Stage) confirmButton.getScene().getWindow();
-		stage.close();
 	}
 }

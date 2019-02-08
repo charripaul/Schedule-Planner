@@ -602,7 +602,7 @@ public class MainNewController implements Initializable{
 				}
 			}
 		}catch(IOException e) {
-			System.out.println("\nError code: Pouch\n" + e.getMessage());
+			System.out.println("\nError code: MNC-Pouch\n" + e.getMessage());
 			e.printStackTrace();
 		}
 		//update labels in case anything changed
@@ -632,7 +632,7 @@ public class MainNewController implements Initializable{
 				initializeTasks();
 				taskTable.getSelectionModel().select(sIndex);
 			}catch(IOException e) {
-				System.out.println("\nError code: Satchel\n" + e.getMessage());
+				System.out.println("\nError code: MNC-Satchel\n" + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -673,7 +673,7 @@ public class MainNewController implements Initializable{
 			//select cell
 			cellSelectedUpdate(p);
 		}catch(IOException e) {
-			System.out.println("\nError code: Shine\n" + e.getMessage());
+			System.out.println("\nError code: MNC-Shine\n" + e.getMessage());
 			e.printStackTrace();
 		}
 		initializeLabels();
@@ -711,7 +711,7 @@ public class MainNewController implements Initializable{
 				}
 			}
 		}catch(IOException e) {
-			System.out.println("\nError code: Pouch\n" + e.getMessage());
+			System.out.println("\nError code: MNC-Pouch\n" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -739,7 +739,7 @@ public class MainNewController implements Initializable{
 				initializeClass();
 				classTable.getSelectionModel().select(sIndex);
 			}catch(IOException e) {
-				System.out.println("\nError code: Satchel\n" + e.getMessage());
+				System.out.println("\nError code: MNC-Satchel\n" + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -779,7 +779,7 @@ public class MainNewController implements Initializable{
 				}
 			}
 		}catch(IOException e) {
-			System.out.println("\nError code: Fume\n" + e.getMessage());
+			System.out.println("\nError code: MNC-Fume\n" + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -807,7 +807,7 @@ public class MainNewController implements Initializable{
 				initializeClass();
 				typeTable.getSelectionModel().select(sIndex);
 			}catch(IOException e) {
-				System.out.println("\nError code: Amazon\n" + e.getMessage());
+				System.out.println("\nError code: MNC-Amor\n" + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -860,7 +860,7 @@ public class MainNewController implements Initializable{
 	    				initializeHome();
 	    				homeTreeTable.getSelectionModel().select(sIndex);
 	    			}catch(IOException e) {
-	    				System.out.println("\nError code: Satchel\n" + e.getMessage());
+	    				System.out.println("\nError code: MNC-Slate\n" + e.getMessage());
 	    				e.printStackTrace();
 	    			}
 	    		}
@@ -1138,7 +1138,7 @@ public class MainNewController implements Initializable{
 			public void handle(WorkerStateEvent event) {
 				boolean result = connectThread.getValue();
 				if(result) {
-					ModelControl.initialize();
+					ModelControl.initializeUserData();
 					
 					if(homeView.isVisible()) {
 						homeButton.fire();

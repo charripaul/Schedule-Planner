@@ -37,10 +37,10 @@ public class ModelControl {
 	public static int mainUID;
 	
 	static {
-		initializeAuthentication();
+		initialize();
 		System.out.println("ModelControl layer initialized");
 	}
-	public static void initializeAuthentication() {
+	public static void initialize() {
 		ResultSet rs;
 		try {
 			rs = Database.getAdmins();
@@ -48,7 +48,7 @@ public class ModelControl {
 				admins.add(new Admin(rs.getInt("id"), rs.getString("username"), rs.getString("password")));
 			}
 		}catch(SQLException e) {
-			System.out.println("\nError Code: Pong\n" + e.getMessage());
+			System.out.println("\nError Code: MC-Pong\n" + e.getMessage());
 		}
 		try {
 			rs = Database.getUsers();
@@ -56,10 +56,10 @@ public class ModelControl {
 				users.add(new User(rs.getInt("id"), rs.getString("username"), rs.getString("password")));
 			}
 		}catch(SQLException e) {
-			System.out.println("\nError Code: Ferocity\n" + e.getMessage());
+			System.out.println("\nError Code: MC-Ferocity\n" + e.getMessage());
 		}
 	}
-	public static void initialize() {
+	public static void initializeUserData() {
 		ResultSet rs;
 		try {
 			rs = Database.getClasses(mainUID);
@@ -69,7 +69,7 @@ public class ModelControl {
 						rs.getString("startTime"), rs.getString("endTime")));
 			}
 		}catch(SQLException e) {
-			System.out.println("\nError Code: Swab\n" + e.getMessage());
+			System.out.println("\nError Code: MC-Swab\n" + e.getMessage());
 		}
 		try {
 			rs = Database.getProjects(mainUID);
@@ -78,7 +78,7 @@ public class ModelControl {
 						 rs.getString("currentStep"), rs.getInt("priorityLevel")));
 			}
 		}catch(SQLException e) {
-			System.out.println("\nError Code: Puff\n" + e.getMessage());
+			System.out.println("\nError Code: MC-Puff\n" + e.getMessage());
 		}
 		try {
 			rs = Database.getTaskTypes(mainUID);
@@ -87,7 +87,7 @@ public class ModelControl {
 						  rs.getInt("warningPeriod"), rs.getInt("timeToComplete"), rs.getInt("totalAssignments")));
 			}
 		}catch(SQLException e) {
-			System.out.println("\nError Code: Center\n" + e.getMessage());
+			System.out.println("\nError Code: MC-Center\n" + e.getMessage());
 		}
 		//has to be last
 		try {
@@ -101,7 +101,7 @@ public class ModelControl {
 						 rs.getInt("timeToComplete"), rs.getLong("scheduledStartTime"), rs.getLong("scheduledEndTime")));
 			}
 		}catch(SQLException e) {
-			System.out.println("\nError Code: Solar\n" + e.getMessage());
+			System.out.println("\nError Code: MC-Solar\n" + e.getMessage());
 		}
 	}
 	//TODO: need to test to see whether identical task already exists excluding description

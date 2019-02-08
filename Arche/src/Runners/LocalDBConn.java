@@ -9,14 +9,12 @@ import java.sql.Statement;
 
 public class LocalDBConn {        
     static Connection con=null;
-    static ResultSet rs = null;
+    static String localTag = "'local'";
+    static String prodTag = "'production'";
     static {
     	//System.out.println("Local Database connection initalized");
     }
-    public static void initialize() {
-    	retrieveDBLoginInfo();
-    }
-    public static void updateLoginUsername(String s) {
+    public static void updateSavedUsername(String s) {
 		PreparedStatement prep = null;
 		try {
 			prep = getConnection().prepareStatement("UPDATE preferences SET loginUsername = ? WHERE id = 1;");
@@ -27,7 +25,7 @@ public class LocalDBConn {
 			System.out.println("\nError LCN01:\n" + e.getMessage());
 		}
 	}
-    public static String getLoginUsername() {
+    public static String getSavedUsername() {
     	Statement stmt = null;
     	String username = "";
 		try {
@@ -40,67 +38,89 @@ public class LocalDBConn {
 		return username;
 	}
     public static String getLocalDBUsername() {
+    	Statement stmt = null;
     	String username = "";
+    	String tag = "";
     	try {
-			username = rs.getString("LocalDBUsername");
+    		stmt = getConnection().createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM DatabaseCredentials WHERE Tag = " +
+    		localTag +
+    		";");
+			username = rs.getString("DBUsername");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
     	return username;
     }	
     public static String getLocalDBPassword() {
+    	Statement stmt = null;
     	String password = "";
     	try {
-			password = rs.getString("LocalDBPassword");
+    		stmt = getConnection().createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM DatabaseCredentials WHERE Tag = "+
+    		localTag+
+    		";");
+			password = rs.getString("DBPassword");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
     	return password;
     }
     public static String getLocalDBAddress() {
+    	Statement stmt = null;
     	String address = "";
     	try {
-			address = rs.getString("LocalDBAddress");
+    		stmt = getConnection().createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM DatabaseCredentials WHERE Tag = "+
+    		localTag+
+    		";");
+			address = rs.getString("DBAddress");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
     	return address;
     }
     public static String getProdDBUsername() {
+    	Statement stmt = null;
     	String username = "";
     	try {
-			username = rs.getString("ProdDBUsername");
+    		stmt = getConnection().createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM DatabaseCredentials WHERE Tag = "+
+    		prodTag+
+    		";");
+			username = rs.getString("DBUsername");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
     	return username;
     }
     public static String getProdDBPassword() {
+    	Statement stmt = null;
     	String password = "";
     	try {
-			password = rs.getString("ProdDBPassword");
+    		stmt = getConnection().createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM DatabaseCredentials WHERE Tag = "+
+    		prodTag+
+    		";");
+			password = rs.getString("BPassword");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
     	return password;
     }
     public static String getProdDBAddress() {
+    	Statement stmt = null;
     	String address = "";
     	try {
-			address = rs.getString("ProdDBAddress");
+    		stmt = getConnection().createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM DatabaseCredentials WHERE Tag = "+
+    		prodTag+
+    		";");
+			address = rs.getString("DBAddress");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
     	return address;
-    }
-    private static void retrieveDBLoginInfo() {
-    	Statement stmt = null;
-		try {
-			stmt = getConnection().createStatement();
-			rs = stmt.executeQuery("SELECT * FROM AppCredentials;");
-		}catch(SQLException e) {
-			System.out.println("\nError LCNR01:\n" + e.getMessage());
-		}
     }
     public static Connection getConnection() {
     	if(con != null) {
@@ -113,7 +133,7 @@ public class LocalDBConn {
     	try
         {
     		Class.forName("org.sqlite.JDBC").newInstance();
-			con = DriverManager.getConnection("jdbc:sqlite::resource:pref.sqlite");		//sqlite, for production
+			con = DriverManager.getConnection("jdbc:sqlite::resource:pref.sqlite");
         }
         catch(Exception e)
         {

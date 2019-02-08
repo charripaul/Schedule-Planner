@@ -25,6 +25,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -43,7 +45,9 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import jfxtras.scene.control.ImageViewButton;
 
-public class LoginController implements Initializable{
+public class LoginController extends ParentController{
+	
+	//login section
 	@FXML private JFXButton loginButton;
 	@FXML private JFXButton registerButton;
 	@FXML private Button closeButton;
@@ -51,343 +55,334 @@ public class LoginController implements Initializable{
 	@FXML private JFXPasswordField password;
 	@FXML private Label title;
 	@FXML private Label description;
-	@FXML private Label loginAlert;
-	@FXML private JFXCheckBox remember;
-	@FXML private ImageView bg;
-	@FXML private AnchorPane entirePane;
-	@FXML private AnchorPane loginPane;
+	@FXML private JFXCheckBox rememberMe;
+	@FXML private ImageView backgroundImage;
+	@FXML private AnchorPane loginLayout;
+	@FXML private AnchorPane bluePane;
 	
-	@FXML private AnchorPane registerPane;
+	//register section
+	@FXML private AnchorPane registerLayout;
 	@FXML private JFXButton registerConfirmButton;
-	@FXML private JFXTextField usernameRegister;
-	@FXML private JFXPasswordField firstPassRegister;
-	@FXML private JFXPasswordField secondPassRegister;
+	@FXML private JFXTextField registerUsername;
+	@FXML private JFXPasswordField registerFirstPass;
+	@FXML private JFXPasswordField registerSecondPass;
 	@FXML private Button backButton;
 	@FXML private Label registerAlert;
 	
-	@FXML private AnchorPane loadingPane;
-	@FXML private JFXButton cancelLoadingButton;
-	@FXML private Label loadingText;
+	private int USERNAME_MAX_LENGTH = 45;
+	private int PASSWORD_MAX_LENGTH = 40;
+	private int USERNAME_MIN_LENGTH = 1;
+	private int PASSWORD_MIN_LENGTH = 6;
+	
+	//Login Controller remains hidden and running in background
+	//Therefore, mainWindow instance variable needed
+	private Stage mainWindow;
 	
 	private double xOffset = 0;
 	private double yOffset = 0;
-	private Stage loginWindow;
-	private Stage mainWindow;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		registerAlert.setVisible(false);
-		registerPane.setVisible(false);
-		loginPane.setVisible(true);
-		loadingPane.setVisible(false);
+		registerLayout.setVisible(false);
+		alertLabel.setVisible(false);
+		loginLayout.setVisible(true);
 		
-		initializeValidation();
-		
-		String usernameFill = LocalDBConn.getLoginUsername();
-		if(!usernameFill.equals("")) {
-			remember.setSelected(true);
-		}
-		username.setText(usernameFill);
-		
-		selectNode(username);
+		disableLoadingOverlay();
+		enableVisualValidation();
+		enableMouseDragProperty();
+		fillSavedUsername();
+		focusNode(username);
 	}
-	@FXML
-	private void closeButtonClicked() {
-		closeWindow();
+	
+	protected void setThisWindow() {
+		thisWindow = (Stage) alertLabel.getScene().getWindow();
 	}
+	
 	@FXML
 	private void loginButtonClicked() {
-		loadingText.setText("Authenticating");
-		loadingPane.setVisible(true);
+		enableLoadingOverlay("Authenticating");
+		computeLoginOperations();
+	}
+	
+	private void computeLoginOperations() {
+		Task<Boolean> authThread = createAuthThread();
+		Task<Boolean> timingThread = createTimedThread(authThread);
 		
-		//perform database authentication check and connection in separate thread
-		Task<Boolean> initializeConnection = new Task<Boolean>() {
+		new Thread(timingThread).start();
+	}
+	
+	//computation thread
+	private Task<Boolean> createAuthThread() {
+		//perform  in separate thread
+		Task<Boolean> authThread = new Task<Boolean>() {
 		    @Override
 		    public Boolean call() throws InterruptedException{
-		    	String u = username.getText();
-				String p = password.getText();
-				
-				LocalDBConn.initialize();
-				
-		        boolean isUser = ModelControl.isUser(u,p);
-		    	boolean isAdmin = ModelControl.isAdmin(u,p);
-		    	
-		    	if(isUser || isAdmin) {
-		    		ModelControl.initialize();
-		    		
-		    		if(remember.isSelected()) {
-		    			LocalDBConn.updateLoginUsername(u);
-		    		}
-		    		else {
-		    			LocalDBConn.updateLoginUsername("");
-		    		}
-		    		
-					Thread.sleep(1000);
-		    		return true;
-		    	}
-		    	else {
-		    		Thread.sleep(1000);
-		    		return false;
-		    	}
+		    	return authenticate();
 		    }
 		};
+		
 		//reverts to javafx main app thread
-		initializeConnection.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+		authThread.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 		    @Override
 		    public void handle(WorkerStateEvent event) {
-		        boolean result = initializeConnection.getValue(); // result of computation
-		        
-		        if(result) {
-		        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/mainNew.fxml"));
-		        	Parent root = null;
-					try {
-						root = loader.load();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-		        	
-		        	mainWindow = new Stage();
-					mainWindow.setMinWidth(900);
-					mainWindow.setMinHeight(600);
-					
-					mainWindow.setOnCloseRequest(e -> {
-						e.consume();
-						closeProgram(ConfirmExitView.display("Are you sure you want to exit?"));
-					});
-					//stage.initStyle(StageStyle.DECORATED);
-					mainWindow.setScene(new Scene(root));
-					loginWindow.hide();
-					mainWindow.show();
-		        }
-		        else {
-		        	loadingPane.setVisible(false);
-		        	displayLoginAlert("Incorrect username/password combination");
-		        }
+		        boolean result = authThread.getValue(); 						//result of computation
+		        computeAuthResult(result);
 		    }
 		});
 		
-		//new Thread(initializeConnection).start();
-		
-		//mid layer thread to handle the use of the initializeconnection thread
-		//needed because this thread waits on the connection thread for information to determine
-		//timeout information
-		Task<Boolean> midlayer = new Task<Boolean>() {
-			@Override
-			public Boolean call() {
-				long timeoutTime = 25000;		//25 secs
-				TimeOut t = new TimeOut(new Thread(initializeConnection), timeoutTime, true);
-				try {                       
-				  boolean success = t.execute(); // Will return false if this times out, this freezes thread
-				  return success;
-				} catch (InterruptedException e) {}
-				return false;
-			}
-		};
-		midlayer.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-		    @Override
-		    public void handle(WorkerStateEvent event) {
-		    	boolean result = midlayer.getValue();
-		    	if(!result) {
-		    		System.out.println("Connection timed out\nProcess killed\n Error Code: LC01");
-		    		loadingPane.setVisible(false);
-		        	displayLoginAlert("Connection timed out, Error Code: LC01");
-		    	}
-		    }
-		});
-		
-		new Thread(midlayer).start();
+		return authThread;
 	}
+	
+	//database authentication check and connection initialization, returns true if pass authentication
+	private boolean authenticate() throws InterruptedException {
+		String u = username.getText();
+		String p = password.getText();
+		
+        boolean isUser = ModelControl.isUser(u,p);
+    	boolean isAdmin = ModelControl.isAdmin(u,p);
+    	
+    	if(isUser || isAdmin) {
+    		Thread.sleep(1000);
+    		setLoadingText("Loading User Data");
+    		ModelControl.initializeUserData();
+    		
+    		if(rememberMe.isSelected()) {
+    			LocalDBConn.updateSavedUsername(u);
+    		}
+    		else {
+    			LocalDBConn.updateSavedUsername("");
+    		}
+    		
+			Thread.sleep(1000);
+    		return true;
+    	}
+    	else {
+    		Thread.sleep(1000);
+    		return false;
+    	}
+	}
+	
+	private void computeAuthResult(boolean result) {
+		if(result) {
+        	FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/mainNew.fxml"));
+        	Parent root = null;
+			try {
+				root = loader.load();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+        	
+        	mainWindow = new Stage();
+			mainWindow.setMinWidth(900);
+			mainWindow.setMinHeight(600);
+			
+			mainWindow.setOnCloseRequest(e -> {
+				e.consume();
+				closeProgram(ConfirmExitView.display("Are you sure you want to exit?"));
+			});
+			//stage.initStyle(StageStyle.DECORATED);
+			mainWindow.setScene(new Scene(root));
+			thisWindow.hide();
+			mainWindow.show();
+        }
+        else {
+        	disableLoadingOverlay();
+        	displayAlert("Incorrect username/password combination", alertLabel);
+        }
+	}
+	
 	@FXML
 	private void enterPressedOnPW(KeyEvent event) {
 		if(event.getCode() == KeyCode.ENTER) {
 			loginButton.fire();
 		}
 	}
+	
 	@FXML
 	private void loginKeyPressed(KeyEvent event) {
 		if(event.getCode() == KeyCode.TAB) {
-			selectNode(username);
+			focusNode(username);
 		}
 		else if(event.getCode() == KeyCode.ENTER) {
 			loginButton.fire();
 		}
 	}
+	
 	@FXML
 	private void registerKeyPressed(KeyEvent event) {
 		if(event.getCode() == KeyCode.TAB) {
-			selectNode(usernameRegister);
+			focusNode(registerUsername);
 		}
 		else if(event.getCode() == KeyCode.ENTER) {
 			registerConfirmButton.fire();
 		}
 	}
+	
+	@FXML
+	private void closeButtonClicked() {
+		closeWindow();
+	}
+	
 	@FXML
 	private void backButtonClicked() {
-		usernameRegister.clear();
-		firstPassRegister.clear();
-		secondPassRegister.clear();
-		registerPane.setVisible(false);
-		loginPane.setVisible(true);
-		selectNode(username);
+		registerUsername.clear();
+		registerFirstPass.clear();
+		registerSecondPass.clear();
+		registerLayout.setVisible(false);
+		loginLayout.setVisible(true);
+		focusNode(username);
 	}
+	
 	@FXML
 	private void registerButtonClicked() {
-		loginPane.setVisible(false);
-		registerPane.setVisible(true);
-		selectNode(usernameRegister);
+		loginLayout.setVisible(false);
+		registerLayout.setVisible(true);
+		focusNode(registerUsername);
 	}
+	
 	@FXML
 	private void confirmRegisterButtonClicked() {
-		loadingText.setText("Registering");
-		loadingPane.setVisible(true);
-		
-		Task<String> initializeConnection = new Task<String>() {
-		    @Override
-		    public String call() throws InterruptedException{
-		    	if(usernameRegister.getText().equals("")) {
-					return "Please enter a username";
-				}
-				else if(ModelControl.usernameExists(usernameRegister.getText()) == false) {
-					if(firstPassRegister.getText().equals(secondPassRegister.getText())) {
-						if(!firstPassRegister.getText().equals("")) {
-							if(validate()) {
-								String hash = "";
-								try {
-									hash = DataLock.createHash(firstPassRegister.getText());
-								} catch (CannotPerformOperationException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								
-								if(hash.isEmpty()) {
-									return "Error LC: hash";
-								}
-								else {
-									ModelControl.addUser(new User(usernameRegister.getText(),hash));
-									Thread.sleep(2000);
-									return "";
-								}
-							}
-							else {
-								return "Please fix input";
-							}
-						}
-						else {
-							return "Please enter a password";
-						}
-					}
-					else {
-						return "Passwords do not match";
-					}
-				}
-				else {
-					return "Username already exists";
-				}
-		    }
-		};
-		
-		initializeConnection.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-		    @Override
-		    public void handle(WorkerStateEvent event) {
-		        String result = initializeConnection.getValue(); // result of computation
-		        
-		        if(result.equals("")) {
-		        	backButton.fire();
-		        	displayLoginAlert("Registration Complete");
-		        	loadingPane.setVisible(false);
-		        }
-		        else {
-		        	displayRegisterAlert(result);
-		        	loadingPane.setVisible(false);
-		        }
-		    }
-		});
-		
-		Task<Boolean> midlayer = new Task<Boolean>() {
-			@Override
-			public Boolean call() {
-				long timeoutTime = 25000;		//25 secs
-				TimeOut t = new TimeOut(new Thread(initializeConnection), timeoutTime, true);
-				try {                       
-				  boolean success = t.execute(); // Will return false if this times out, this freezes thread
-				  return success;
-				} catch (InterruptedException e) {}
-				return false;
-			}
-		};
-		midlayer.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-		    @Override
-		    public void handle(WorkerStateEvent event) {
-		    	boolean result = midlayer.getValue();
-		    	if(!result) {
-		    		System.out.println("Connection timed out\nProcess killed\nError Code: LC02");
-		    		loadingPane.setVisible(false);
-		        	displayRegisterAlert("Connection timed out, Error Code: LC02");
-		    	}
-		    }
-		});
-		
-		new Thread(midlayer).start();
+		enableLoadingOverlay("Validating");
+		computeRegisterOperations();
 	}
-	private boolean validate() {
-		if(!usernameRegister.getText().matches("^[a-zA-Z0-9\\-_]*$")){
+	
+	private void computeRegisterOperations() {
+		Task<Boolean> registerThread = createRegisterThread();
+		Task<Boolean> timedThread = createTimedThread(registerThread);
+		
+		new Thread(timedThread).start();
+	}
+	
+	private Task<Boolean> createRegisterThread(){
+		Task<Boolean> registerThread = new Task<Boolean>() {
+		    @Override
+		    public Boolean call() throws InterruptedException, CannotPerformOperationException{
+		    	return register();
+		    }
+		};
+		
+		registerThread.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+		    @Override
+		    public void handle(WorkerStateEvent event) {
+		        boolean result = registerThread.getValue();
+		        computeRegisterResult(result);
+		    }
+		});
+		return registerThread;
+	}
+	
+	private boolean register() throws InterruptedException, CannotPerformOperationException {		
+		if(!validate()) {
+			return false;
+		}
+		else {
+			setLoadingText("Registering");
+			
+			String hash = DataLock.createHash(registerFirstPass.getText());
+			ModelControl.addUser(new User(registerUsername.getText(), hash));
+			Thread.sleep(2000);
+			
+			return true;
+		}
+	}
+	
+	private void computeRegisterResult(boolean result){
+		if(result) {
+        	backButton.fire();
+        	displayAlert("Registration Complete", alertLabel);
+        	disableLoadingOverlay();
+        }
+        else {
+        	displayAlert("Please fix input", registerAlert);
+        	loadingOverlay.setVisible(false);
+        	disableLoadingOverlay();
+        }
+	}
+	
+	protected boolean validate() {
+		if(!registerUsername.getText().matches(NORMAL_TEXT_REGEX)){
             return false;
         }
-        else if(usernameRegister.getText().length() > 45) {
+        else if(registerUsername.getText().length() > USERNAME_MAX_LENGTH) {
         	return false;
         }
-        else if(usernameRegister.getText().isEmpty()) {
+        else if(registerUsername.getText().isEmpty()) {
+        	return false;
+        }
+        else if(ModelControl.usernameExists(registerUsername.getText())) {
+			return false;
+		}
+		
+		if(!registerFirstPass.getText().matches(SPECIAL_TEXT_REGEX)){
+            return false;
+        }
+        else if(registerFirstPass.getText().length() > PASSWORD_MAX_LENGTH) {
+        	return false;
+        }
+        else if(registerFirstPass.getText().length() < PASSWORD_MIN_LENGTH) {
+        	return false;
+        }
+        else if(registerFirstPass.getText().isEmpty()) {
+        	return false;
+        }
+        else if(!registerFirstPass.getText().equals(registerSecondPass.getText())) {
         	return false;
         }
 		
-		if(!firstPassRegister.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
-            return false;
-        }
-        else if(firstPassRegister.getText().length() > 40) {
-        	return false;
-        }
-        else if(firstPassRegister.getText().length() < 6) {
-        	return false;
-        }
-        else if(firstPassRegister.getText().isEmpty()) {
-        	return false;
-        }
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		return true;
 	}
-	private void initializeValidation() {
-		usernameRegister.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-	        if (!newValue) { //when focus lost
-	            if(!usernameRegister.getText().matches("^[a-zA-Z0-9\\-_]*$")){
-	                //when it doesn't match the pattern
-	                //set the textField empty
-	                displayRegisterAlert("Username text invalid");
+	
+	protected void enableVisualValidation() {
+		registerUsername.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) {
+	            if(!registerUsername.getText().matches(NORMAL_TEXT_REGEX)){
+	                displayAlert("Username text invalid", registerAlert);
 	            }
-	            else if(usernameRegister.getText().length() > 45) {
-	            	displayRegisterAlert("Username too long: Keep under 45 characters");
+	            else if(registerUsername.getText().length() > USERNAME_MAX_LENGTH) {
+	            	displayAlert("Username too long: Keep under 45 characters", registerAlert);
 	            }
-	            else if(usernameRegister.getText().isEmpty()) {
-	            	displayRegisterAlert("Please enter a username");
+	            else if(registerUsername.getText().isEmpty()) {
+	            	displayAlert("Please enter a username", registerAlert);
+	            }
+	            else if(ModelControl.usernameExists(registerUsername.getText())) {
+	    			displayAlert("Username already exists", registerAlert);
+	    		}
+	            else {
+	            	registerAlert.setVisible(false);
+	            }
+	        }
+	    });
+		
+		registerFirstPass.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) {
+	            if(!registerFirstPass.getText().matches(SPECIAL_TEXT_REGEX)){
+	                displayAlert("Password text invalid", registerAlert);
+	            }
+	            else if(registerFirstPass.getText().length() > PASSWORD_MAX_LENGTH) {
+	            	displayAlert("Password too long: Keep under 40 characters", registerAlert);
+	            }
+	            else if(registerFirstPass.getText().isEmpty()) {
+	            	displayAlert("Please enter a password", registerAlert);
+	            }
+	            else if(registerFirstPass.getText().length() < PASSWORD_MIN_LENGTH) {
+	            	displayAlert("Password must be at least 6 characters long", registerAlert);
 	            }
 	            else {
 	            	registerAlert.setVisible(false);
 	            }
 	        }
 	    });
-		firstPassRegister.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-	        if (!newValue) { //when focus lost
-	            if(!firstPassRegister.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
-	                //when it doesn't match- the pattern
-	                //set the textField empty
-	                displayRegisterAlert("Password text invalid");
-	            }
-	            else if(firstPassRegister.getText().length() > 40) {
-	            	displayRegisterAlert("Password too long: Keep under 40 characters");
-	            }
-	            else if(firstPassRegister.getText().isEmpty()) {
-	            	displayRegisterAlert("Please enter a password");
-	            }
-	            else if(firstPassRegister.getText().length() < 6) {
-	            	displayRegisterAlert("Password must be at least 6 characters long");
+		
+		registerSecondPass.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) {
+	            if(!registerFirstPass.getText().equals(registerSecondPass.getText())){
+	                displayAlert("Passwords do not match", registerAlert);
 	            }
 	            else {
 	            	registerAlert.setVisible(false);
@@ -395,94 +390,70 @@ public class LoginController implements Initializable{
 	        }
 	    });
 	}
+	
 	public void setStage(Stage stage) {
-		loginWindow = stage;
-		bg.setOnMousePressed(new EventHandler<MouseEvent>() {
+		thisWindow = stage;
+	}
+	
+	private void enableMouseDragProperty() {
+		backgroundImage.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 xOffset = event.getSceneX();
                 yOffset = event.getSceneY();
             }
         });
-        bg.setOnMouseDragged(new EventHandler<MouseEvent>() {
+		
+        backgroundImage.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                loginWindow.setX(event.getScreenX() - xOffset);
-                loginWindow.setY(event.getScreenY() - yOffset);
+                thisWindow.setX(event.getScreenX() - xOffset);
+                thisWindow.setY(event.getScreenY() - yOffset);
             }
         });
         
-        loadingPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+        loadingOverlay.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 xOffset = event.getSceneX();
                 yOffset = event.getSceneY();
             }
         });
-        loadingPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+        
+        loadingOverlay.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                loginWindow.setX(event.getScreenX() - xOffset);
-                loginWindow.setY(event.getScreenY() - yOffset);
+                thisWindow.setX(event.getScreenX() - xOffset);
+                thisWindow.setY(event.getScreenY() - yOffset);
             }
         });
 	}
-	private void selectNode(JFXTextField field) {
+	
+	private void focusNode(JFXTextField field) {
 		Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                field.requestFocus();			//select username on start
+                field.requestFocus();
             }
         });
 	}
-	private void selectNode(JFXPasswordField field) {
-		Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                field.requestFocus();			//select username on start
-            }
-        });
+	
+	private void fillSavedUsername() {
+		String usernameFill = LocalDBConn.getSavedUsername();
+		if(!usernameFill.equals("")) {
+			rememberMe.setSelected(true);
+		}
+		username.setText(usernameFill);
 	}
-	private void selectNode(JFXButton button) {
-		Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                button.requestFocus();			//select username on start
-            }
-        });
-	}
-	private void displayRegisterAlert(String msg) {
-		registerAlert.setText(msg);
-		registerAlert.setVisible(true);
-		PauseTransition visiblePause = new PauseTransition(
-		        Duration.seconds(5)
-		);
-		visiblePause.setOnFinished(
-		        event -> registerAlert.setVisible(false)
-		);
-		visiblePause.play();
-	}
-	private void displayLoginAlert(String msg) {
-		loginAlert.setText(msg);
-		loginAlert.setVisible(true);
-		
-		PauseTransition visiblePause = new PauseTransition(
-		        Duration.seconds(5)
-		);
-		visiblePause.setOnFinished(
-		        event -> loginAlert.setVisible(false)
-		);
-		visiblePause.play();
-	}
-	private void closeWindow() {
-		Stage window = (Stage) loginButton.getScene().getWindow();
-		DBConn.closeConnection();
-		window.close();
-	}
+	
 	private void closeProgram(boolean answer){
 		if(answer == true) {
 			DBConn.closeConnection();
 			mainWindow.close();
 		}
+	}
+	
+	protected void enableCloseEventProperty() {
+		//none
 	}
 }

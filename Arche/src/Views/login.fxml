@@ -10,18 +10,17 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="entirePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Views.LoginController">
    <children>
-      <ImageView fx:id="bg" fitHeight="539.0" fitWidth="1059.0" layoutX="-111.0" layoutY="-15.0" opacity="0.36" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="backgroundImage" fitHeight="539.0" fitWidth="1059.0" layoutX="-111.0" layoutY="-15.0" opacity="0.36" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/icons/login2.png" />
          </image></ImageView>
-      <AnchorPane fx:id="loginPane" layoutX="58.0" layoutY="48.0">
+      <AnchorPane fx:id="loginLayout" layoutX="58.0" layoutY="48.0">
          <children>
-            <AnchorPane layoutX="468.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="301.0" style="-fx-background-color: #2fa9f2;">
+            <AnchorPane fx:id="bluePane" layoutX="468.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="301.0" style="-fx-background-color: #2fa9f2;">
                <children>
                   <JFXTextField fx:id="username" layoutX="41.0" layoutY="136.0" prefHeight="25.0" prefWidth="219.0" promptText="Username" style="-fx-background-color: #299adb;" />
                   <JFXPasswordField fx:id="password" layoutX="41.0" layoutY="190.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#enterPressedOnPW" prefHeight="25.0" prefWidth="219.0" promptText="Password" style="-fx-background-color: #299adb;" />
@@ -30,9 +29,9 @@
                         <Image url="@../resources/icons/user_icon.png" />
                      </image>
                   </ImageView>
-                  <JFXCheckBox fx:id="remember" checkedColor="#f2782f" layoutX="48.0" layoutY="250.0" text="Remember Me" />
+                  <JFXCheckBox fx:id="rememberMe" checkedColor="#f2782f" layoutX="48.0" layoutY="250.0" text="Remember Me" />
                   <JFXButton fx:id="loginButton" layoutX="172.0" layoutY="246.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#loginButtonClicked" onKeyPressed="#loginKeyPressed" prefHeight="25.0" prefWidth="89.0" ripplerFill="BLACK" style="-fx-background-color: #f2782f;" text="Login" />
-                  <Label fx:id="loginAlert" layoutX="38.0" layoutY="301.0" text="Incorrect username/password combination" visible="false" />
+                  <Label fx:id="alertLabel" layoutX="38.0" layoutY="301.0" text="Incorrect username/password combination" visible="false" />
                </children>
             </AnchorPane>
             <Label fx:id="title" layoutY="125.0" text="Welcome to Project Arche" textFill="WHITE">
@@ -57,7 +56,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <AnchorPane fx:id="registerPane" layoutX="7.0" layoutY="5.0" visible="false">
+      <AnchorPane fx:id="registerLayout" layoutX="7.0" layoutY="5.0" visible="false">
          <children>
             <Button fx:id="backButton" layoutX="-5.0" layoutY="-1.0" mnemonicParsing="false" onAction="#backButtonClicked" prefWidth="28.0" style="-fx-background-color: #05080C;">
                <graphic>
@@ -75,9 +74,9 @@
                         <Font size="22.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="usernameRegister" layoutX="109.0" layoutY="103.0" prefHeight="25.0" prefWidth="170.0" promptText="Username" />
-                  <JFXPasswordField fx:id="firstPassRegister" layoutX="109.0" layoutY="159.0" prefHeight="25.0" prefWidth="170.0" promptText="Password" />
-                  <JFXPasswordField fx:id="secondPassRegister" layoutX="109.0" layoutY="217.0" prefHeight="25.0" prefWidth="170.0" promptText="Re-enter Password" />
+                  <JFXTextField fx:id="registerUsername" layoutX="109.0" layoutY="103.0" prefHeight="25.0" prefWidth="170.0" promptText="Username" />
+                  <JFXPasswordField fx:id="registerFirstPass" layoutX="109.0" layoutY="159.0" prefHeight="25.0" prefWidth="170.0" promptText="Password" />
+                  <JFXPasswordField fx:id="registerSecondPass" layoutX="109.0" layoutY="217.0" prefHeight="25.0" prefWidth="170.0" promptText="Re-enter Password" />
                   <JFXButton fx:id="registerConfirmButton" layoutX="126.0" layoutY="276.0" onAction="#confirmRegisterButtonClicked" onKeyPressed="#registerKeyPressed" prefHeight="25.0" prefWidth="135.0" style="-fx-background-color: #f2782f;" text="Confirm Registration" />
                   <ImageView fitHeight="46.0" fitWidth="45.0" layoutX="171.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -89,9 +88,9 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="loadingPane" prefHeight="500.0" prefWidth="900.0" visible="false">
+      <AnchorPane fx:id="loadingOverlay" prefHeight="500.0" prefWidth="900.0" visible="false">
          <children>
-            <Pane opacity="0.6" prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: #d4d4d4;">
+            <AnchorPane opacity="0.6" prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: #d4d4d4;">
                <children>
                   <Label fx:id="loadingText" layoutX="391.0" layoutY="300.0" text="Authenticating">
                      <font>
@@ -101,7 +100,7 @@
                   <JFXSpinner layoutX="425.0" layoutY="225.0" />
                   <JFXButton fx:id="cancelLoadingButton" blendMode="MULTIPLY" layoutX="424.0" layoutY="448.0" text="Cancel" visible="false" />
                </children>
-            </Pane>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>
