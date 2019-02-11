@@ -2,7 +2,7 @@
 Daily schedule planner with calendar, agenda, and automatic scheduling
 
 Download link to last working version (jar executable):
-https://drive.google.com/open?id=1EGrZES0eiq4v3C7n8cjOKeucqyyfstTe
+https://drive.google.com/open?id=1uWG2hwellRv2bjMAO3XyLNyDPjVlVsYh
 
 Login window
 ![alt text](https://raw.githubusercontent.com/charripaul/Schedule-Planner/master/Arche/src/resources/readme-pics/login.png)
