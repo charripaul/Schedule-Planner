@@ -102,7 +102,7 @@ public class LocalDBConn {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM DatabaseCredentials WHERE Tag = "+
     		prodTag+
     		";");
-			password = rs.getString("BPassword");
+			password = rs.getString("DBPassword");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
