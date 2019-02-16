@@ -231,6 +231,7 @@ public class LoginController extends ParentController{
 		registerSecondPass.clear();
 		registerLayout.setVisible(false);
 		loginLayout.setVisible(true);
+		alertLabel.setVisible(false);
 		focusNode(username);
 	}
 	
@@ -238,6 +239,7 @@ public class LoginController extends ParentController{
 	private void registerButtonClicked() {
 		loginLayout.setVisible(false);
 		registerLayout.setVisible(true);
+		password.setText("");
 		focusNode(registerUsername);
 	}
 	

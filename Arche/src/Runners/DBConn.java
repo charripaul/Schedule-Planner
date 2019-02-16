@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConn {        
     static Connection con=null;
-    static boolean production = true;			//use production database or not
+    static boolean production = false;			//use production database or not
     
     static {
     	System.out.println("Database connection initalized");

@@ -392,7 +392,7 @@ public class ModelControl {
 					e.printStackTrace();
 				}
 				if(is) {
-					mainUID = -1;		//superusers sign uid as -1
+					mainUID = users.get(count).getId();
 					return true;
 				}
 			}
