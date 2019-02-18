@@ -44,32 +44,18 @@ import javafx.scene.control.CheckBox;
 public class ViewTaskController extends ParentNormalTaskController{
 	@FXML private JFXButton deleteButton;
 	@FXML private JFXButton saveCloseButton;
-	@FXML private TextField name;
-	@FXML private ChoiceBox<String> taskTypes;
-	@FXML private ChoiceBox<String> classAbrs;
-	@FXML private DateTimePicker dueDate, scheduledStartTime, scheduledEndTime;
-	@FXML private TextArea description;
-	@FXML private JFXCheckBox completed;
-	@FXML private TextField noticePeriod;
-	@FXML private TextField hours, minutes;
 	
-	private final Task temp;
-	private String oldClassAbr, newClassAbr;
-	private String oldTypeName, newTypeName;
-	
-	private MainNewController mainWindow;
+	private final Task dataHolder;
 	
 	public ViewTaskController(Task t, MainNewController mw) {
 		super(mw);
-		temp = t;
-		oldClassAbr = t.getClassAbr();
-		oldTypeName = t.getType();
+		dataHolder = t;
 	}
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		initializeData(temp);
 		alertLabel.setVisible(false);
+		initializeData(dataHolder);
 		disableLoadingOverlay();
 		enableCloseEventProperty();
 		enableVisualValidation();
@@ -83,16 +69,9 @@ public class ViewTaskController extends ParentNormalTaskController{
 	}
 	
 	@FXML
-	private void handleKeyPressed(KeyEvent event) {
-		if(event.getCode() == KeyCode.ENTER) {
-			saveCloseButton.fire();
-		}
-	}
-	
-	@FXML
 	private void deleteButtonClicked() {
 		if(ConfirmExitView.display("Are you sure you want to delete this task?")) {
-			ModelControl.deleteTask(temp);
+			ModelControl.deleteTask(dataHolder);
 			closeWindow();
 		}
 	}
@@ -130,25 +109,26 @@ public class ViewTaskController extends ParentNormalTaskController{
 	
 	private boolean updateTask() {
 		if(validate()) {
-			temp.setName(name.getText());
-			temp.setType(taskTypes.getSelectionModel().getSelectedItem());
-			temp.setClassAbr(classAbrs.getSelectionModel().getSelectedItem());
-			temp.setDueDate(dueDate.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-			temp.setScheduledStartTime((scheduledStartTime.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
-			temp.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-			temp.setDescription(description.getText());
-			temp.setFinishFlag(completed.isSelected());
-			temp.setNoticePeriod(Integer.parseInt(noticePeriod.getText()));
+			dataHolder.setName(name.getText());
+			dataHolder.setType(taskTypes.getSelectionModel().getSelectedItem());
+			dataHolder.setClassAbr(classAbrs.getSelectionModel().getSelectedItem());
+			dataHolder.setDueDate(dueDate.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+			dataHolder.setScheduledStartTime((scheduledStartTime.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
+			dataHolder.setScheduledEndTime(scheduledEndTime.getDateTimeValue().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+			dataHolder.setDescription(description.getText());
+			dataHolder.setFinishFlag(completed.isSelected());
+			dataHolder.setNoticePeriod(Integer.parseInt(noticePeriod.getText()));
 			
 			int amountOfTime = (Integer.parseInt(hours.getText())*60) + Integer.parseInt(minutes.getText());
-			temp.setTimeToComplete(amountOfTime);
+			dataHolder.setTimeToComplete(amountOfTime);
 			
-			newClassAbr = temp.getClassAbr();
-			newTypeName = temp.getType();
-			
-			ModelControl.updateTaskAndClassDependency(temp, oldClassAbr, newClassAbr);
-			ModelControl.updateTaskAndTypeDependency(temp, oldTypeName, newTypeName);
-			
+			ModelControl.updateTask(dataHolder);
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return true;
 		}
 		else {

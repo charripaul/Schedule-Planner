@@ -64,7 +64,10 @@ public abstract class ParentSpecialTaskController extends ParentNormalTaskContro
 		initializeDateTimePickers();
 		initializeColumns();
 		initializeChoiceBoxes();
-		initializeStates();
+		disableLoadingOverlay();
+		enableCloseEventProperty();
+		enableVisualValidation();
+		resetTabPane();
 	}
 	
 	protected void initializeColumns() {
@@ -82,13 +85,6 @@ public abstract class ParentSpecialTaskController extends ParentNormalTaskContro
 		nameColumn.setSortable(false);
 		descriptionColumn.setSortable(false);
 		scheduledColumn.setSortable(false);
-	}
-	
-	protected void initializeStates() {
-		loadingOverlay.setVisible(false);
-		enableCloseEventProperty();
-		enableVisualValidation();
-		resetTabPane();
 	}
 	
 	@FXML

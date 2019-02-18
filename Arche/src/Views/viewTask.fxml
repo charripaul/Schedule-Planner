@@ -19,7 +19,7 @@
          <bottom>
             <HBox BorderPane.alignment="CENTER">
                <children>
-                  <JFXButton fx:id="deleteButton" onAction="#deleteButtonClicked" onKeyPressed="#handleKeyPressed" style="-fx-background-color: #f2782f;" text="Delete" />
+                  <JFXButton fx:id="deleteButton" onAction="#deleteButtonClicked" style="-fx-background-color: #f2782f;" text="Delete" />
                   <AnchorPane HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="alertLabel" layoutX="224.0" layoutY="4.0" text="Alert Label" />
@@ -37,7 +37,7 @@
             </Label>
          </top>
          <center>
-            <AnchorPane onKeyPressed="#handleKeyPressed" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
                   <Label layoutX="33.0" layoutY="30.0" text="Name:" />
                   <Label layoutX="33.0" layoutY="101.0" text="Description:" />

@@ -124,14 +124,12 @@ public class ModelControl {
 		tasks.add(t);
 		for(int count = 0;count<classes.size();count++) {
 			if(classes.get(count).getAbbreviation().equals(classAbr)) {
-				classes.get(count).addOneToTA();
 				Database.updateClass(classes.get(count));
 			}
 		}
 		
 		for(int count=0;count<taskTypes.size();count++) {
 			if(taskTypes.get(count).getName().equals(type)) {
-				taskTypes.get(count).addOneToTA();;
 				Database.updateTaskType(taskTypes.get(count));
 			}
 		}
@@ -198,32 +196,6 @@ public class ModelControl {
 			if(tasks.get(count).getId() == t.getId()) {
 				tasks.set(count, t);
 				break;
-			}
-		}
-	}
-	//update total assignments count
-	//if class for task changes
-	public static void updateTaskAndClassDependency(Task t, String oldClassAbr, String newClassAbr) {
-		updateTask(t);
-		for(int count=0;count<classes.size();count++) {
-			if(classes.get(count).getAbbreviation().equals(oldClassAbr)) {
-				classes.get(count).removeOneFromTA();
-			}
-			else if(classes.get(count).getAbbreviation().equals(newClassAbr)) {
-				classes.get(count).addOneToTA();
-			}
-		}
-	}
-	//update total assignments count
-	//if type for task changes
-	public static void updateTaskAndTypeDependency(Task t, String oldTypeName, String newTypeName) {
-		updateTask(t);
-		for(int count=0;count<taskTypes.size();count++) {
-			if(taskTypes.get(count).getName().equals(oldTypeName)) {
-				taskTypes.get(count).removeOneFromTA();
-			}
-			else if(taskTypes.get(count).getName().equals(newTypeName)) {
-				taskTypes.get(count).addOneToTA();
 			}
 		}
 	}
@@ -304,13 +276,11 @@ public class ModelControl {
 		//update total assignment count
 		for(int count = 0;count<classes.size();count++) {
 			if(classes.get(count).getAbbreviation().equals(classAbr)) {
-				classes.get(count).removeOneFromTA();
 				Database.updateClass(classes.get(count));
 			}
 		}
 		for(int count = 0;count<taskTypes.size();count++) {
 			if(taskTypes.get(count).getName().equals(type)) {
-				taskTypes.get(count).removeOneFromTA();
 				Database.updateTaskType(taskTypes.get(count));
 			}
 		}
@@ -639,6 +609,24 @@ public class ModelControl {
 			tt.add(taskTypes.get(count));
 		}
 		return tt;
+	}
+	public static int getClassTACount(String abbreviation) {
+		int count=0;
+		for(int num=0;num<tasks.size();num++) {
+			if(tasks.get(num).getClassAbr().equals(abbreviation)) {
+				count++;
+			}
+		}
+		return count;
+	}
+	public static int getTaskTypeTACount(String name) {
+		int count=0;
+		for(int num=0;num<tasks.size();num++) {
+			if(tasks.get(num).getType().equals(name)) {
+				count++;
+			}
+		}
+		return count;
 	}
 	public static String getTypeName(int id) {
 		for(int count=0;count<taskTypes.size();count++) {

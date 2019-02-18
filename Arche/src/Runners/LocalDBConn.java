@@ -18,7 +18,7 @@ public class LocalDBConn {
 		PreparedStatement prep = null;
 		try {
 			prep = getConnection().prepareStatement("UPDATE preferences SET loginUsername = ? WHERE id = 1;");
-			prep.setString(1,  s);
+			prep.setString(1, s);
 			prep.execute();
 			prep.close();
 		}catch(SQLException e) {
