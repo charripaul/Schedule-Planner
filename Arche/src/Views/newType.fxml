@@ -35,13 +35,13 @@
                   <TextField fx:id="minute" layoutX="493.0" layoutY="56.0" prefHeight="25.0" prefWidth="67.0" promptText="Min" />
                   <JFXButton fx:id="cancelButton" buttonType="RAISED" layoutX="14.0" layoutY="334.0" onAction="#cancelButtonClicked" style="-fx-background-color: #f2782f;" text="Cancel" />
                   <JFXButton fx:id="confirmButton" buttonType="RAISED" layoutX="531.0" layoutY="334.0" onAction="#confirmButtonClicked" style="-fx-background-color: #f2782f;" text="Confirm" />
-                  <Label fx:id="warningLabel" layoutX="220.0" layoutY="338.0" text="Warning Label" />
+                  <Label fx:id="alertLabel" layoutX="220.0" layoutY="338.0" text="Alert Label" />
                   <JFXCheckBox layoutX="407.0" layoutY="100.0" text="Unknown" />
                </children>
             </AnchorPane>
          </center>
       </BorderPane>
-      <AnchorPane fx:id="loadingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" visible="false">
+      <AnchorPane fx:id="loadingOverlay" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" visible="false">
          <children>
             <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.6" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #d4d4d4;">
                <children>

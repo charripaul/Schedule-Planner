@@ -71,6 +71,15 @@ public abstract class ParentController implements Initializable{
 		}
 	}
 	
+	protected boolean getBooleanVal(String s) {
+		if(s.equals("0")) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	protected Task<Boolean> createTimedThread(Task<Boolean> thread) {
 		Task<Boolean> timingThread = new Task<Boolean>() {
 			@Override

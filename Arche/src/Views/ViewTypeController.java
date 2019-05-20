@@ -28,7 +28,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class ViewTypeController implements Initializable{
+public class ViewTypeController extends ParentController{
 	@FXML private TextField name;
 	@FXML private TextField noticePeriod;
 	@FXML private TextField hour, minute;		//timeToComplete
@@ -36,30 +36,25 @@ public class ViewTypeController implements Initializable{
 	@FXML private JFXButton deleteButton, saveButton;
 	@FXML private Label warningLabel, totalAssignments;
 	
-	//ui loading
-	@FXML public AnchorPane loadingPane;
-	@FXML private JFXButton cancelLoadingButton;
-	@FXML private Label loadingText;
-	
-	private final TaskType temp;
+	private final TaskType dataHolder;
 	private String oldTypeName, newTypeName;
 	
-	private MainNewController mainWindow;
-	
 	public ViewTypeController(TaskType tt, MainNewController mw) {
-		temp = tt;
-		oldTypeName = temp.getName();
-		mainWindow = mw;
+		super(mw);
+		dataHolder = tt;
+		oldTypeName = dataHolder.getName();
 	}
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		initializeData(temp);
-		loadingPane.setVisible(false);
-		initializeCloseEventProperty();
-		setValidators();
+		initializeData(dataHolder);
+		disableLoadingOverlay();
+		enableCloseEventProperty();
+		enableVisualValidation();
 	}
+	
 	private void initializeData(TaskType tt) {
-		name.setText(temp.getName());
+		name.setText(dataHolder.getName());
 		noticePeriod.setText(tt.getWarningPeriod()+"");
 		description.setText(tt.getDescription());
 		int amountOfTime = tt.getTimeToComplete();
@@ -69,89 +64,89 @@ public class ViewTypeController implements Initializable{
 		
 		warningLabel.setVisible(false);
 	}
+	
 	@FXML
 	private void saveButtonClicked() {
-		loadingPane.setVisible(true);
+		enableLoadingOverlay("Updating");
+		computeUpdateOperations();
+	}
+	
+	private void computeUpdateOperations() {
+		Task<Boolean> updateThread = createUpdateThread();
+		Task<Boolean> timingThread = createTimedThread(updateThread);
+		
+		new Thread(timingThread).start();
+	}
+	
+	private Task<Boolean> createUpdateThread(){
 		Task<Boolean> changeThread = new Task<Boolean>() {
 			@Override
 			public Boolean call() throws InterruptedException{
-				//validate input data
-				if(checkValidation()) {
-					temp.setName(name.getText());
-					temp.setWarningPeriod(Integer.parseInt(noticePeriod.getText()));
-					temp.setDescription(description.getText());
-					int amountOfTime = (Integer.parseInt(hour.getText())*60) + Integer.parseInt(minute.getText());
-					temp.setTimeToComplete(amountOfTime);
-					
-					newTypeName = temp.getName();
-					ModelControl.updateTaskTypeAndTaskDependency(temp, oldTypeName, newTypeName);
-					
-					return true;
-				}
-				else {
-					return false;
-				}
+				return updateType();
 			}
 		};
+		
 		changeThread.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
 			@Override
 			public void handle(WorkerStateEvent event) {
 				boolean result = changeThread.getValue();
-				if(result) {
-					closeWindow();
-				}
-				else {
-					loadingPane.setVisible(false);
-					displayWarningLabel("Please fix input errors");
-				}
+				computeUpdateResult(result);
 			}
 		});
 		
-		Task<Boolean> midlayer = new Task<Boolean>() {
-			@Override
-			public Boolean call() {
-				long timeoutTime = 15000;		//15 secs
-				TimeOut t = new TimeOut(new Thread(changeThread), timeoutTime, true);
-				try {                       
-				  boolean success = t.execute(); // Will return false if this times out, this freezes thread
-				  return success;
-				} catch (InterruptedException e) {}
-				return false;
-			}
-		};
-		midlayer.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-			@Override
-			public void handle(WorkerStateEvent event) {
-				boolean result = midlayer.getValue();
-				if(!result) {
-					//display loading pane on main window
-					mainWindow.displayConnectionTimeOut();
-					closeWindow();
-				}
-			}
-		});
-		
-		new Thread(midlayer).start();
+		return changeThread;
 	}
+	
+	private boolean updateType() {
+		//validate input data
+		if(validate()) {
+			dataHolder.setName(name.getText());
+			dataHolder.setWarningPeriod(Integer.parseInt(noticePeriod.getText()));
+			dataHolder.setDescription(description.getText());
+			int amountOfTime = (Integer.parseInt(hour.getText())*60) + Integer.parseInt(minute.getText());
+			dataHolder.setTimeToComplete(amountOfTime);
+			
+			newTypeName = dataHolder.getName();
+			ModelControl.updateTaskTypeAndTaskDependency(dataHolder, oldTypeName, newTypeName);
+			
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	private void computeUpdateResult(boolean result) {
+		if(result) {
+			closeWindow();
+		}
+		else {
+			disableLoadingOverlay();
+			displayAlertLabel("Please fix input errors");
+		}
+	}
+	
 	@FXML
 	private void deleteButtonClicked() {
-		if(ModelControl.isBeingUsed(temp)) {
-			displayWarningLabel("Cannot delete Task Type: Already in use by Task");
+		if(ModelControl.isBeingUsed(dataHolder)) {
+			displayAlertLabel("Cannot delete Task Type: Already in use by Task");
 		}else {
 			if(ConfirmExitView.display("Are you sure you want to delete this task type?")) {
-				ModelControl.deleteTaskType(temp);
+				ModelControl.deleteTaskType(dataHolder);
 				closeWindow();
 			}
 		}
 	}
+	
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
 		if(event.getCode() == KeyCode.ENTER) {
 			saveButton.fire();
 		}
 	}
+	
 	//detect change, ask for save changes on close
-	private void initializeCloseEventProperty() {
+	protected void enableCloseEventProperty() {
 		name.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable,
@@ -159,6 +154,7 @@ public class ViewTypeController implements Initializable{
 		    	setCloseEvent();
 		    }
 		});
+		
 		noticePeriod.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable,
@@ -166,6 +162,7 @@ public class ViewTypeController implements Initializable{
 		    	setCloseEvent();
 		    }
 		});
+		
 		hour.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable,
@@ -173,6 +170,7 @@ public class ViewTypeController implements Initializable{
 		    	setCloseEvent();
 		    }
 		});
+		
 		minute.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable,
@@ -180,6 +178,7 @@ public class ViewTypeController implements Initializable{
 		    	setCloseEvent();
 		    }
 		});
+		
 		description.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable,
@@ -188,122 +187,103 @@ public class ViewTypeController implements Initializable{
 		    }
 		});
 	}
-	private void displayWarningLabel(String s) {
-		warningLabel.setText(s);
-		warningLabel.setVisible(true);
-		PauseTransition visiblePause = new PauseTransition(
-		        Duration.seconds(3)
-		);
-		visiblePause.setOnFinished(
-		        event -> warningLabel.setVisible(false)
-		);
-		visiblePause.play();
-	}
-	private void setValidators() {
+	
+	protected void enableVisualValidation() {
 		name.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-	        if (!newValue) { //when focus lost
-	            if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
-	                //when it doesn't match the pattern
-	                //set the textField empty
-	                displayWarningLabel("Name text invalid");
+	        if (!newValue) {
+	            if(!name.getText().matches(NORMAL_TEXT_REGEX)){
+	                displayAlertLabel("Name text invalid");
 	            }
-	            else if(name.getText().length() > 45) {
-	            	displayWarningLabel("Name too long: Keep under 45 characters");
+	            else if(name.getText().length() > NAME_MAX_LENGTH) {
+	            	displayAlertLabel("Name too long: Keep under 45 characters");
 	            }
 	            else if(name.getText().isEmpty()) {
-	            	displayWarningLabel("Please enter a name");
+	            	displayAlertLabel("Please enter a name");
 	            }
 	        }
 	    });
+		
 		noticePeriod.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-	        if (!newValue) { //when focus lost
-	            if(!noticePeriod.getText().matches("^[0-9]*$")){
-	                //when it doesn't match the pattern
-	                //set the textField empty
-	                displayWarningLabel("Notice Period characters invalid");
+	        if (!newValue) {
+	            if(!noticePeriod.getText().matches(NUMBER_REGEX)){
+	                displayAlertLabel("Notice Period characters invalid");
 	            }
-	            else if(noticePeriod.getText().length() > 9) {
-	            	displayWarningLabel("Notice Period value too large: Keep under 1,000,000,000");
-	            }
-	            else if(Integer.parseInt(noticePeriod.getText()) <= 0) {
-	            	displayWarningLabel("Notice Period value must be positive");
+	            else if(noticePeriod.getText().length() > NUMBER_MAX_LENGTH) {
+	            	displayAlertLabel("Notice Period value too large: Keep under 1,000,000,000");
 	            }
 	            else if(noticePeriod.getText().isEmpty()) {
-	            	displayWarningLabel("Please enter a Notice Period");
+	            	displayAlertLabel("Please enter a Notice Period");
+	            }
+	            else if(Integer.parseInt(noticePeriod.getText()) <= 0) {
+	            	displayAlertLabel("Notice Period value must be positive");
 	            }
 	        }
 	    });
+		
 		hour.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-	        if (!newValue) { //when focus lost
-	            if(!hour.getText().matches("^[0-9]*$")){
-	                //when it doesn't match the pattern
-	                //set the textField empty
-	                displayWarningLabel("Hour characters invalid");
+	        if (!newValue) {
+	            if(!hour.getText().matches(NUMBER_REGEX)){
+	                displayAlertLabel("Hour characters invalid");
 	            }
-	            else if(hour.getText().length() > 9) {
-	            	displayWarningLabel("Hour value too large: Keep under 1,000,000,000");
+	            else if(hour.getText().length() > NUMBER_MAX_LENGTH) {
+	            	displayAlertLabel("Hour value too large: Keep under 1,000,000,000");
 	            }
 	            else if(Integer.parseInt(hour.getText()) < 0) {
-	            	displayWarningLabel("Hour value must be positive");
+	            	displayAlertLabel("Hour value must be positive");
 	            }
 	            else if(hour.getText().isEmpty()) {
-	            	displayWarningLabel("Please enter an hour value");
+	            	displayAlertLabel("Please enter an hour value");
 	            }
 	        }
 	    });
+		
 		minute.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-	        if (!newValue) { //when focus lost
-	            if(!minute.getText().matches("^[0-9]*$")){
-	                //when it doesn't match the pattern
-	                //set the textField empty
-	                displayWarningLabel("Minute characters invalid");
+	        if (!newValue) {
+	            if(!minute.getText().matches(NUMBER_REGEX)){
+	                displayAlertLabel("Minute characters invalid");
 	            }
-	            else if(minute.getText().length() > 9) {
-	            	displayWarningLabel("Minute value too large: Keep under 60");
+	            else if(minute.getText().length() > NUMBER_MAX_LENGTH) {
+	            	displayAlertLabel("Minute value too large: Keep under 60");
 	            }
 	            else if(Integer.parseInt(minute.getText()) > 59) {
-	            	displayWarningLabel("Minute value too large: Keep under 60");
+	            	displayAlertLabel("Minute value too large: Keep under 60");
 	            }
-	            else if(Integer.parseInt(minute.getText()) <= 0) {
-	            	displayWarningLabel("Minute value must be positive");
+	            else if(Integer.parseInt(minute.getText()) < 0) {
+	            	displayAlertLabel("Minute value must be positive");
 	            }
 	            else if(minute.getText().isEmpty()) {
-	            	displayWarningLabel("Please enter a minute value");
+	            	displayAlertLabel("Please enter a minute value");
 	            }
 	        }
 	    });
+		
 		description.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-	        if (!newValue) { //when focus lost
-	            if(!description.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
-	                //when it doesn't match the pattern
-	                //set the textField empty
-	                displayWarningLabel("Description text invalid");
+	        if (!newValue) {
+	            if(!description.getText().matches(SPECIAL_TEXT_REGEX)){
+	                displayAlertLabel("Description text invalid");
 	            }
-	            else if(description.getText().length() > 255) {
-	            	displayWarningLabel("Description text too long: Keep under 255 characters");
+	            else if(description.getText().length() > TEXTAREA_MAX_LENGTH) {
+	            	displayAlertLabel("Description text too long: Keep under 255 characters");
 	            }
 	        }
 	    });
 	}
-	private boolean checkValidation() {
-		if(!name.getText().matches("^[a-zA-Z0-9\\-_]*$")){
-            //when it doesn't match the pattern
-            //set the textField empty
+	
+	protected boolean validate() {
+		if(!name.getText().matches(NORMAL_TEXT_REGEX)){
             return false;
         }
-        else if(name.getText().length() > 45) {
+        else if(name.getText().length() > NAME_MAX_LENGTH) {
         	return false;
         }
         else if(name.getText().isEmpty()) {
         	return false;
         }
 		
-		if(!noticePeriod.getText().matches("^[0-9]*$")){
-            //when it doesn't match the pattern
-            //set the textField empty
+		if(!noticePeriod.getText().matches(NUMBER_REGEX)){
 			return false;
         }
-        else if(noticePeriod.getText().length() > 9) {
+        else if(noticePeriod.getText().length() > NUMBER_MAX_LENGTH) {
         	return false;
         }
         else if(Integer.parseInt(noticePeriod.getText()) <= 0) {
@@ -313,12 +293,10 @@ public class ViewTypeController implements Initializable{
         	return false;
         }
 		
-		if(!hour.getText().matches("^[0-9]*$")){
-            //when it doesn't match the pattern
-            //set the textField empty
+		if(!hour.getText().matches(NUMBER_REGEX)){
 			return false;
         }
-        else if(hour.getText().length() > 9) {
+        else if(hour.getText().length() > NUMBER_MAX_LENGTH) {
         	return false;
         }
         else if(Integer.parseInt(hour.getText()) < 0) {
@@ -328,51 +306,28 @@ public class ViewTypeController implements Initializable{
         	return false;
         }
 		
-		if(!minute.getText().matches("^[0-9]*$")){
-            //when it doesn't match the pattern
-            //set the textField empty
+		if(!minute.getText().matches(NUMBER_REGEX)){
 			return false;
         }
-        else if(minute.getText().length() > 9) {
+        else if(minute.getText().length() > NUMBER_MAX_LENGTH) {
         	return false;
         }
         else if(Integer.parseInt(minute.getText()) > 59) {
         	return false;
         }
-        else if(Integer.parseInt(minute.getText()) <= 0) {
+        else if(Integer.parseInt(minute.getText()) < 0) {
         	return false;
         }
         else if(minute.getText().isEmpty()) {
         	return false;
         }
 		
-		if(!description.getText().matches("^[\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$")){
-            //when it doesn't match the pattern
-            //set the textField empty
+		if(!description.getText().matches(SPECIAL_TEXT_REGEX)){
 			return false;
         }
-        else if(description.getText().length() > 255) {
+        else if(description.getText().length() > TEXTAREA_MAX_LENGTH) {
         	return false;
         }
 		return true;
-	}
-	private void setCloseEvent() {
-		Stage window = (Stage) name.getScene().getWindow();
-		window.setOnCloseRequest(e -> {
-			e.consume();
-			closeWindow(ConfirmExitView.display("Are you sure you want to exit without saving?"));
-		});
-	}
-	private void closeWindow(boolean answer) {
-		if(answer == true) {
-			if(loadingPane.isVisible()) {
-				mainWindow.displayConnectionTimeOut();
-			}
-			closeWindow();
-		}
-	}
-	private void closeWindow() {
-		Stage stage = (Stage) saveButton.getScene().getWindow();
-		stage.close();
 	}
 }

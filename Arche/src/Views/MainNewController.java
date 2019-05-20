@@ -147,11 +147,11 @@ public class MainNewController implements Initializable{
 						pane05, pane15, pane25, pane35, pane45, pane55, pane65;
 	//for cell data
 	@FXML private JFXTextArea 	text00, text10, text20, text30, text40, text50, text60,
-							text01, text11, text21, text31, text41, text51, text61,
-							text02, text12, text22, text32, text42, text52, text62,
-							text03, text13, text23, text33, text43, text53, text63,
-							text04, text14, text24, text34, text44, text54, text64,
-							text05, text15, text25, text35, text45, text55, text65;
+								text01, text11, text21, text31, text41, text51, text61,
+								text02, text12, text22, text32, text42, text52, text62,
+								text03, text13, text23, text33, text43, text53, text63,
+								text04, text14, text24, text34, text44, text54, text64,
+								text05, text15, text25, text35, text45, text55, text65;
 	
 	public Calendar guicalendar = Calendar.getInstance();		//for calendar the gui is displaying
 	public Calendar calendarToday = Calendar.getInstance();		//for highlighted date on calendar

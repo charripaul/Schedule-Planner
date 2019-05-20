@@ -52,12 +52,12 @@
                   <JFXTimePicker fx:id="endTime" layoutX="410.0" layoutY="315.0" />
                   <JFXButton fx:id="deleteButton" buttonType="RAISED" layoutX="14.0" layoutY="372.0" onAction="#deleteButtonClicked" style="-fx-background-color: #f2782f;" text="Delete" />
                   <JFXButton fx:id="saveButton" buttonType="RAISED" layoutX="549.0" layoutY="372.0" onAction="#saveButtonClicked" style="-fx-background-color: #f2782f;" text="Save/Close" />
-                  <Label fx:id="warningLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="210.0" layoutY="376.0" text="Warning Label" textAlignment="CENTER" />
+                  <Label fx:id="alertLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="210.0" layoutY="376.0" text="Alert Label" textAlignment="CENTER" />
                </children>
             </AnchorPane>
          </center>
       </BorderPane>
-      <AnchorPane fx:id="loadingPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="637.0" visible="false">
+      <AnchorPane fx:id="loadingOverlay" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="637.0" visible="false">
          <children>
             <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.6" prefHeight="438.0" prefWidth="637.0" style="-fx-background-color: #d4d4d4;">
                <children>

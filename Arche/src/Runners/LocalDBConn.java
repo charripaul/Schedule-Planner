@@ -40,7 +40,6 @@ public class LocalDBConn {
     public static String getLocalDBUsername() {
     	Statement stmt = null;
     	String username = "";
-    	String tag = "";
     	try {
     		stmt = getConnection().createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM DatabaseCredentials WHERE Tag = " +

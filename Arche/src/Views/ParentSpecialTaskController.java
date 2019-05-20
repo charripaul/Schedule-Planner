@@ -100,6 +100,7 @@ public abstract class ParentSpecialTaskController extends ParentNormalTaskContro
 		new Thread(timingThread).start();
 	}
 	
+	//add task
 	protected javafx.concurrent.Task<Boolean> createUpdateThread() {
 		javafx.concurrent.Task<Boolean> updateThread = new javafx.concurrent.Task<Boolean>() {
 		    @Override
@@ -134,6 +135,7 @@ public abstract class ParentSpecialTaskController extends ParentNormalTaskContro
 		new Thread(timingThread).start();
 	}
 	
+	//change task/update task
 	protected javafx.concurrent.Task<Boolean> createChangeThread(){
 		javafx.concurrent.Task<Boolean> changeThread = new javafx.concurrent.Task<Boolean>() {
 		    @Override

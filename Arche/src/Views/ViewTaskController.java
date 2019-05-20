@@ -78,8 +78,13 @@ public class ViewTaskController extends ParentNormalTaskController{
 	
 	@FXML
 	private void closeButtonClicked() {
-		enableLoadingOverlay("Updating");
-		computeUpdateOperations();
+		if(saveCloseButton.getText().equalsIgnoreCase("close")) {
+			closeWindow();
+		}
+		else {
+			enableLoadingOverlay("Updating");
+			computeUpdateOperations();
+		}
 	}
 	
 	private void computeUpdateOperations() {
