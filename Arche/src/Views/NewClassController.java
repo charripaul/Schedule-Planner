@@ -35,11 +35,11 @@ public class NewClassController extends ParentController{
 								friday, saturday, sunday;
 	@FXML private JFXTimePicker startTime, endTime;
 	@FXML private JFXButton cancelButton, confirmButton;
-	@FXML private Label alertLabel;
 	
 	public NewClassController(MainNewController mw) {
 		super(mw);
 	}
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		alertLabel.setVisible(false);
@@ -47,23 +47,27 @@ public class NewClassController extends ParentController{
 		enableCloseEventProperty();
 		enableVisualValidation();
 	}
+	
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
 		if(event.getCode() == KeyCode.ENTER) {
 			confirmButton.fire();
 		}
 	}
+	
 	@FXML
 	private void confirmButtonClicked() {
 		enableLoadingOverlay("Updating");
 		computeUpdateOperations();
 	}
+	
 	private void computeUpdateOperations() {
 		Task<Boolean> updateThread = createUpdateThread();
 		Task<Boolean> timingThread = createTimedThread(updateThread);
 		
 		new Thread(timingThread).start();
 	}
+	
 	private Task<Boolean> createUpdateThread(){
 		Task<Boolean> updateThread = new Task<Boolean>() {
 		    @Override
@@ -71,7 +75,7 @@ public class NewClassController extends ParentController{
 		    	return addClass();
 		    }
 		};
-		//reverts to javafx main app thread
+		
 		updateThread.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 		    @Override
 		    public void handle(WorkerStateEvent event) {
@@ -79,8 +83,10 @@ public class NewClassController extends ParentController{
 		        computeUpdateResult(result);
 		    }
 		});
+		
 		return updateThread;
 	}
+	
 	private boolean addClass() throws InterruptedException {
 		if(validate()) {
 			String daysOfWeek = 
@@ -92,6 +98,7 @@ public class NewClassController extends ParentController{
 					getBinary(friday.isSelected())+
 					getBinary(saturday.isSelected()
 			);
+			
 			Models.Class c = new Models.Class(
 					ModelControl.mainUID,
 					name.getText(),
@@ -105,13 +112,13 @@ public class NewClassController extends ParentController{
 			
 			Thread.sleep(1000);
 			ModelControl.addClass(c);
-			
 			return true;
 		}
 		else {
 			return false;
 		}
 	}
+	
 	private void computeUpdateResult(boolean result) {
 		if(result) {
 			closeWindow();
@@ -121,10 +128,12 @@ public class NewClassController extends ParentController{
 			displayAlertLabel("Please fix input errors");
 		}
 	}
+	
 	@FXML
 	private void cancelButtonClicked() {
 		closeWindow();
 	}
+	
 	protected void enableCloseEventProperty() {
 		enableTextCloseProperty(name);
 		enableTextCloseProperty(abbreviation);
@@ -141,6 +150,7 @@ public class NewClassController extends ParentController{
 		enableTimepickerCloseProperty(startTime);
 		enableTimepickerCloseProperty(endTime);
 	}
+	
 	protected void enableVisualValidation() {
 		name.focusedProperty().addListener((arg0, oldValue, newValue) -> {
 	        if (!newValue) {
@@ -155,6 +165,7 @@ public class NewClassController extends ParentController{
 	            }
 	        }
 	    });
+		
 		abbreviation.focusedProperty().addListener((arg0, oldValue, newValue) -> {
 	        if (!newValue) {
 	            if(!abbreviation.getText().matches(NORMAL_TEXT_REGEX)){
@@ -168,6 +179,7 @@ public class NewClassController extends ParentController{
 	            }
 	        }
 	    });
+		
 		details.focusedProperty().addListener((arg0, oldValue, newValue) -> {
 	        if (!newValue) {
 	            if(!details.getText().matches(SPECIAL_TEXT_REGEX)){
@@ -178,6 +190,7 @@ public class NewClassController extends ParentController{
 	            }
 	        }
 	    });
+		
 		startTime.focusedProperty().addListener((arg0, oldValue, newValue) -> {
 	        if (!newValue) {
 	            if(startTime.getValue() == null) {
@@ -185,6 +198,7 @@ public class NewClassController extends ParentController{
 	            }
 	        }
 	    });
+		
 		endTime.focusedProperty().addListener((arg0, oldValue, newValue) -> {
 	        if (!newValue) {
 	        	if(startTime.getValue() == null) {

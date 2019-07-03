@@ -34,7 +34,7 @@ public class ViewTypeController extends ParentController{
 	@FXML private TextField hour, minute;		//timeToComplete
 	@FXML private TextArea description;
 	@FXML private JFXButton deleteButton, saveButton;
-	@FXML private Label warningLabel, totalAssignments;
+	@FXML private Label totalAssignments;
 	
 	private final TaskType dataHolder;
 	private String oldTypeName, newTypeName;
@@ -62,7 +62,7 @@ public class ViewTypeController extends ParentController{
 		minute.setText((amountOfTime%60)+"");
 		totalAssignments.setText(tt.getTotalAssignments()+"");
 		
-		warningLabel.setVisible(false);
+		alertLabel.setVisible(false);
 	}
 	
 	@FXML
