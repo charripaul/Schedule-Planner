@@ -40,6 +40,7 @@ public class ModelControl {
 		initialize();
 		System.out.println("ModelControl layer initialized");
 	}
+	//TODO:fix so that these are not loaded into memory, perform check using sql
 	public static void initialize() {
 		ResultSet rs;
 		try {
@@ -60,6 +61,7 @@ public class ModelControl {
 		}
 	}
 	public static void initializeUserData() {
+		resetData();
 		ResultSet rs;
 		try {
 			rs = Database.getClasses(mainUID);
@@ -674,5 +676,11 @@ public class ModelControl {
 		Calendar cal = Calendar.getInstance();
 		long val = cal.getTimeInMillis();
 		return val;
+	}
+	private static void resetData() {
+		tasks.clear();
+		classes.clear();
+		projects.clear();
+		taskTypes.clear();
 	}
 }

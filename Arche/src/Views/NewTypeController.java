@@ -95,7 +95,7 @@ public class NewTypeController extends ParentController{
 			Thread.sleep(1000);
 			ModelControl.addTaskType(tt);
 			
-			return false;
+			return true;
 		}
 		else {
 			return false;
@@ -107,6 +107,7 @@ public class NewTypeController extends ParentController{
 			closeWindow();
 		}
 		else {
+			loadingOverlay.setVisible(false);
 			displayAlertLabel("Please fix input errors");
 		}
 	}

@@ -45,7 +45,7 @@ public abstract class ParentController implements Initializable{
 	protected String SPECIAL_TEXT_REGEX = "^[\\:\\.\\s\\w\\d\\?><;,\\{\\}\\[\\]\\-_\\+=!@\\#\\$%^&\\*\\|\\']*$";
 	protected String NUMBER_REGEX = "^[0-9]*$";
 	protected String DATE_TIME_FORMAT = "MM/dd/yyyy hh:mm a";
-	protected int TIMEOUT_TIME = 25000;							//25 secs
+	protected int TIMEOUT_TIME = 15000;							//15 secs
 	protected int NAME_MAX_LENGTH = 45;
 	protected int ABRV_MAX_LENGTH = 15;							//abbreviation
 	protected int TEXTAREA_MAX_LENGTH = 255;

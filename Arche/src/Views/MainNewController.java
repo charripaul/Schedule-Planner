@@ -1114,6 +1114,7 @@ public class MainNewController implements Initializable{
 	private int getYear() {
 		return guicalendar.get(Calendar.YEAR);
 	}
+	//TODO: find bug causing double displays
 	public void displayConnectionTimeOut() {
 		loadingPane.setVisible(true);
 		
